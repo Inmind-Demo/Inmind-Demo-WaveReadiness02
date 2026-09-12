@@ -1,0 +1,235 @@
+telemetryId: a1b2c3d4-e5f6-4707-8001-000000000007
+steps:
+  - type: navigate
+    target:
+      - page: Purchase Order List
+    description: Navigate to Purchase Orders
+  - type: page-shown
+    source:
+      page: Purchase Order List
+    modal: false
+    runtimeId: b6t
+    description: Page <caption>Purchase Orders</caption> was shown.
+  - type: invoke
+    target:
+      - page: Purchase Order List
+        runtimeRef: c701
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+  - type: page-shown
+    source:
+      page: Purchase Order
+    modal: false
+    runtimeId: c702
+    description: Page <caption>New - Purchase Order</caption> was shown.
+  - type: focus
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - field: Buy-from Vendor Name
+    description: Focus <caption>Vendor Name</caption>
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - field: Buy-from Vendor Name
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Vendor Name</caption>
+  - type: page-shown
+    source:
+      page: lookup:Buy-from Vendor Name
+    modal: false
+    runtimeId: c703
+    description: Page <caption>Select</caption> was shown.
+  - type: invoke
+    target:
+      - page: lookup:Buy-from Vendor Name
+        runtimeRef: c703
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+  - type: page-closed
+    source:
+      page: lookup:Buy-from Vendor Name
+    runtimeId: c703
+    description: Page <caption>Select</caption> was closed.
+  - type: copy-value
+    source:
+      - page: Purchase Order
+        runtimeRef: c702
+      - field: No.
+    name: Purchase Order - No.
+    valueType: string
+    description: Copy value from <caption>No.</caption>
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - field: Vendor Invoice No.
+    value: =Clipboard.'Purchase Order - No.'
+    description: Input <value>Clipboard.'Purchase Order - No.'</value> into
+      <caption>Vendor Invoice No.</caption>
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - part: PurchLines
+      - page: Purchase Order Subform
+      - repeater: Control1
+      - field: No.
+    value: ""
+    isFilterAsYouType: true
+    description: Input <value></value> into <caption>No.</caption>
+  - type: focus
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - part: PurchLines
+      - page: Purchase Order Subform
+      - repeater: Control1
+      - field: No.
+    description: Focus <caption>No.</caption>
+  - type: page-shown
+    source:
+      page: lookup:No.
+    modal: false
+    runtimeId: c704
+    description: Page <caption>Select</caption> was shown.
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - part: PurchLines
+      - page: Purchase Order Subform
+      - repeater: Control1
+      - field: No.
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>No.</caption>
+  - type: invoke
+    target:
+      - page: lookup:No.
+        runtimeRef: c704
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+  - type: page-closed
+    source:
+      page: lookup:No.
+    runtimeId: c704
+    description: Page <caption>Select</caption> was closed.
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - part: PurchLines
+      - page: Purchase Order Subform
+      - repeater: Control1
+      - field: Quantity
+    value: "10"
+    description: Input <value>10</value> into <caption>Quantity</caption>
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - part: PurchLines
+      - page: Purchase Order Subform
+      - repeater: Control1
+      - field: Direct Unit Cost
+    value: "1500"
+    description: Input <value>1500</value> into <caption>Direct Unit Cost Excl.
+      Tax</caption>
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - part: PurchLines
+      - page: Purchase Order Subform
+      - repeater: Control1
+      - field: Qty. to Receive
+    value: "3"
+    description: Input <value>3</value> into <caption>Qty. to Receive</caption>
+  - type: focus
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - field: null
+        automationId: fb8cccf3-54ac-4d77-9ad8-136cec25583a
+        caption: null
+    description: Focus <caption>null</caption>
+  - type: invoke
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - action: Post
+    description: Invoke <caption>Post...</caption>
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Choose
+    modal: true
+    runtimeId: c705
+    description: Page <caption>Choose</caption> was shown.
+  - type: input
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: c705
+      - field: AL:STRMENU
+    value: 0
+    description: Input <value>0</value> into <caption>AL:STRMENU</caption>
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: c705
+    invokeType: Ok
+    description: Invoke Ok on <caption>Choose</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: c705
+    description: Page <caption>Choose</caption> was closed.
+  - type: validate
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+      - part: PurchLines
+      - page: Purchase Order Subform
+      - repeater: Control1
+      - field: Quantity Received
+    operation: =
+    value: 3
+    description: Validate <caption>Quantity Received</caption>
+      <operation>is</operation> <value>3</value>
+  - type: close-page
+    target:
+      - page: Purchase Order
+        runtimeRef: c702
+    description: Close page <caption>Purchase Order</caption>
+  - type: page-closed
+    source:
+      page: Purchase Order
+    runtimeId: c702
+    description: Page <caption>Purchase Order</caption> was closed.
+  - type: close-page
+    target:
+      - page: Purchase Order List
+        runtimeRef: bazl
+    description: Close page <caption>Purchase Orders</caption>
+  - type: page-closed
+    source:
+      page: Purchase Order List
+    runtimeId: bazl
+    description: Page <caption>Purchase Orders</caption> was closed.
+name: DynamicsCon - Page Scripting 3 - Partial Receipt with Validate
+description: Create PO with qty 10, post partial receipt of 3, validate Qty Received
+start:
+  profile: PAGE SCRIPTING

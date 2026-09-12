@@ -1,0 +1,230 @@
+name: DynamicsCon - Page Scripting 21 - Change Qty After Entering Line
+description: Create purchase invoice, enter line, change quantity before posting
+telemetryId: a1b2c3d4-e5f6-4021-8001-000000000021
+start:
+  profile: PAGE SCRIPTING
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: <Page Purchase Invoices>
+    description: Navigate to <caption>Purchase Invoices</caption>
+  - type: page-shown
+    source:
+      page: Purchase Invoices
+    modal: false
+    runtimeId: e101
+    description: Page <caption>Purchase Invoices</caption> was shown.
+  - type: invoke
+    target:
+      - page: Purchase Invoices
+        runtimeRef: e101
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+  - type: page-shown
+    source:
+      page: Purchase Invoice
+    modal: false
+    runtimeId: e102
+    description: Page <caption>New - Purchase Invoice</caption> was shown.
+  - type: focus
+    target:
+      - page: Purchase Invoice
+        runtimeRef: e102
+      - field: Buy-from Vendor Name
+    description: Focus <caption>Vendor Name</caption>
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: e102
+      - field: Buy-from Vendor Name
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Vendor Name</caption>
+  - type: page-shown
+    source:
+      page: lookup:Buy-from Vendor Name
+    modal: false
+    runtimeId: e103
+    description: Page <caption>Select</caption> was shown.
+  - type: invoke
+    target:
+      - page: lookup:Buy-from Vendor Name
+        runtimeRef: e103
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+  - type: page-closed
+    source:
+      page: lookup:Buy-from Vendor Name
+    runtimeId: e103
+    description: Page <caption>Select</caption> was closed.
+  - type: copy-value
+    source:
+      - page: Purchase Invoice
+        runtimeRef: e102
+      - field: No.
+    name: Purchase Invoice - No.
+    valueType: string
+    description: Copy value from <caption>No.</caption>
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: e102
+      - field: Vendor Invoice No.
+    value: =Clipboard.'Purchase Invoice - No.'
+    description: Input <value>Clipboard.'Purchase Invoice - No.'</value> into <caption>Vendor Invoice No.</caption>
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b6zk
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: No.
+    value: ""
+    isFilterAsYouType: true
+    description: Input <value></value> into <caption>No.</caption>
+  - type: focus
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b6zk
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: No.
+    description: Focus <caption>No.</caption>
+  - type: page-shown
+    source:
+      page: lookup:No.
+    modal: false
+    runtimeId: e104
+    description: Page <caption>Select</caption> was shown.
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b6zk
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: No.
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>No.</caption>
+  - type: invoke
+    target:
+      - page: lookup:No.
+        runtimeRef: e104
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+  - type: page-closed
+    source:
+      page: lookup:No.
+    runtimeId: e104
+    description: Page <caption>Select</caption> was closed.
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b6zk
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: Quantity
+    value: "1"
+    description: Input <value>1</value> into <caption>Quantity</caption>
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b6zk
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: Direct Unit Cost
+    value: "1500"
+    description: Input <value>1500</value> into <caption>Direct Unit Cost Excl. Tax</caption>
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b6zk
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: Quantity
+    value: "3"
+    description: Input <value>3</value> into <caption>Quantity</caption>
+  - type: focus
+    target:
+      - page: Purchase Invoice
+        runtimeRef: e102
+      - field: null
+        automationId: fb8cccf3-54ac-4d77-9ad8-136cec25583a
+        caption: null
+    description: Focus <caption>null</caption>
+  - type: invoke
+    target:
+      - page: Purchase Invoice
+        runtimeRef: e102
+      - action: Post
+    parameters: {}
+    description: Invoke <caption>Post</caption>
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: e105
+    description: Page <caption>Confirm</caption> was shown.
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: e105
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: e105
+    description: Page <caption>Confirm</caption> was closed.
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: e106
+    description: Page <caption>Confirm</caption> was shown.
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: e106
+    invokeType: No
+    description: Invoke No on <caption>Confirm</caption>
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: e106
+    description: Page <caption>Confirm</caption> was closed.
+  - type: page-closed
+    source:
+      page: Purchase Invoice
+    runtimeId: e102
+    description: Page <caption>Purchase Invoice</caption> was closed.
+  - type: close-page
+    target:
+      - page: Purchase Invoices
+        runtimeRef: e101
+    description: Close page <caption>Purchase Invoices</caption>
+  - type: page-closed
+    source:
+      page: Purchase Invoices
+    runtimeId: e101
+    description: Page <caption>Purchase Invoices</caption> was closed.

@@ -1,0 +1,93 @@
+name: DynamicsCon - Page Scripting 28 - Drill Balance Close Vendor Ledger
+description: Open vendor card, drill Balance to Vendor Ledger Entries, close without action
+telemetryId: a1b2c3d4-e5f6-4028-8001-000000000028
+start:
+  profile: PAGE SCRIPTING
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Vendors
+    description: Navigate to <caption>Vendors</caption>
+  - type: page-shown
+    source:
+      page: Vendor List
+    modal: false
+    runtimeId: e801
+    description: Page <caption>Vendors</caption> was shown.
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: e801
+      - repeater: Control1
+      - field: Name
+    invokeType: FilterByColumn
+    parameters:
+      UseAdvancedFiltering: true
+    description: Invoke FilterByColumn on <caption>Name</caption>
+  - type: input
+    target:
+      - page: Vendor List
+        runtimeRef: e801
+      - scope: filter
+        field: Name
+    value: Page Scripting
+    description: Input <value>Page Scripting</value> into <caption>Name</caption>
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: e801
+      - repeater: Control1
+    invokeType: Edit
+    parameters:
+      AlwaysCommit: false
+    description: Invoke row on <caption>Control1</caption>
+  - type: page-shown
+    source:
+      page: Vendor Card
+    modal: false
+    runtimeId: e802
+    description: Page <caption>Vendor Card</caption> was shown.
+  - type: invoke
+    target:
+      - page: Vendor Card
+        runtimeRef: e802
+      - field: Balance (LCY)
+    invokeType: DrillDown
+    description: Invoke DrillDown on <caption>Balance ($)</caption>
+  - type: page-shown
+    source:
+      page: Vendor Ledger Entries
+    modal: false
+    runtimeId: e803
+    description: Page <caption>Vendor Ledger Entries</caption> was shown.
+  - type: close-page
+    target:
+      - page: Vendor Ledger Entries
+        runtimeRef: e803
+    description: Close page <caption>Vendor Ledger Entries</caption>
+  - type: page-closed
+    source:
+      page: Vendor Ledger Entries
+    runtimeId: e803
+    description: Page <caption>Vendor Ledger Entries</caption> was closed.
+  - type: close-page
+    target:
+      - page: Vendor Card
+        runtimeRef: e802
+    description: Close page <caption>Vendor Card</caption>
+  - type: page-closed
+    source:
+      page: Vendor Card
+    runtimeId: e802
+    description: Page <caption>Vendor Card</caption> was closed.
+  - type: close-page
+    target:
+      - page: Vendor List
+        runtimeRef: e801
+    description: Close page <caption>Vendors</caption>
+  - type: page-closed
+    source:
+      page: Vendor List
+    runtimeId: e801
+    description: Page <caption>Vendors</caption> was closed.
