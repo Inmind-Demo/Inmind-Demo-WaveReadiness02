@@ -1,0 +1,1160 @@
+name: Wave Readiness Validation
+
+# Validates that recorded business scenarios under PageScriptLibrary/ still
+# work on the next BC wave, before that wave reaches production.
+#
+# Flow:
+#   1. Copy SOURCE_ENV (prod) -> TARGET_ENV (sandbox). Both names are
+#      configurable via repository variables — see env: block below.
+#   2. Optionally schedule a platform upgrade on the sandbox to a target
+#      wave version (Preview while Microsoft is previewing the wave;
+#      Available once GA). Poll until upgrade completes.
+#   3. Sequentially replay every area under PageScriptLibrary/, one
+#      job per phase, using @microsoft/bc-replay.
+#   4. Publish a merged Playwright HTML report to Azure App Service so
+#      stakeholders get a single Entra-protected URL per run.
+#
+# Prerequisites (see previous workflow's header for full detail):
+#   - Entra app with AdminCenter.ReadWrite.All, authorized in BC admin centre.
+#     Secrets: BC_ADMIN_TENANT_ID, BC_ADMIN_CLIENT_ID, BC_ADMIN_CLIENT_SECRET.
+#   - BC user with PAGESCRIPTING-PLAY + needed data permissions, in prod so
+#     it flows through the copy.
+#     Secrets: BC_REPLAY_USER, BC_REPLAY_PASSWORD, optional BC_REPLAY_TOTP_SECRET.
+#
+# Cadence:
+#   - Trigger manually (workflow_dispatch) when Microsoft announces a wave
+#     preview. Supply the target version from the admin centre's update
+#     settings page, or leave blank to run against the current sandbox
+#     version (pipeline validation mode).
+#   - A scheduled weekly probe can be added later once the team is ready
+#     to track it — kept off in v1 so runs are intentional.
+
+on:
+  workflow_dispatch:
+    inputs:
+      targetVersion:
+        description: "Upgrade sandbox to: 'latest' (default) = newest released GA/Preview; bare major '28' = latest minor of that wave; exact 'N.M' like '28.3'. Ignored when skipUpgrade is checked."
+        required: false
+        default: 'latest'
+      skipUpgrade:
+        description: 'Skip the platform upgrade entirely and replay at the current sandbox version. Overrides targetVersion.'
+        required: false
+        type: boolean
+        default: false
+      scriptArea:
+        description: 'Optional: restrict to one area under PageScriptLibrary/ (e.g. Purchase). Leave blank to run all areas.'
+        required: false
+        default: ''
+      refreshSandbox:
+        description: 'Delete + copy prod -> sandbox before replay. Uncheck to reuse the existing sandbox (saves ~8-10 min, useful when iterating on workflow/script changes).'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wave-readiness
+  cancel-in-progress: false
+
+env:
+  # BC environment names. Defaults are neutral placeholders; override per
+  # environment via repository variables (Settings → Variables → Actions)
+  # without editing this file. onboard-customer.ps1 sets them per customer.
+  SOURCE_ENV: ${{ vars.BC_SOURCE_ENV || 'PRODUCTION' }}
+  TARGET_ENV: ${{ vars.BC_TARGET_ENV || 'SANDBOX-Waves' }}
+  # BC Admin Center API base URL. The v2.28 path is stable for now but may
+  # bump on a future BC platform release — override via vars.BC_ADMIN_API_BASE
+  # if Microsoft retires this version.
+  ADMIN_API_BASE: ${{ vars.BC_ADMIN_API_BASE || 'https://api.businesscentral.dynamics.com/admin/v2.28/applications/BusinessCentral' }}
+  # Opt the JavaScript-based actions (upload-artifact@v5, download-artifact@v5,
+  # etc.) onto Node 24 ahead of GitHub's 2026-06-02 forced migration. Silences
+  # the "Node.js 20 actions are deprecated" annotation on every run.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+  # Phase-1 area under PageScriptLibrary/. Runs as its own job before the
+  # matrix fans out over the remaining areas — all downstream scripts assume
+  # the master data (vendors, items, G/L setup, etc.) this phase creates.
+  # Rename this env var if the folder is renamed on disk.
+  MASTER_DATA_AREA: 'MasterData - 1'
+  # Azure App Service URL. Set via repository variable (Settings → Variables)
+  # after creating the App Service resource. Trailing slash required.
+  # e.g. https://wave-readiness-reports.azurewebsites.net/
+  REPORT_SITE_URL: ${{ vars.REPORT_SITE_URL }}
+  # Notification email addresses. Unset by default — the email step is
+  # skipped (with a warning) until BOTH are configured, so a fresh fork /
+  # install stays green without a mailbox. Set them via repository variables
+  # (Settings → Variables → Actions). FROM must be a real mailbox in the
+  # tenant whose Entra app has Mail.Send granted.
+  NOTIFY_FROM: ${{ vars.NOTIFY_FROM }}
+  NOTIFY_TO: ${{ vars.NOTIFY_TO }}
+
+jobs:
+  # ---------------------------------------------------------------------
+  # Compute the script phases to run.
+  #
+  # Phase 1 is fixed to MASTER_DATA_AREA (vendors, items, setup tables).
+  # It runs in its own job before the matrix so every downstream script
+  # can rely on the seed data existing.
+  #
+  # Phase 2 runs the remaining areas sequentially in folder-name
+  # sort order (the numeric suffix in each folder name controls the
+  # execution order). Scripts inside each area are also sorted by name.
+  #
+  # The scriptArea input narrows to a single area:
+  #   - blank            -> MasterData + all other areas
+  #   - 'MasterData - 1' -> MasterData only (matrix empty)
+  #   - 'Purchase - 2'   -> that area only (MasterData skipped, useful
+  #                         when iterating against an already-seeded
+  #                         sandbox with refreshSandbox=false)
+  # ---------------------------------------------------------------------
+  setup:
+    runs-on: ubuntu-latest
+    # Same environment as deploy-report, deliberately: the OIDC subject is
+    # derived from it, so the preflight below only proves anything if it
+    # requests a token with the identical subject the real deploy will use.
+    # It also means any approval rule on the environment gates the run before
+    # it rebuilds a sandbox, rather than after.
+    environment: report-site
+    # id-token:write so the deploy identity can be smoke-tested here, before
+    # the run spends 20+ minutes replaying against a live sandbox.
+    permissions:
+      contents: read
+      id-token: write
+    outputs:
+      areas: ${{ steps.matrix.outputs.areas }}
+      hasScripts: ${{ steps.matrix.outputs.hasScripts }}
+      hasAreas: ${{ steps.matrix.outputs.hasAreas }}
+      masterDataArea: ${{ steps.matrix.outputs.masterDataArea }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Catches a broken deploy identity in the first 10 seconds rather than
+      # after 20+ minutes of replay: wrong client/tenant/subscription secret,
+      # a deleted app registration, a revoked role assignment, or a federated
+      # credential that does not match this repo.
+      #
+      # Non-fatal on purpose: the replay results are still worth producing and
+      # still upload as artifacts. Only the published report is lost.
+      - name: Preflight - Azure deploy identity
+        id: az_preflight
+        continue-on-error: true
+        uses: azure/login@7ddb5af1ef8758cf1353cf3b42f940aee27ba21c # v3.0.2
+        with:
+          client-id: ${{ secrets.AZURE_DEPLOY_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_DEPLOY_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_DEPLOY_SUBSCRIPTION_ID }}
+
+      # Print the exact subject Entra must trust. This is the sub claim GitHub
+      # puts in the OIDC token, so it can be pasted straight into the federated
+      # credential rather than reconstructed by hand.
+      #
+      # The prefix is READ FROM GITHUB, never assembled from owner/repo: the
+      # current default embeds numeric entity IDs so the claim survives a
+      # rename (repo:Acme@123/Reports@456:...). A hand-built owner/repo subject
+      # matches nothing, and printing one here would send the reader in circles
+      # - this message is the one place they look for the fix.
+      - name: Report deploy-identity preflight
+        if: steps.az_preflight.outcome == 'failure'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          endpoint="repos/${GITHUB_REPOSITORY}/actions/oidc/customization/sub"
+          prefix="$(gh api "$endpoint" --jq '.sub_claim_prefix' 2>/dev/null || true)"
+          if [ -z "${prefix}" ]; then
+            prefix="repo:${GITHUB_REPOSITORY}"
+            echo "::notice::Could not read this repository's OIDC subject prefix; showing the name-based form."
+          fi
+          subject="${prefix}:environment:report-site"
+          echo "::warning title=Azure deploy identity unusable::The report will not publish. Expected federated credential subject: ${subject}"
+          {
+            echo "### :warning: Azure deploy identity unusable"
+            echo
+            echo "Replay will still run and results will upload as artifacts, but"
+            echo "the report site will not publish at the end of this run."
+            echo
+            echo "The deploy app registration needs a federated credential whose"
+            echo "subject is exactly:"
+            echo
+            echo '```'
+            echo "${subject}"
+            echo '```'
+            echo
+            echo "Entra matches this string exactly and supports no wildcards."
+            echo "It is branch-independent: one credential covers every branch"
+            echo "this workflow is run from. See WAVE-READINESS-SETUP.md section 15."
+            echo
+            echo "Or re-run provisioning, which sets it for you:"
+            echo
+            echo '```'
+            echo "npx @inmindtechnologies/bc-wave-readiness provision"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Build script-area matrix
+        id: matrix
+        shell: bash
+        env:
+          AREA_FILTER: ${{ github.event.inputs.scriptArea }}
+          MASTER_DATA_AREA: ${{ env.MASTER_DATA_AREA }}
+        run: |
+          set -euo pipefail
+          entries=()
+          masterData=""
+          if [ -d PageScriptLibrary ]; then
+            while IFS= read -r dir; do
+              [ -d "$dir" ] || continue
+              area=$(basename "$dir")
+              if [ -n "$AREA_FILTER" ] && [ "$AREA_FILTER" != "$area" ]; then
+                continue
+              fi
+              if ! ls "$dir/"*.yml >/dev/null 2>&1; then
+                continue
+              fi
+              if [ "$area" = "$MASTER_DATA_AREA" ]; then
+                masterData="$area"
+              else
+                entries+=("$area")
+              fi
+            done < <(find PageScriptLibrary -mindepth 1 -maxdepth 1 -type d | sort -t'-' -k2 -n)
+          fi
+          # Build a sorted JSON array of area names.
+          areas_json="[]"
+          if [ ${#entries[@]} -gt 0 ]; then
+            areas_json=$(printf '%s\n' "${entries[@]}" | jq -R . | jq -sc .)
+          fi
+          {
+            echo "areas=$areas_json"
+            echo "masterDataArea=$masterData"
+          } >> "$GITHUB_OUTPUT"
+          if [ ${#entries[@]} -eq 0 ]; then
+            echo "hasAreas=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "hasAreas=true" >> "$GITHUB_OUTPUT"
+          fi
+          if [ ${#entries[@]} -eq 0 ] && [ -z "$masterData" ]; then
+            echo "hasScripts=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::No script areas discovered under PageScriptLibrary/ (filter='$AREA_FILTER'). Replay will be skipped."
+          else
+            echo "hasScripts=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Master data area: ${masterData:-<none>}"
+          echo "Areas (sorted): $areas_json"
+
+  # ---------------------------------------------------------------------
+  # Refresh the sandbox from prod and (optionally) schedule a platform
+  # upgrade. Token is re-acquired in each step rather than passed across
+  # jobs since copy + upgrade together can exceed the token lifetime.
+  # ---------------------------------------------------------------------
+  copy-and-upgrade:
+    needs: setup
+    if: needs.setup.outputs.hasScripts == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 300
+    defaults:
+      run:
+        shell: pwsh
+    outputs:
+      resolvedVersion: ${{ steps.upgrade.outputs.resolved }}
+      resolvedType: ${{ steps.upgrade.outputs.resolvedType }}
+      upgradeSkipped: ${{ steps.upgrade.outputs.skipped }}
+      currentVersion: ${{ steps.upgrade.outputs.currentVersion }}
+      skipReason: ${{ steps.upgrade.outputs.skipReason }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Acquire admin API token
+        id: token1
+        uses: ./.github/actions/acquire-entra-token
+        with:
+          tenant-id: ${{ secrets.BC_ADMIN_TENANT_ID }}
+          client-id: ${{ secrets.BC_ADMIN_CLIENT_ID }}
+          client-secret: ${{ secrets.BC_ADMIN_CLIENT_SECRET }}
+          scope: https://api.businesscentral.dynamics.com/.default
+
+      - name: Delete existing sandbox (if present)
+        if: github.event.inputs.refreshSandbox != 'false'
+        env:
+          TOKEN: ${{ steps.token1.outputs.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $headers = @{ Authorization = "Bearer $env:TOKEN" }
+          $uri = "${{ env.ADMIN_API_BASE }}/environments/${{ env.TARGET_ENV }}"
+          try {
+            Invoke-RestMethod -Method Delete -Uri $uri -Headers $headers | Out-Null
+            Write-Host "Delete requested for ${{ env.TARGET_ENV }}. Polling..."
+          } catch {
+            if ($_.Exception.Response.StatusCode.value__ -eq 404) {
+              Write-Host "${{ env.TARGET_ENV }} does not exist. Skipping delete."
+              return
+            }
+            throw
+          }
+          $deadline = (Get-Date).AddMinutes(15)
+          while ((Get-Date) -lt $deadline) {
+            Start-Sleep -Seconds 30
+            try {
+              Invoke-RestMethod -Method Get -Uri $uri -Headers $headers | Out-Null
+              Write-Host "Still exists; waiting..."
+            } catch {
+              if ($_.Exception.Response.StatusCode.value__ -eq 404) {
+                Write-Host "Environment gone."
+                return
+              }
+              throw
+            }
+          }
+          throw "Timeout waiting for ${{ env.TARGET_ENV }} to be deleted."
+
+      - name: Copy prod -> sandbox
+        id: copy
+        if: github.event.inputs.refreshSandbox != 'false'
+        env:
+          TOKEN: ${{ steps.token1.outputs.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $headers = @{ Authorization = "Bearer $env:TOKEN" }
+          $uri = "${{ env.ADMIN_API_BASE }}/environments/${{ env.SOURCE_ENV }}/copy"
+          $body = @{
+            environmentName = '${{ env.TARGET_ENV }}'
+            type            = 'Sandbox'
+          } | ConvertTo-Json
+          $resp = Invoke-RestMethod -Method Post -Uri $uri -Headers $headers `
+            -Body $body -ContentType 'application/json'
+          Write-Host "Copy requested. Operation id: $($resp.id)"
+          "opId=$($resp.id)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Poll copy operation
+        if: github.event.inputs.refreshSandbox != 'false'
+        env:
+          TOKEN: ${{ steps.token1.outputs.token }}
+          OP_ID: ${{ steps.copy.outputs.opId }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $headers = @{ Authorization = "Bearer $env:TOKEN" }
+          $uri = "${{ env.ADMIN_API_BASE }}/environments/${{ env.SOURCE_ENV }}/operations/$env:OP_ID"
+          $deadline = (Get-Date).AddMinutes(60)
+          while ((Get-Date) -lt $deadline) {
+            $op = Invoke-RestMethod -Method Get -Uri $uri -Headers $headers
+            Write-Host "Copy status: $($op.status)"
+            switch ($op.status) {
+              'Succeeded' { Write-Host "Copy complete."; return }
+              'Failed'    { throw "Copy failed: $($op.errorMessage)" }
+              default     { Start-Sleep -Seconds 60 }
+            }
+          }
+          throw "Timeout waiting for copy to complete."
+
+      # Re-acquire: copy can run longer than the token's 60-min lifetime, so
+      # everything after this step uses a fresh token.
+      - name: Re-acquire admin API token
+        id: token2
+        if: github.event.inputs.skipUpgrade != 'true' && github.event.inputs.targetVersion != ''
+        uses: ./.github/actions/acquire-entra-token
+        with:
+          tenant-id: ${{ secrets.BC_ADMIN_TENANT_ID }}
+          client-id: ${{ secrets.BC_ADMIN_CLIENT_ID }}
+          client-secret: ${{ secrets.BC_ADMIN_CLIENT_SECRET }}
+          scope: https://api.businesscentral.dynamics.com/.default
+
+      - name: Schedule sandbox upgrade
+        id: upgrade
+        if: github.event.inputs.skipUpgrade != 'true' && github.event.inputs.targetVersion != ''
+        env:
+          TOKEN: ${{ steps.token2.outputs.token }}
+          ADMIN_API_BASE: ${{ env.ADMIN_API_BASE }}
+          TARGET_ENV: ${{ env.TARGET_ENV }}
+          TARGET_VERSION: ${{ github.event.inputs.targetVersion }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $result = & "$env:GITHUB_WORKSPACE/.github/scripts/Resolve-BcUpgrade.ps1" `
+            -Token $env:TOKEN `
+            -AdminApiBase $env:ADMIN_API_BASE `
+            -EnvironmentName $env:TARGET_ENV `
+            -RequestedVersion $env:TARGET_VERSION
+
+          # currentVersion is always emitted so the report / email can fall
+          # back to it when the upgrade was skipped. resolved/resolvedType
+          # only when an upgrade was actually scheduled; skipped/skipReason
+          # only when it wasn't — downstream steps gate on 'skipped' so the
+          # poll step doesn't wait for an upgrade that was never scheduled.
+          "currentVersion=$($result.CurrentVersion)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          if ($result.Skipped) {
+            "skipped=true"                     | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            "skipReason=$($result.SkipReason)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          } else {
+            "resolved=$($result.Resolved)"         | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            "resolvedType=$($result.ResolvedType)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          }
+
+      - name: Poll upgrade operation
+        if: github.event.inputs.skipUpgrade != 'true' && github.event.inputs.targetVersion != '' && steps.upgrade.outputs.skipped != 'true'
+        env:
+          TOKEN: ${{ steps.token2.outputs.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $headers = @{ Authorization = "Bearer $env:TOKEN" }
+          $opsUri = "${{ env.ADMIN_API_BASE }}/environments/${{ env.TARGET_ENV }}/operations"
+          $deadline = (Get-Date).AddHours(4)
+          $seenId = $null
+          $scheduledAt = Get-Date
+          while ((Get-Date) -lt $deadline) {
+            Start-Sleep -Seconds 60
+            $ops = Invoke-RestMethod -Method Get -Uri $opsUri -Headers $headers
+            $update = $ops.value |
+              Where-Object { $_.type -eq 'Update' } |
+              Sort-Object -Property createdOn -Descending |
+              Select-Object -First 1
+            if (-not $update) { Write-Host "Waiting for Update op to appear..."; continue }
+            if ($update.id -ne $seenId) {
+              $seenId = $update.id
+              Write-Host "Tracking Update operation $seenId (createdOn=$($update.createdOn))"
+            }
+            Write-Host "Upgrade status: $($update.status)"
+            switch ($update.status) {
+              'Succeeded' { Write-Host "Upgrade complete."; return }
+              'Failed'    { throw "Upgrade failed: $($update.errorMessage)" }
+            }
+            # If the admin centre's update window is narrow, the upgrade may
+            # not start for hours. Warn after an hour of no status change.
+            if (((Get-Date) - $scheduledAt).TotalHours -gt 1 -and $update.status -in @('Queued','Scheduled')) {
+              Write-Host "::warning::Upgrade still in '$($update.status)' state after 1h. Check the sandbox's update window in the admin centre."
+            }
+          }
+          throw "Timeout waiting for upgrade to complete."
+
+      # Copy + upgrade both leave the sandbox in a brief warm-up window
+      # where first page loads 503. If we did neither (refresh off and no
+      # target version), skip the wait — the sandbox is steady-state.
+      - name: Warm-up wait
+        if: github.event.inputs.refreshSandbox != 'false' || (github.event.inputs.skipUpgrade != 'true' && github.event.inputs.targetVersion != '')
+        run: Start-Sleep -Seconds 90
+
+  # ---------------------------------------------------------------------
+  # Phase 1: seed master data.
+  #
+  # Runs every .yml under PageScriptLibrary/<MASTER_DATA_AREA>/ one at a
+  # time, on a single runner. All downstream phases depend on the data
+  # this job creates (vendors, items, G/L setup, ...), so its failure
+  # shortcircuits the matrix below via `needs:`.
+  #
+  # Gated on masterDataArea being present so a targeted run
+  # (scriptArea='Purchase - 2' + refreshSandbox=false) can skip straight
+  # to Phase 2 without re-seeding.
+  # ---------------------------------------------------------------------
+  master-data:
+    needs: [setup, copy-and-upgrade]
+    if: needs.setup.outputs.masterDataArea != ''
+    runs-on: windows-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup bc-replay
+        uses: ./.github/actions/setup-bc-replay
+
+      - name: Run master-data scripts
+        id: run
+        env:
+          BC_USER: ${{ secrets.BC_REPLAY_USER }}
+          BC_PASS: ${{ secrets.BC_REPLAY_PASSWORD }}
+          BC_TOTP: ${{ secrets.BC_REPLAY_TOTP_SECRET }}
+          TENANT_ID: ${{ secrets.BC_ADMIN_TENANT_ID }}
+          AREA: ${{ needs.setup.outputs.masterDataArea }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $sandboxUrl = "https://businesscentral.dynamics.com/$env:TENANT_ID/${{ env.TARGET_ENV }}/"
+          $result = & "$env:GITHUB_WORKSPACE/.github/scripts/Invoke-ReplayArea.ps1" `
+            -AreaName $env:AREA `
+            -SandboxUrl $sandboxUrl `
+            -WorkspaceRoot $env:GITHUB_WORKSPACE
+
+          "failedCount=$($result.Failed.Count)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "totalCount=$($result.Total)"         | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+          if ($result.Failed.Count -gt 0) {
+            throw "$($result.Failed.Count) of $($result.Total) master-data script(s) failed: $($result.Failed -join ', '). Downstream matrix will not run — the other phases depend on this seed data."
+          }
+          Write-Host "All $($result.Total) master-data script(s) passed."
+
+      - name: Upload master-data results
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: replay-results-${{ needs.setup.outputs.masterDataArea }}
+          path: replay-results/${{ needs.setup.outputs.masterDataArea }}
+          retention-days: 7
+
+  # ---------------------------------------------------------------------
+  # Phase 2: sequential replay of the remaining areas.
+  #
+  # Areas run one at a time in the order determined by their folder names
+  # (the numeric suffix controls the sequence: Purchase - 2, Invoice - 3,
+  # etc.). Within each area, scripts are sorted by file name.
+  #
+  # Skipped automatically if master-data failed (default needs: semantics)
+  # or if no areas remain after filtering.
+  # ---------------------------------------------------------------------
+  replay:
+    needs: [setup, copy-and-upgrade, master-data]
+    if: needs.setup.outputs.hasAreas == 'true' && (needs.master-data.result == 'success' || needs.master-data.result == 'skipped')
+    runs-on: windows-latest
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup bc-replay
+        uses: ./.github/actions/setup-bc-replay
+
+      - name: Run all areas sequentially
+        id: run
+        env:
+          BC_USER: ${{ secrets.BC_REPLAY_USER }}
+          BC_PASS: ${{ secrets.BC_REPLAY_PASSWORD }}
+          BC_TOTP: ${{ secrets.BC_REPLAY_TOTP_SECRET }}
+          TENANT_ID: ${{ secrets.BC_ADMIN_TENANT_ID }}
+          AREAS_JSON: ${{ needs.setup.outputs.areas }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $sandboxUrl = "https://businesscentral.dynamics.com/$env:TENANT_ID/${{ env.TARGET_ENV }}/"
+          $areas = $env:AREAS_JSON | ConvertFrom-Json
+
+          $totalAreas = $areas.Count
+          $failedAreas = New-Object System.Collections.Generic.List[string]
+
+          for ($ai = 0; $ai -lt $totalAreas; $ai++) {
+            $area = $areas[$ai]
+            Write-Host "======================================================"
+            Write-Host "Area $($ai + 1)/$totalAreas : $area"
+            Write-Host "======================================================"
+
+            $result = & "$env:GITHUB_WORKSPACE/.github/scripts/Invoke-ReplayArea.ps1" `
+              -AreaName $area `
+              -SandboxUrl $sandboxUrl `
+              -WorkspaceRoot $env:GITHUB_WORKSPACE
+
+            if ($result.Failed.Count -gt 0) {
+              Write-Host "::error::$($result.Failed.Count) of $($result.Total) script(s) failed in area '$area': $($result.Failed -join ', ')"
+              $failedAreas.Add($area)
+            } else {
+              Write-Host "All $($result.Total) script(s) passed in area '$area'."
+            }
+          }
+
+          "failedCount=$($failedAreas.Count)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "totalCount=$totalAreas"            | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+          if ($failedAreas.Count -gt 0) {
+            throw "$($failedAreas.Count) of $totalAreas area(s) had failures: $($failedAreas -join ', ')"
+          }
+          Write-Host "All $totalAreas area(s) passed."
+
+      - name: Upload replay results
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: replay-results
+          path: replay-results/
+          retention-days: 7
+
+  # ---------------------------------------------------------------------
+  # Aggregate all per-area results into one Pages site. Top-level index
+  # lists every area and every script with pass/fail state and a link to
+  # the Playwright report for that script.
+  # ---------------------------------------------------------------------
+  deploy-report:
+    needs: [setup, copy-and-upgrade, master-data, replay]
+    if: always() && needs.setup.outputs.hasScripts == 'true'
+    runs-on: ubuntu-latest
+    # The federated credential's subject is derived from this environment
+    # rather than the branch, so one credential covers every branch the
+    # workflow is run from. Must match the name in setup and in the Entra
+    # credential exactly.
+    environment: report-site
+    # Job-level permissions override the workflow-level read default:
+    # contents:write to push the per-run report to wave-readiness-history,
+    # issues:write to file/close one issue per failed script,
+    # id-token:write for OIDC federated login to Azure.
+    # Other jobs keep contents:read.
+    permissions:
+      contents: write
+      issues: write
+      id-token: write
+    outputs:
+      pageUrl: ${{ env.REPORT_SITE_URL }}
+      runUrl: ${{ env.REPORT_SITE_URL }}runs/${{ github.run_id }}/
+      total: ${{ steps.build.outputs.total }}
+      failed: ${{ steps.build.outputs.failed }}
+    steps:
+      # Checkout runs first so build-report-site.sh is on disk. Cannot run
+      # after download-artifact: actions/checkout defaults to clean=true and
+      # would wipe the just-downloaded replay-results/.
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Materialise the persistent history branch as ./history. Done by
+      # hand (rather than actions/checkout) so the first-ever run, when
+      # the branch does not yet exist, falls through cleanly to an empty
+      # tree; the commit step below creates the branch on push.
+      - name: Restore history branch
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HISTORY_BRANCH: wave-readiness-history
+        run: |
+          set -euo pipefail
+          mkdir -p history
+          cd history
+          if [ ! -d .git ]; then
+            git init -q -b "$HISTORY_BRANCH"
+            git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin "$HISTORY_BRANCH" >/dev/null 2>&1; then
+            git fetch -q --depth=1 origin "$HISTORY_BRANCH"
+            git checkout -q -B "$HISTORY_BRANCH" FETCH_HEAD
+          else
+            echo "$HISTORY_BRANCH does not exist on origin yet — first run will create it."
+          fi
+
+      # v8 defaults digest-mismatch to `error` (v7 only warned). Left at the
+      # default: these artifacts were uploaded by this same run, so a hash
+      # mismatch means corruption in transit and the report would be wrong.
+      - name: Download all area artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          path: replay-results
+          pattern: replay-results*
+          merge-multiple: false
+
+      - name: Build aggregate site
+        id: build
+        shell: bash
+        env:
+          # Prefer the version actually installed (resolved from 'latest' /
+          # bare major) over the raw input alias, so the report reflects
+          # reality. When the upgrade was skipped because the sandbox was
+          # already at the latest available version, fall through to the
+          # current version so the report doesn't mislead with e.g. 'latest'.
+          TARGET_VERSION: ${{ needs.copy-and-upgrade.outputs.resolvedVersion || needs.copy-and-upgrade.outputs.currentVersion || github.event.inputs.targetVersion }}
+          HISTORY_DIR: history
+          RUN_ID: ${{ github.run_id }}
+          RUN_NUMBER: ${{ github.run_number }}
+          MAX_RUNS: '7'
+        run: bash .github/scripts/build-report-site.sh
+
+      # Persist the new run + the regenerated index to the history
+      # branch. Runs even when prior phases failed (the report itself is
+      # still meaningful), and is a no-op if nothing changed (e.g. retry
+      # of an already-published run id).
+      - name: Commit history branch
+        shell: bash
+        working-directory: history
+        env:
+          HISTORY_BRANCH: wave-readiness-history
+        run: |
+          set -euo pipefail
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No history changes to commit."
+            exit 0
+          fi
+          git commit -q -m "Wave readiness run #${{ github.run_number }} (${{ github.run_id }})"
+          git push -q -u origin "$HISTORY_BRANCH"
+
+      # Package the site content (excluding .git) into a zip for
+      # deployment to Azure App Service. App Service with Easy Auth
+      # handles the Entra login — no auth config files needed in the
+      # site content itself.
+      #
+      # Ship a tiny zero-dependency Node static server alongside the
+      # files. App Service's default Node container otherwise returns
+      # "Cannot GET /runs/<id>/" (Express 404) for directory paths;
+      # this server resolves them to <dir>/index.html, which is what
+      # build-report-site.sh emits for every per-run report.
+      - name: Package site for deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf site-content
+          mkdir site-content
+          (cd history && tar --exclude='./.git' -cf - .) | (cd site-content && tar -xf -)
+          cat > site-content/package.json <<'JSON'
+          {
+            "name": "wave-readiness-report",
+            "version": "1.0.0",
+            "private": true,
+            "scripts": { "start": "node server.js" },
+            "engines": { "node": ">=20" }
+          }
+          JSON
+          cat > site-content/server.js <<'JS'
+          // Static file server for the Wave Readiness report site.
+          // Resolves /foo/ to /foo/index.html so directory links work.
+          const http = require('http');
+          const fs = require('fs');
+          const path = require('path');
+          const { URL } = require('url');
+
+          const root = __dirname;
+          const port = process.env.PORT || 8080;
+          const mime = {
+            '.html': 'text/html; charset=utf-8',
+            '.css':  'text/css; charset=utf-8',
+            '.js':   'application/javascript; charset=utf-8',
+            '.json': 'application/json; charset=utf-8',
+            '.png':  'image/png',
+            '.jpg':  'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.svg':  'image/svg+xml',
+            '.webm': 'video/webm',
+            '.zip':  'application/zip',
+            '.txt':  'text/plain; charset=utf-8',
+            '.md':   'text/markdown; charset=utf-8',
+            '.xml':  'application/xml; charset=utf-8',
+          };
+
+          http.createServer((req, res) => {
+            const pathname = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+            const resolved = path.resolve(root, '.' + pathname);
+            const rel = path.relative(root, resolved);
+            if (rel.startsWith('..') || path.isAbsolute(rel)) {
+              res.writeHead(403); res.end('Forbidden'); return;
+            }
+            fs.stat(resolved, (err, stat) => {
+              if (err) { res.writeHead(404); res.end('Not found'); return; }
+              const target = stat.isDirectory() ? path.join(resolved, 'index.html') : resolved;
+              fs.stat(target, (err2, stat2) => {
+                if (err2 || !stat2.isFile()) { res.writeHead(404); res.end('Not found'); return; }
+                res.writeHead(200, { 'Content-Type': mime[path.extname(target).toLowerCase()] || 'application/octet-stream' });
+                fs.createReadStream(target).pipe(res);
+              });
+            });
+          }).listen(port);
+          JS
+          cd site-content && zip -r -q ../site-content.zip .
+
+      - name: Login to Azure
+        uses: azure/login@7ddb5af1ef8758cf1353cf3b42f940aee27ba21c # v3.0.2
+        with:
+          client-id: ${{ secrets.AZURE_DEPLOY_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_DEPLOY_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_DEPLOY_SUBSCRIPTION_ID }}
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@02a81bead70021f5284939794bcec79c271ab383 # v3.0.8
+        with:
+          app-name: ${{ vars.AZURE_WEBAPP_NAME }}
+          package: site-content.zip
+
+      # File one GitHub issue per failed script and close issues for
+      # scripts that started passing again. Title is stable across runs
+      # ("[Wave Readiness] <area> / <script>") so flaky-recovered
+      # scripts leave a single closed issue, not a trail of duplicates.
+      - name: Manage failure issues
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HISTORY_DIR: history
+          RUN_ID: ${{ github.run_id }}
+          RUN_NUMBER: ${{ github.run_number }}
+          PAGE_URL: ${{ env.REPORT_SITE_URL }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          TARGET_VERSION: ${{ needs.copy-and-upgrade.outputs.resolvedVersion || needs.copy-and-upgrade.outputs.currentVersion || github.event.inputs.targetVersion }}
+        run: bash .github/scripts/manage-failure-issues.sh
+
+      - name: Write step summary
+        if: always()
+        shell: bash
+        run: |
+          URL="${{ env.REPORT_SITE_URL }}"
+          RUN_REPORT_URL="${URL}runs/${{ github.run_id }}/"
+          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          MD_STATUS="${{ needs.master-data.result }}"
+          REPLAY_STATUS="${{ needs.replay.result }}"
+          RESOLVED="${{ needs.copy-and-upgrade.outputs.resolvedVersion }}"
+          RESOLVED_TYPE="${{ needs.copy-and-upgrade.outputs.resolvedType }}"
+          REQUESTED="${{ github.event.inputs.targetVersion }}"
+          SKIPPED="${{ needs.copy-and-upgrade.outputs.upgradeSkipped }}"
+          CURRENT="${{ needs.copy-and-upgrade.outputs.currentVersion }}"
+          SKIP_REASON="${{ needs.copy-and-upgrade.outputs.skipReason }}"
+          REFRESHED="${{ github.event.inputs.refreshSandbox }}"
+          if [ "$REFRESHED" = "false" ]; then
+            SANDBOX_NOTE="reused (not refreshed from \`${{ env.SOURCE_ENV }}\`)"
+          else
+            SANDBOX_NOTE="fresh copy of \`${{ env.SOURCE_ENV }}\`"
+          fi
+          if [ -n "$RESOLVED" ]; then
+            TYPE_SUFFIX=""
+            if [ -n "$RESOLVED_TYPE" ]; then TYPE_SUFFIX=" [$RESOLVED_TYPE]"; fi
+            if [ "$RESOLVED" = "$REQUESTED" ]; then
+              TARGET="${RESOLVED}${TYPE_SUFFIX}"
+            else
+              TARGET="${RESOLVED}${TYPE_SUFFIX} (resolved from '$REQUESTED')"
+            fi
+          elif [ "$SKIPPED" = "true" ]; then
+            TARGET="${CURRENT:-current} (upgrade skipped — ${SKIP_REASON:-no newer version available})"
+          elif [ -z "$REQUESTED" ]; then
+            TARGET="(no upgrade — replay at current sandbox version)"
+          else
+            TARGET="$REQUESTED (upgrade did not complete)"
+          fi
+
+          # Overall PASS requires: master-data and replay each succeeded
+          # or were legitimately skipped (user filtered to a single area),
+          # and zero script-level failures across both phases.
+          MD_OK="false";      [ "$MD_STATUS" = "success" ]      || [ "$MD_STATUS" = "skipped" ]      && MD_OK="true"
+          REPLAY_OK="false";  [ "$REPLAY_STATUS" = "success" ]  || [ "$REPLAY_STATUS" = "skipped" ]  && REPLAY_OK="true"
+          if [ "$MD_OK" = "true" ] && [ "$REPLAY_OK" = "true" ] && [ "${failed:-0}" = "0" ]; then
+            HEADLINE="# Wave readiness: PASS"
+            BANNER="All recorded business scenarios ran end-to-end on the target version."
+          elif [ "$MD_STATUS" = "failure" ]; then
+            HEADLINE="# Wave readiness: FAIL (master data)"
+            BANNER="Master-data seeding failed. The remaining phases did not run because they depend on the seed data. Open the report below to see which master-data step broke."
+          else
+            HEADLINE="# Wave readiness: FAIL"
+            BANNER="One or more scenarios broke. Open the report below to see which step failed and on which page."
+          fi
+
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          $HEADLINE
+
+          $BANNER
+
+          ## Open this run's report: $RUN_REPORT_URL
+
+          ## Browse run history (last 7 runs): $URL
+
+          | | |
+          |---|---|
+          | Target version | \`$TARGET\` |
+          | Sandbox | \`${{ env.TARGET_ENV }}\` ($SANDBOX_NOTE) |
+          | Scripts total / failed | ${total:-?} / ${failed:-?} |
+          | Master-data phase | $MD_STATUS |
+          | Replay phase | $REPLAY_STATUS |
+
+          ---
+
+          The history URL lists every retained run with pass/fail at a glance. Share either with stakeholders — access requires your organisation's Entra login.
+
+          For logs and raw per-area artifacts, [open this run]($RUN_URL).
+          EOF
+
+  # ---------------------------------------------------------------------
+  # Email the report URL + headline pass/fail to a notifications mailbox
+  # via Microsoft Graph sendMail. Reuses the BC admin Entra app — that
+  # app must have Mail.Send (Application) granted + admin-consented on
+  # Microsoft Graph, with FROM resolving to a real mailbox in the tenant.
+  #
+  # Runs on always() so failed runs still notify; only gated by
+  # hasScripts so dispatches that match nothing don't spam an inbox.
+  # ---------------------------------------------------------------------
+  notify:
+    needs: [setup, copy-and-upgrade, master-data, replay, deploy-report]
+    if: always() && needs.setup.outputs.hasScripts == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Acquire Graph token
+        id: token
+        uses: ./.github/actions/acquire-entra-token
+        with:
+          tenant-id: ${{ secrets.BC_ADMIN_TENANT_ID }}
+          client-id: ${{ secrets.BC_ADMIN_CLIENT_ID }}
+          client-secret: ${{ secrets.BC_ADMIN_CLIENT_SECRET }}
+          scope: https://graph.microsoft.com/.default
+
+      - name: Send notification email
+        shell: bash
+        env:
+          TOKEN: ${{ steps.token.outputs.token }}
+          FROM: ${{ env.NOTIFY_FROM }}
+          TO: ${{ env.NOTIFY_TO }}
+          PAGE_URL: ${{ needs.deploy-report.outputs.pageUrl }}
+          RUN_REPORT_URL: ${{ needs.deploy-report.outputs.runUrl }}
+          TOTAL: ${{ needs.deploy-report.outputs.total }}
+          FAILED: ${{ needs.deploy-report.outputs.failed }}
+          REQUESTED: ${{ github.event.inputs.targetVersion }}
+          RESOLVED: ${{ needs.copy-and-upgrade.outputs.resolvedVersion }}
+          RESOLVED_TYPE: ${{ needs.copy-and-upgrade.outputs.resolvedType }}
+          CURRENT: ${{ needs.copy-and-upgrade.outputs.currentVersion }}
+          SKIPPED: ${{ needs.copy-and-upgrade.outputs.upgradeSkipped }}
+          SKIP_REASON: ${{ needs.copy-and-upgrade.outputs.skipReason }}
+          MD_STATUS: ${{ needs.master-data.result }}
+          REPLAY_STATUS: ${{ needs.replay.result }}
+          REFRESHED: ${{ github.event.inputs.refreshSandbox }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          SOURCE_ENV: ${{ env.SOURCE_ENV }}
+          TARGET_ENV: ${{ env.TARGET_ENV }}
+        run: |
+          set -euo pipefail
+
+          # Opt-in: stay green on a fresh fork/install until a notification
+          # mailbox is configured. Both FROM and TO must be set. Mirrors the
+          # Teams step, which no-ops until TEAMS_WEBHOOK_URL exists.
+          if [ -z "${FROM:-}" ] || [ -z "${TO:-}" ]; then
+            echo "::warning::NOTIFY_FROM / NOTIFY_TO not set; skipping email notification. Set both repository variables to enable it."
+            exit 0
+          fi
+
+          htmlesc() {
+            printf '%s' "$1" | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' \
+              -e 's/>/\&gt;/g' -e 's/"/\&quot;/g' -e "s/'/\&#39;/g"
+          }
+
+          # Mirror the step-summary's target-version display logic so the
+          # email and the Actions summary tell the same story.
+          if [ -n "${RESOLVED:-}" ]; then
+            type_suffix=""
+            [ -n "${RESOLVED_TYPE:-}" ] && type_suffix=" [${RESOLVED_TYPE}]"
+            if [ "${RESOLVED}" = "${REQUESTED:-}" ]; then
+              target="${RESOLVED}${type_suffix}"
+            else
+              target="${RESOLVED}${type_suffix} (resolved from '${REQUESTED:-}')"
+            fi
+          elif [ "${SKIPPED:-}" = "true" ]; then
+            target="${CURRENT:-current} (upgrade skipped — ${SKIP_REASON:-no newer version available})"
+          elif [ -z "${REQUESTED:-}" ]; then
+            target="(no upgrade — replay at current sandbox version)"
+          else
+            target="${REQUESTED} (upgrade did not complete)"
+          fi
+
+          # PASS only when each phase succeeded or was legitimately skipped
+          # AND zero per-script failures. Same logic as the step summary.
+          md_ok="false";      { [ "$MD_STATUS" = "success" ]      || [ "$MD_STATUS" = "skipped" ]; }      && md_ok="true"
+          replay_ok="false";  { [ "$REPLAY_STATUS" = "success" ]  || [ "$REPLAY_STATUS" = "skipped" ]; }  && replay_ok="true"
+          failed_count="${FAILED:-0}"
+          total_count="${TOTAL:-?}"
+
+          if [ "$md_ok" = "true" ] && [ "$replay_ok" = "true" ] && [ "$failed_count" = "0" ]; then
+            headline="PASS"
+            banner="All recorded business scenarios ran end-to-end on the target version."
+          elif [ "$MD_STATUS" = "failure" ]; then
+            headline="FAIL (master data)"
+            banner="Master-data seeding failed. The remaining phases did not run because they depend on the seed data."
+          else
+            headline="FAIL"
+            banner="One or more scenarios broke. Open the report to see which step failed and on which page."
+          fi
+
+          if [ "${REFRESHED:-}" = "false" ]; then
+            sandbox_note="reused (not refreshed from ${SOURCE_ENV})"
+          else
+            sandbox_note="fresh copy of ${SOURCE_ENV}"
+          fi
+
+          subject="Wave Readiness: ${headline} — ${failed_count}/${total_count} failed (target ${target})"
+
+          # HTML-escape every value sourced from a workflow input or admin
+          # API response before it lands in the body.
+          h_status=$(htmlesc "$headline")
+          h_banner=$(htmlesc "$banner")
+          h_target=$(htmlesc "$target")
+          h_sandbox_note=$(htmlesc "$sandbox_note")
+          h_target_env=$(htmlesc "$TARGET_ENV")
+          h_md=$(htmlesc "$MD_STATUS")
+          h_replay=$(htmlesc "$REPLAY_STATUS")
+
+          body=$(cat <<HTML
+          <!doctype html>
+          <html><body style="font-family:system-ui,sans-serif;color:#222;max-width:680px;">
+            <h2>Wave readiness: ${h_status}</h2>
+            <p>${h_banner}</p>
+            <p>
+              <a href="${RUN_REPORT_URL}">Open this run's report</a>
+              &nbsp;&middot;&nbsp;
+              <a href="${PAGE_URL}">Browse run history (last 7 runs)</a>
+            </p>
+            <table cellpadding="6" style="border-collapse:collapse;">
+              <tr><td><b>Target version</b></td><td>${h_target}</td></tr>
+              <tr><td><b>Sandbox</b></td><td>${h_target_env} (${h_sandbox_note})</td></tr>
+              <tr><td><b>Scripts total / failed</b></td><td>${total_count} / ${failed_count}</td></tr>
+              <tr><td><b>Master-data phase</b></td><td>${h_md}</td></tr>
+              <tr><td><b>Replay phase</b></td><td>${h_replay}</td></tr>
+            </table>
+          </body></html>
+          HTML
+          )
+
+          payload=$(jq -n \
+            --arg subject "$subject" \
+            --arg body    "$body" \
+            --arg to      "$TO" \
+            '{
+              message: {
+                subject: $subject,
+                body: { contentType: "HTML", content: $body },
+                toRecipients: [{ emailAddress: { address: $to } }]
+              },
+              saveToSentItems: false
+            }')
+
+          curl -sS --fail-with-body -X POST \
+            "https://graph.microsoft.com/v1.0/users/${FROM}/sendMail" \
+            -H "Authorization: Bearer ${TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data "$payload"
+
+          echo "Notification sent: ${TO}"
+
+      # Post an Adaptive Card to a Teams channel via a Power Automate
+      # "Workflows" webhook. Failures-only by design — email is the audit
+      # trail, the Teams ping is the "look at this now" signal. Skipped
+      # silently if TEAMS_WEBHOOK_URL is not yet configured, so the
+      # workflow stays green during initial rollout.
+      #
+      # Webhook setup (one-time, no Entra changes needed):
+      #   In the target channel: + → Workflows → "Post to a channel when
+      #   a webhook request is received" → finish → copy the URL → save
+      #   as the TEAMS_WEBHOOK_URL repo secret. The flow forwards the
+      #   posted Adaptive Card to the channel.
+      - name: Post Teams notification
+        if: always()
+        shell: bash
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+          PAGE_URL: ${{ needs.deploy-report.outputs.pageUrl }}
+          RUN_REPORT_URL: ${{ needs.deploy-report.outputs.runUrl }}
+          TOTAL: ${{ needs.deploy-report.outputs.total }}
+          FAILED: ${{ needs.deploy-report.outputs.failed }}
+          REQUESTED: ${{ github.event.inputs.targetVersion }}
+          RESOLVED: ${{ needs.copy-and-upgrade.outputs.resolvedVersion }}
+          RESOLVED_TYPE: ${{ needs.copy-and-upgrade.outputs.resolvedType }}
+          CURRENT: ${{ needs.copy-and-upgrade.outputs.currentVersion }}
+          SKIPPED: ${{ needs.copy-and-upgrade.outputs.upgradeSkipped }}
+          SKIP_REASON: ${{ needs.copy-and-upgrade.outputs.skipReason }}
+          MD_STATUS: ${{ needs.master-data.result }}
+          REPLAY_STATUS: ${{ needs.replay.result }}
+          REFRESHED: ${{ github.event.inputs.refreshSandbox }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          SOURCE_ENV: ${{ env.SOURCE_ENV }}
+          TARGET_ENV: ${{ env.TARGET_ENV }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${TEAMS_WEBHOOK_URL:-}" ]; then
+            echo "::warning::TEAMS_WEBHOOK_URL not set; skipping Teams notification."
+            exit 0
+          fi
+
+          # Mirror the email step's target-version display logic so all
+          # three channels (summary / email / Teams) tell the same story.
+          if [ -n "${RESOLVED:-}" ]; then
+            type_suffix=""
+            [ -n "${RESOLVED_TYPE:-}" ] && type_suffix=" [${RESOLVED_TYPE}]"
+            if [ "${RESOLVED}" = "${REQUESTED:-}" ]; then
+              target="${RESOLVED}${type_suffix}"
+            else
+              target="${RESOLVED}${type_suffix} (resolved from '${REQUESTED:-}')"
+            fi
+          elif [ "${SKIPPED:-}" = "true" ]; then
+            target="${CURRENT:-current} (upgrade skipped — ${SKIP_REASON:-no newer version available})"
+          elif [ -z "${REQUESTED:-}" ]; then
+            target="(no upgrade — replay at current sandbox version)"
+          else
+            target="${REQUESTED} (upgrade did not complete)"
+          fi
+
+          md_ok="false";      { [ "$MD_STATUS" = "success" ]      || [ "$MD_STATUS" = "skipped" ]; }      && md_ok="true"
+          replay_ok="false";  { [ "$REPLAY_STATUS" = "success" ]  || [ "$REPLAY_STATUS" = "skipped" ]; }  && replay_ok="true"
+          failed_count="${FAILED:-0}"
+          total_count="${TOTAL:-?}"
+
+          # Failures-only: skip on green runs to keep the channel quiet.
+          if [ "$md_ok" = "true" ] && [ "$replay_ok" = "true" ] && [ "$failed_count" = "0" ]; then
+            echo "All phases passed; skipping Teams notification."
+            exit 0
+          fi
+
+          if [ "$MD_STATUS" = "failure" ]; then
+            headline="FAIL (master data)"
+            banner="Master-data seeding failed. The remaining phases did not run because they depend on the seed data."
+            style="attention"
+          else
+            headline="FAIL"
+            banner="One or more scenarios broke. Open the report to see which step failed and on which page."
+            style="attention"
+          fi
+
+          if [ "${REFRESHED:-}" = "false" ]; then
+            sandbox_note="reused (not refreshed from ${SOURCE_ENV})"
+          else
+            sandbox_note="fresh copy of ${SOURCE_ENV}"
+          fi
+
+          # Adaptive Card 1.4 wrapped in the standard message envelope.
+          # Power Automate's "Post adaptive card in a chat or channel"
+          # action accepts this payload as-is when the flow forwards
+          # the request body directly.
+          payload=$(jq -n \
+            --arg headline    "Wave Readiness: ${headline}" \
+            --arg banner      "$banner" \
+            --arg target      "$target" \
+            --arg sandbox     "${TARGET_ENV} (${sandbox_note})" \
+            --arg counts      "${total_count} / ${failed_count}" \
+            --arg md          "$MD_STATUS" \
+            --arg replay      "$REPLAY_STATUS" \
+            --arg style       "$style" \
+            --arg report_url  "$RUN_REPORT_URL" \
+            --arg history_url "$PAGE_URL" \
+            --arg run_url     "$RUN_URL" \
+            '{
+              type: "message",
+              attachments: [{
+                contentType: "application/vnd.microsoft.card.adaptive",
+                content: {
+                  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                  type: "AdaptiveCard",
+                  version: "1.4",
+                  body: [
+                    {
+                      type: "Container",
+                      style: $style,
+                      bleed: true,
+                      items: [
+                        { type: "TextBlock", text: $headline, weight: "Bolder", size: "Large", wrap: true }
+                      ]
+                    },
+                    { type: "TextBlock", text: $banner, wrap: true, spacing: "Medium" },
+                    {
+                      type: "FactSet",
+                      facts: [
+                        { title: "Target version",         value: $target  },
+                        { title: "Sandbox",                value: $sandbox },
+                        { title: "Scripts total / failed", value: $counts  },
+                        { title: "Master-data phase",      value: $md      },
+                        { title: "Replay phase",           value: $replay  }
+                      ]
+                    }
+                  ],
+                  actions: [
+                    { type: "Action.OpenUrl", title: "Open run report", url: $report_url },
+                    { type: "Action.OpenUrl", title: "Run history",     url: $history_url },
+                    { type: "Action.OpenUrl", title: "Actions run",     url: $run_url }
+                  ]
+                }
+              }]
+            }')
+
+          curl -sS --fail-with-body -X POST \
+            "$TEAMS_WEBHOOK_URL" \
+            -H "Content-Type: application/json" \
+            --data "$payload"
+
+          echo "Teams notification posted."

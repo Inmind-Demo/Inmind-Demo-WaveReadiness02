@@ -1,0 +1,193 @@
+name: Update Wave Readiness Pipeline
+
+# Re-syncs the pipeline-managed files from the source repo and opens a pull
+# request with the diff, so a patch published upstream reaches this repo
+# without anyone remembering to run the installer by hand.
+#
+# It NEVER touches configuration. Secrets, repository variables and
+# PageScriptLibrary/ are outside the managed set, so an update cannot undo
+# your setup - the worst case is a PR you close.
+#
+# It NEVER pushes to a default branch. Everything lands as a pull request you
+# review with a plain `git diff`, exactly like running the installer locally.
+#
+# REQUIRES a personal access token in the secret UPDATE_TOKEN.
+# GITHUB_TOKEN cannot be used: GitHub refuses to let it modify files under
+# .github/workflows/, and the pipeline's own workflow is one of the managed
+# files this job rewrites. Without the secret the job explains itself and
+# exits green rather than failing every schedule - the token is optional, and
+# `npx @inmindtechnologies/bc-wave-readiness update` from a clone stays a
+# perfectly good way to do this by hand.
+#
+# Token needed: a fine-grained PAT scoped to THIS repository with
+#   Contents: Read and write   (commit the synced files)
+#   Pull requests: Read and write   (open the PR)
+#   Workflows: Read and write   (the pipeline workflow is a managed file)
+# A classic PAT with the `repo` + `workflow` scopes also works.
+
+on:
+  schedule:
+    # Mondays 06:17 UTC. Off the hour on purpose: scheduled workflows are
+    # queued cluster-wide, and the top of the hour is the worst slot.
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Source ref to pull from. Blank uses the ref recorded in .pipeline-version (normally 'main')."
+        required: false
+        default: ''
+
+# Read-only by default. The write access this job needs comes from
+# UPDATE_TOKEN, not from GITHUB_TOKEN, so nothing here can escalate on its own.
+permissions:
+  contents: read
+
+concurrency:
+  group: wave-readiness-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check for the update token
+        id: gate
+        env:
+          UPDATE_TOKEN: ${{ secrets.UPDATE_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${UPDATE_TOKEN}" ]; then
+            echo "hasToken=false" >> "$GITHUB_OUTPUT"
+            {
+              echo "### Wave Readiness update skipped"
+              echo
+              echo 'No `UPDATE_TOKEN` secret is configured, so this job has nothing to commit with.'
+              echo
+              echo 'GitHub does not allow the built-in `GITHUB_TOKEN` to modify files under'
+              echo '`.github/workflows/`, and the pipeline workflow is one of the files an update'
+              echo 'rewrites. Automating this therefore needs a personal access token.'
+              echo
+              echo '**To enable it:** create a fine-grained PAT scoped to this repository with'
+              echo '`Contents: Read and write`, `Pull requests: Read and write` and'
+              echo '`Workflows: Read and write`, then save it as the repository secret `UPDATE_TOKEN`.'
+              echo
+              echo '**To keep doing it by hand instead**, from a clone of this repo:'
+              echo
+              echo '```'
+              echo 'npx @inmindtechnologies/bc-wave-readiness update'
+              echo '```'
+              echo
+              echo 'Then review with `git diff` and commit. Disable this workflow if you prefer'
+              echo 'not to be reminded.'
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::notice title=Wave Readiness update skipped::UPDATE_TOKEN is not configured - see the job summary."
+          else
+            echo "hasToken=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        if: steps.gate.outputs.hasToken == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Persist the PAT for the later push. The pipeline workflow is a
+          # managed file, so GITHUB_TOKEN would be rejected at push time.
+          token: ${{ secrets.UPDATE_TOKEN }}
+
+      - name: Run the installer's update
+        if: steps.gate.outputs.hasToken == 'true'
+        env:
+          # setup-pipeline.ps1 clones the source repo through gh, and gh reads
+          # its credentials from here.
+          GH_TOKEN: ${{ secrets.UPDATE_TOKEN }}
+          INPUT_REF: ${{ inputs.ref }}
+        run: |
+          set -euo pipefail
+          if [ ! -f .pipeline-version ]; then
+            echo "::error title=Not an installed repo::.pipeline-version is missing, so there is nothing to update. Install first with: npx @inmindtechnologies/bc-wave-readiness"
+            exit 1
+          fi
+          echo "Current marker:"
+          cat .pipeline-version
+
+          # Deliberately the published installer rather than a copy of the
+          # update logic: one implementation, and the one the test suite
+          # exercises. npx resolves the current version on every run.
+          if [ -n "${INPUT_REF}" ]; then
+            npx --yes @inmindtechnologies/bc-wave-readiness update --ref "${INPUT_REF}"
+          else
+            npx --yes @inmindtechnologies/bc-wave-readiness update
+          fi
+
+      - name: Open a pull request if anything changed
+        if: steps.gate.outputs.hasToken == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.UPDATE_TOKEN }}
+        run: |
+          set -euo pipefail
+
+          # installedAt changes on every run, so the marker alone is not a
+          # change worth a PR. Ask git whether anything ELSE moved.
+          if [ -z "$(git status --porcelain -- . ':(exclude).pipeline-version')" ]; then
+            echo "Pipeline already up to date - nothing to propose."
+            git checkout -- .pipeline-version 2>/dev/null || true
+            {
+              echo "### Wave Readiness pipeline is up to date"
+              echo
+              echo 'No managed file changed, so no pull request was opened.'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          BRANCH="wave-readiness-update"
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Reuse one branch so repeated schedules refresh a single PR instead
+          # of stacking a new one every week.
+          git checkout -B "$BRANCH"
+          git add -A
+          git commit -q -m "Update Wave Readiness pipeline files
+
+          Synced by .github/workflows/UpdateWaveReadiness.yaml. Managed files
+          only - secrets, repository variables and PageScriptLibrary/ are
+          untouched. Review with 'git diff' before merging."
+
+          git push --force-with-lease origin "$BRANCH"
+
+          EXISTING="$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$EXISTING" ]; then
+            echo "Refreshed existing PR #${EXISTING}."
+            echo "### Wave Readiness update refreshed [PR #${EXISTING}]($(gh pr view "$EXISTING" --json url --jq .url))" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          # Built line by line rather than with a heredoc: this whole script is
+          # a YAML block scalar, and a heredoc terminator has to sit at column 0
+          # of the file, which ends the block early.
+          {
+            echo 'Automated re-sync of the pipeline-managed files from the source repo, opened by'
+            echo '`.github/workflows/UpdateWaveReadiness.yaml`.'
+            echo
+            echo '**What this touches:** only the pipeline'"'"'s managed paths - the workflow, the'
+            echo 'self-update workflow, the composite actions, the helper scripts and `WAVE-READINESS-SETUP.md`.'
+            echo
+            echo '**What it cannot touch:** your GitHub secrets, your repository variables and'
+            echo 'everything under `PageScriptLibrary/`. Configuration is not stored in these'
+            echo 'files, so merging this cannot undo your setup.'
+            echo
+            echo 'Review the diff as you would any other PR. If something here is unwanted, close'
+            echo 'this PR - the next scheduled run will re-open it against the then-current'
+            echo 'upstream, and nothing is applied until you merge.'
+            echo
+            echo 'After merging, a good cheap smoke test is a `workflow_dispatch` of **Wave'
+            echo 'Readiness Validation** with `skipUpgrade` checked and `refreshSandbox`'
+            echo 'unchecked.'
+          } > /tmp/wr-pr-body.md
+
+          URL="$(gh pr create \
+            --head "$BRANCH" \
+            --title "Update Wave Readiness pipeline files" \
+            --body-file /tmp/wr-pr-body.md)"
+          echo "Opened ${URL}"
+          echo "### Wave Readiness update proposed: ${URL}" >> "$GITHUB_STEP_SUMMARY"

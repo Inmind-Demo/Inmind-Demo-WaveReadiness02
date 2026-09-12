@@ -1,0 +1,95 @@
+name: 'Setup bc-replay'
+description: >
+  Install @microsoft/bc-replay into $RUNNER_TEMP and patch its Playwright HTML
+  reporter to strip step data (keeps the replay user's password out of the
+  published report). Used by every job that actually runs page scripts.
+
+inputs:
+  node-version:
+    description: 'Node.js version to install.'
+    required: false
+    default: '24'
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Node
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install bc-replay
+      shell: pwsh
+      working-directory: ${{ runner.temp }}
+      run: |
+        '{ "name": "bc-replay-runner", "version": "1.0.0", "private": true }' |
+          Out-File -FilePath package.json -Encoding utf8
+        npm install '@microsoft/bc-replay'
+
+    - name: Install Playwright browser
+      shell: pwsh
+      working-directory: ${{ runner.temp }}
+      run: |
+        # bc-replay drives Chromium through @playwright/test. Without an
+        # explicit install here Playwright fetches the browser lazily on the
+        # first replay - inside the script run, where a transient CDN failure
+        # is reported as every recording failing rather than as a setup
+        # problem, and where nothing retries it. Seen in the wild as
+        #   Download failed: server closed connection.
+        #   URL: https://cdn.playwright.dev/.../chromium-win64.zip
+        # followed by all nine master-data scripts "failing" in ~14s each.
+        # Installing here makes a download problem fail this step, by name,
+        # before any sandbox time is spent.
+        for ($i = 1; $i -le 3; $i++) {
+          npx --yes playwright install chromium
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Chromium installed (attempt $i)."
+            exit 0
+          }
+          Write-Host "::warning::playwright install chromium failed (attempt $i of 3)."
+          if ($i -lt 3) { Start-Sleep -Seconds (10 * $i) }
+        }
+        throw 'Playwright could not download Chromium after 3 attempts.'
+
+    - name: Patch bc-replay (strip steps from HTML report, retain video, disable trace)
+      shell: pwsh
+      working-directory: ${{ runner.temp }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $distDir = Join-Path $env:RUNNER_TEMP 'node_modules/@microsoft/bc-replay/player/dist'
+
+        # Copy the reporter subclass from this action's own directory rather
+        # than inlining the JS here. $GITHUB_ACTION_PATH points at the
+        # checked-out copy of the composite action.
+        $src = Join-Path $env:GITHUB_ACTION_PATH 'strip-steps-reporter.js'
+        Copy-Item -Path $src -Destination $distDir -Force
+
+        $cfg = Join-Path $distDir 'playwright.config.js'
+        $raw = Get-Content $cfg -Raw
+
+        # Point playwright.config.js at the subclass.
+        $updated = $raw -replace "\['html'", "['./strip-steps-reporter.js'"
+
+        # Default config retains video only on failure in CI. We publish
+        # reports for passing scripts too, so stakeholders can watch the
+        # recording, so force video on regardless of outcome.
+        $updated = $updated -replace 'video:\s*process\.env\.CI\s*\?\s*"retain-on-failure"\s*:\s*"on"', 'video: "on"'
+
+        # Disable Playwright traces. Traces serialize every page.fill()
+        # argument (including the replay user's password) in their action
+        # log, which would leak via the published Pages site. Video gives
+        # us enough to debug — BC's login form masks the password input.
+        $updated = $updated -replace "trace:\s*'on-first-retry'", "trace: 'off'"
+
+        # Enable screenshots for all tests. Screenshots are stored as
+        # attachments (not steps), so strip-steps-reporter.js leaves them
+        # intact. BC's login form masks the password input, so screenshots
+        # are safe to publish.
+        if ($updated -match "screenshot:") {
+            $updated = $updated -replace "screenshot:\s*'[^']*'", "screenshot: 'on'"
+        } else {
+            $updated = $updated -replace "(trace:\s*'off')", "`$1,`n        screenshot: 'on'"
+        }
+
+        Set-Content -Path $cfg -Value $updated -NoNewline
+        Write-Host 'Installed strip-steps HTML reporter; forced video on, trace off, screenshot on'

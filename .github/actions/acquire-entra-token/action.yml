@@ -1,0 +1,50 @@
+name: 'Acquire Entra access token'
+description: >
+  Client-credentials OAuth flow against an Entra tenant. Used by the Wave
+  Readiness workflow to mint tokens for both the BC admin API and Microsoft
+  Graph. Emits ::add-mask:: so the token is never surfaced in the run log,
+  even if a later step accidentally echoes it.
+
+inputs:
+  tenant-id:
+    description: 'Entra tenant ID.'
+    required: true
+  client-id:
+    description: 'Entra app (client) ID.'
+    required: true
+  client-secret:
+    description: 'Entra app client secret.'
+    required: true
+  scope:
+    description: "OAuth scope, e.g. 'https://graph.microsoft.com/.default' or 'https://api.businesscentral.dynamics.com/.default'."
+    required: true
+
+outputs:
+  token:
+    description: 'Bearer access token.'
+    value: ${{ steps.fetch.outputs.token }}
+
+runs:
+  using: composite
+  steps:
+    - id: fetch
+      shell: pwsh
+      env:
+        TENANT_ID: ${{ inputs.tenant-id }}
+        CLIENT_ID: ${{ inputs.client-id }}
+        CLIENT_SECRET: ${{ inputs.client-secret }}
+        SCOPE: ${{ inputs.scope }}
+      run: |
+        $ErrorActionPreference = 'Stop'
+        $body = @{
+          grant_type    = 'client_credentials'
+          client_id     = $env:CLIENT_ID
+          client_secret = $env:CLIENT_SECRET
+          scope         = $env:SCOPE
+        }
+        $uri = "https://login.microsoftonline.com/$($env:TENANT_ID)/oauth2/v2.0/token"
+        $resp = Invoke-RestMethod -Method Post -Uri $uri -Body $body -ContentType 'application/x-www-form-urlencoded'
+        $token = $resp.access_token
+        if (-not $token) { throw "Token endpoint returned no access_token for scope '$($env:SCOPE)'." }
+        Write-Host "::add-mask::$token"
+        "token=$token" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
