@@ -1,7 +1,10 @@
+# Copyright (c) 2026 inMind Technologies. Licensed under the MIT License.
+# SPDX-License-Identifier: MIT
 <#
 .SYNOPSIS
   Replay every .yml page script under one PageScriptLibrary area using
-  @microsoft/bc-replay, sequentially.
+  @microsoft/bc-replay, sequentially, in natural file-name order (numbers
+  inside a name compare by value, so "Script 2" runs before "Script 10").
 
 .DESCRIPTION
   Shared by the master-data and replay jobs in WaveReadinessValidation.yaml.
@@ -41,7 +44,17 @@ $areaDir     = Join-Path $WorkspaceRoot "PageScriptLibrary/$AreaName"
 $areaResults = Join-Path $WorkspaceRoot "replay-results/$AreaName"
 New-Item -ItemType Directory -Force -Path $areaResults | Out-Null
 
-$scripts = Get-ChildItem -Path $areaDir -Filter '*.yml' -File | Sort-Object Name
+# Natural sort: "Page Scripting 10 - ..." must run after "Page Scripting 9 - ...",
+# not straight after "Page Scripting 1 - ..." as a plain name sort would have it.
+# Every digit run in the name is left-padded to a fixed width so an ordinary
+# string comparison orders numbers by value; the raw name breaks ties.
+function Get-NaturalSortKey {
+  param([Parameter(Mandatory)][string]$Name)
+  [regex]::Replace($Name, '\d+', { param($m) $m.Value.PadLeft(20, '0') })
+}
+
+$scripts = Get-ChildItem -Path $areaDir -Filter '*.yml' -File |
+  Sort-Object { Get-NaturalSortKey $_.Name }, Name
 Write-Host "Area '$AreaName': found $($scripts.Count) script(s) in $areaDir"
 
 # npx --no-install resolves `replay` from the CWD's node_modules/.bin. The

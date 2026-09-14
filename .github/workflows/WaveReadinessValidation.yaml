@@ -1,3 +1,5 @@
+# Copyright (c) 2026 inMind Technologies. Licensed under the MIT License.
+# SPDX-License-Identifier: MIT
 name: Wave Readiness Validation
 
 # Validates that recorded business scenarios under PageScriptLibrary/ still
@@ -99,7 +101,8 @@ jobs:
   #
   # Phase 2 runs the remaining areas sequentially in folder-name
   # sort order (the numeric suffix in each folder name controls the
-  # execution order). Scripts inside each area are also sorted by name.
+  # execution order). Scripts inside each area run in natural name order
+  # (numbers compare by value, so script 10 follows script 9).
   #
   # The scriptArea input narrows to a single area:
   #   - blank            -> MasterData + all other areas
@@ -498,7 +501,8 @@ jobs:
   #
   # Areas run one at a time in the order determined by their folder names
   # (the numeric suffix controls the sequence: Purchase - 2, Invoice - 3,
-  # etc.). Within each area, scripts are sorted by file name.
+  # etc.). Within each area, scripts run in natural file-name order (numbers
+  # compare by value, see Invoke-ReplayArea.ps1).
   #
   # Skipped automatically if master-data failed (default needs: semantics)
   # or if no areas remain after filtering.

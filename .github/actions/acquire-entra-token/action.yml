@@ -1,3 +1,5 @@
+# Copyright (c) 2026 inMind Technologies. Licensed under the MIT License.
+# SPDX-License-Identifier: MIT
 name: 'Acquire Entra access token'
 description: >
   Client-credentials OAuth flow against an Entra tenant. Used by the Wave

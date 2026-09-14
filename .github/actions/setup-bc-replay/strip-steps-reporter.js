@@ -1,3 +1,5 @@
+// Copyright (c) 2026 inMind Technologies. Licensed under the MIT License.
+// SPDX-License-Identifier: MIT
 // Playwright HTML reporter subclass that strips `steps` out of every test
 // result before the report is written. Needed because bc-replay's default
 // HTML report records every page.fill() argument as a step — including the

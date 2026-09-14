@@ -1,3 +1,5 @@
+# Copyright (c) 2026 inMind Technologies. Licensed under the MIT License.
+# SPDX-License-Identifier: MIT
 name: Update Wave Readiness Pipeline
 
 # Re-syncs the pipeline-managed files from the source repo and opens a pull
