@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
-# Build the Wave Readiness GitHub Pages site, retaining the last $MAX_RUNS runs.
+# Build the Wave Readiness report site, retaining the last $MAX_RUNS runs.
 #
 # State persists across executions on a dedicated history branch (the
 # workflow checks it out at $HISTORY_DIR before invoking this script).
 # Each run is stored under runs/<run_id>/ alongside a metadata.json
 # sidecar; the top-level index.html lists all retained runs newest-first.
+# Unless KEEP_SUMMARY is 'false', a copy of every run's metadata.json is
+# kept under summary/, which is never pruned, so the pass/fail record
+# outlives the reports themselves at a few hundred bytes per run.
 #
-# Per-run layout (unchanged from the previous flat-site version, just
-# moved one level deeper):
-#   $HISTORY_DIR/runs/<run_id>/
-#     index.html                 per-run report (areas + scripts table)
-#     metadata.json              summary used by the top-level index
-#     <area>/<script>/...        Playwright reports + results.xml
+# Layout:
+#   $HISTORY_DIR/
+#     index.html                 history index (retained runs, newest first)
+#     summary/<run_id>.json      one per run ever published; never pruned
+#                                (absent when KEEP_SUMMARY=false)
+#     runs/<run_id>/
+#       index.html               per-run report (areas + scripts table)
+#       metadata.json            summary used by the top-level index
+#       <area>/<script>/...      Playwright reports + results.xml
 #
 # Inputs (env):
 #   HISTORY_DIR          Persistent site root (the history branch
@@ -29,10 +35,14 @@
 #                        are deleted before the top-level index is built,
 #                        so pruning only ever removes runs already on the
 #                        branch (the new run survives any prune).
+#   KEEP_SUMMARY         'false' disables summary/ and deletes it if
+#                        present. Anything else (default 'true') keeps it.
 #
 # Outputs:
-#   $HISTORY_DIR/runs/<id>/   Per-run report tree (added by this run).
-#   $HISTORY_DIR/index.html   Regenerated top-level history index.
+#   $HISTORY_DIR/runs/<id>/        Per-run report tree (added by this run).
+#   $HISTORY_DIR/summary/<id>.json Copy of this run's metadata.json
+#                                  (unless KEEP_SUMMARY=false).
+#   $HISTORY_DIR/index.html        Regenerated top-level history index.
 #   total / failed counts to $GITHUB_ENV (sibling steps in this job)
 #                          and $GITHUB_OUTPUT (cross-job consumers).
 
@@ -43,6 +53,7 @@ run_id="${RUN_ID:-${GITHUB_RUN_ID:-unknown}}"
 run_number="${RUN_NUMBER:-${GITHUB_RUN_NUMBER:-?}}"
 run_timestamp="${RUN_TIMESTAMP:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 max_runs="${MAX_RUNS:-7}"
+keep_summary="${KEEP_SUMMARY:-true}"
 target="${TARGET_VERSION:-<no upgrade>}"
 
 run_dir="$history_dir/runs/$run_id"
@@ -149,6 +160,17 @@ json_esc() {
   echo "  \"failed\": $failed"
   echo '}'
 } > "$run_dir/metadata.json"
+
+# Keep the summary beyond the run's own retention. summary/ is never
+# pruned, so it holds one small file per run ever published. Opting out
+# also removes what earlier runs left there, so the setting describes the
+# branch rather than only the runs after it was changed.
+if [ "$keep_summary" = "false" ]; then
+  rm -rf "$history_dir/summary"
+else
+  mkdir -p "$history_dir/summary"
+  cp "$run_dir/metadata.json" "$history_dir/summary/$run_id.json"
+fi
 
 # Prune oldest runs to keep only the $max_runs most recent. Run IDs are
 # monotonically increasing, so reverse name-sort gives newest-first; the

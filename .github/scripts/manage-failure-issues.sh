@@ -40,6 +40,17 @@ if [ ! -d "$run_dir" ]; then
   exit 0
 fi
 
+# Repositories can have Issues switched off. Every gh issue command then
+# fails with "has disabled issues", which would fail the deploy-report job
+# after the site has already shipped. Skip with a warning instead; the
+# report site and the history branch still carry the failures.
+repo="${GITHUB_REPOSITORY:-$(gh repo view --json nameWithOwner --jq .nameWithOwner)}"
+has_issues=$(gh api "repos/${repo}" --jq .has_issues 2>/dev/null || echo "unknown")
+if [ "$has_issues" = "false" ]; then
+  echo "::warning::Issues are disabled on ${repo}; skipping failure-issue management. Enable Issues in the repository settings to get one issue per failing script."
+  exit 0
+fi
+
 # Idempotent label create. The `|| true` swallows "already exists" so
 # manual colour/description tweaks made in the UI are preserved.
 gh label create "$label" \

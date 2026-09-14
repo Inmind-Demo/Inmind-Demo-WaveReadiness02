@@ -604,10 +604,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      # Materialise the persistent history branch as ./history. Done by
-      # hand (rather than actions/checkout) so the first-ever run, when
-      # the branch does not yet exist, falls through cleanly to an empty
-      # tree; the commit step below creates the branch on push.
+      # Materialise the history branch as ./history. Done by hand (rather
+      # than actions/checkout) so the first-ever run, when the branch does
+      # not yet exist, falls through cleanly to an empty tree. The branch
+      # is always a single commit, so depth=1 fetches all of it. Its tip
+      # is recorded so the publish step can refuse to overwrite a commit
+      # this job never saw.
       - name: Restore history branch
         shell: bash
         env:
@@ -623,12 +625,14 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if git ls-remote --exit-code --heads origin "$HISTORY_BRANCH" >/dev/null 2>&1; then
+          tip=$(git ls-remote --heads origin "$HISTORY_BRANCH" | cut -f1)
+          if [ -n "$tip" ]; then
             git fetch -q --depth=1 origin "$HISTORY_BRANCH"
             git checkout -q -B "$HISTORY_BRANCH" FETCH_HEAD
           else
             echo "$HISTORY_BRANCH does not exist on origin yet — first run will create it."
           fi
+          echo "HISTORY_TIP=$tip" >> "$GITHUB_ENV"
 
       # v8 defaults digest-mismatch to `error` (v7 only warned). Left at the
       # default: these artifacts were uploaded by this same run, so a hash
@@ -654,13 +658,21 @@ jobs:
           RUN_ID: ${{ github.run_id }}
           RUN_NUMBER: ${{ github.run_number }}
           MAX_RUNS: '7'
+          # 'false' drops the permanent per-run summary and removes any
+          # already on the branch; anything else keeps it.
+          KEEP_SUMMARY: ${{ vars.REPORT_KEEP_SUMMARY || 'true' }}
         run: bash .github/scripts/build-report-site.sh
 
-      # Persist the new run + the regenerated index to the history
-      # branch. Runs even when prior phases failed (the report itself is
-      # still meaningful), and is a no-op if nothing changed (e.g. retry
-      # of an already-published run id).
-      - name: Commit history branch
+      # Publish the regenerated tree as the history branch. The branch is
+      # a snapshot, not a log: each run writes one parentless commit
+      # holding the retained reports and force-pushes it, so the branch
+      # never carries more than the current tree and a pruned run leaves
+      # nothing behind in git. The lease pins the push to the tip fetched
+      # above, so a tip that moved in the meantime fails the push instead
+      # of being overwritten. Runs even when prior phases failed (the
+      # report itself is still meaningful), and is a no-op when the tree
+      # is unchanged (e.g. a retry of an already-published run id).
+      - name: Publish history branch
         shell: bash
         working-directory: history
         env:
@@ -668,12 +680,13 @@ jobs:
         run: |
           set -euo pipefail
           git add -A
-          if git diff --cached --quiet; then
-            echo "No history changes to commit."
+          tree=$(git write-tree)
+          if [ -n "$HISTORY_TIP" ] && [ "$tree" = "$(git rev-parse "${HISTORY_TIP}^{tree}")" ]; then
+            echo "No history changes to publish."
             exit 0
           fi
-          git commit -q -m "Wave readiness run #${{ github.run_number }} (${{ github.run_id }})"
-          git push -q -u origin "$HISTORY_BRANCH"
+          commit=$(git commit-tree "$tree" -m "Wave readiness run #${{ github.run_number }} (${{ github.run_id }})")
+          git push -q --force-with-lease="refs/heads/${HISTORY_BRANCH}:${HISTORY_TIP}" origin "${commit}:refs/heads/${HISTORY_BRANCH}"
 
       # Package the site content (excluding .git) into a zip for
       # deployment to Azure App Service. App Service with Easy Auth
@@ -905,8 +918,7 @@ jobs:
           set -euo pipefail
 
           # Opt-in: stay green on a fresh fork/install until a notification
-          # mailbox is configured. Both FROM and TO must be set. Mirrors the
-          # Teams step, which no-ops until TEAMS_WEBHOOK_URL exists.
+          # mailbox is configured. Both FROM and TO must be set.
           if [ -z "${FROM:-}" ] || [ -z "${TO:-}" ]; then
             echo "::warning::NOTIFY_FROM / NOTIFY_TO not set; skipping email notification. Set both repository variables to enable it."
             exit 0
@@ -1012,149 +1024,3 @@ jobs:
             --data "$payload"
 
           echo "Notification sent: ${TO}"
-
-      # Post an Adaptive Card to a Teams channel via a Power Automate
-      # "Workflows" webhook. Failures-only by design — email is the audit
-      # trail, the Teams ping is the "look at this now" signal. Skipped
-      # silently if TEAMS_WEBHOOK_URL is not yet configured, so the
-      # workflow stays green during initial rollout.
-      #
-      # Webhook setup (one-time, no Entra changes needed):
-      #   In the target channel: + → Workflows → "Post to a channel when
-      #   a webhook request is received" → finish → copy the URL → save
-      #   as the TEAMS_WEBHOOK_URL repo secret. The flow forwards the
-      #   posted Adaptive Card to the channel.
-      - name: Post Teams notification
-        if: always()
-        shell: bash
-        env:
-          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-          PAGE_URL: ${{ needs.deploy-report.outputs.pageUrl }}
-          RUN_REPORT_URL: ${{ needs.deploy-report.outputs.runUrl }}
-          TOTAL: ${{ needs.deploy-report.outputs.total }}
-          FAILED: ${{ needs.deploy-report.outputs.failed }}
-          REQUESTED: ${{ github.event.inputs.targetVersion }}
-          RESOLVED: ${{ needs.copy-and-upgrade.outputs.resolvedVersion }}
-          RESOLVED_TYPE: ${{ needs.copy-and-upgrade.outputs.resolvedType }}
-          CURRENT: ${{ needs.copy-and-upgrade.outputs.currentVersion }}
-          SKIPPED: ${{ needs.copy-and-upgrade.outputs.upgradeSkipped }}
-          SKIP_REASON: ${{ needs.copy-and-upgrade.outputs.skipReason }}
-          MD_STATUS: ${{ needs.master-data.result }}
-          REPLAY_STATUS: ${{ needs.replay.result }}
-          REFRESHED: ${{ github.event.inputs.refreshSandbox }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          SOURCE_ENV: ${{ env.SOURCE_ENV }}
-          TARGET_ENV: ${{ env.TARGET_ENV }}
-        run: |
-          set -euo pipefail
-
-          if [ -z "${TEAMS_WEBHOOK_URL:-}" ]; then
-            echo "::warning::TEAMS_WEBHOOK_URL not set; skipping Teams notification."
-            exit 0
-          fi
-
-          # Mirror the email step's target-version display logic so all
-          # three channels (summary / email / Teams) tell the same story.
-          if [ -n "${RESOLVED:-}" ]; then
-            type_suffix=""
-            [ -n "${RESOLVED_TYPE:-}" ] && type_suffix=" [${RESOLVED_TYPE}]"
-            if [ "${RESOLVED}" = "${REQUESTED:-}" ]; then
-              target="${RESOLVED}${type_suffix}"
-            else
-              target="${RESOLVED}${type_suffix} (resolved from '${REQUESTED:-}')"
-            fi
-          elif [ "${SKIPPED:-}" = "true" ]; then
-            target="${CURRENT:-current} (upgrade skipped — ${SKIP_REASON:-no newer version available})"
-          elif [ -z "${REQUESTED:-}" ]; then
-            target="(no upgrade — replay at current sandbox version)"
-          else
-            target="${REQUESTED} (upgrade did not complete)"
-          fi
-
-          md_ok="false";      { [ "$MD_STATUS" = "success" ]      || [ "$MD_STATUS" = "skipped" ]; }      && md_ok="true"
-          replay_ok="false";  { [ "$REPLAY_STATUS" = "success" ]  || [ "$REPLAY_STATUS" = "skipped" ]; }  && replay_ok="true"
-          failed_count="${FAILED:-0}"
-          total_count="${TOTAL:-?}"
-
-          # Failures-only: skip on green runs to keep the channel quiet.
-          if [ "$md_ok" = "true" ] && [ "$replay_ok" = "true" ] && [ "$failed_count" = "0" ]; then
-            echo "All phases passed; skipping Teams notification."
-            exit 0
-          fi
-
-          if [ "$MD_STATUS" = "failure" ]; then
-            headline="FAIL (master data)"
-            banner="Master-data seeding failed. The remaining phases did not run because they depend on the seed data."
-            style="attention"
-          else
-            headline="FAIL"
-            banner="One or more scenarios broke. Open the report to see which step failed and on which page."
-            style="attention"
-          fi
-
-          if [ "${REFRESHED:-}" = "false" ]; then
-            sandbox_note="reused (not refreshed from ${SOURCE_ENV})"
-          else
-            sandbox_note="fresh copy of ${SOURCE_ENV}"
-          fi
-
-          # Adaptive Card 1.4 wrapped in the standard message envelope.
-          # Power Automate's "Post adaptive card in a chat or channel"
-          # action accepts this payload as-is when the flow forwards
-          # the request body directly.
-          payload=$(jq -n \
-            --arg headline    "Wave Readiness: ${headline}" \
-            --arg banner      "$banner" \
-            --arg target      "$target" \
-            --arg sandbox     "${TARGET_ENV} (${sandbox_note})" \
-            --arg counts      "${total_count} / ${failed_count}" \
-            --arg md          "$MD_STATUS" \
-            --arg replay      "$REPLAY_STATUS" \
-            --arg style       "$style" \
-            --arg report_url  "$RUN_REPORT_URL" \
-            --arg history_url "$PAGE_URL" \
-            --arg run_url     "$RUN_URL" \
-            '{
-              type: "message",
-              attachments: [{
-                contentType: "application/vnd.microsoft.card.adaptive",
-                content: {
-                  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-                  type: "AdaptiveCard",
-                  version: "1.4",
-                  body: [
-                    {
-                      type: "Container",
-                      style: $style,
-                      bleed: true,
-                      items: [
-                        { type: "TextBlock", text: $headline, weight: "Bolder", size: "Large", wrap: true }
-                      ]
-                    },
-                    { type: "TextBlock", text: $banner, wrap: true, spacing: "Medium" },
-                    {
-                      type: "FactSet",
-                      facts: [
-                        { title: "Target version",         value: $target  },
-                        { title: "Sandbox",                value: $sandbox },
-                        { title: "Scripts total / failed", value: $counts  },
-                        { title: "Master-data phase",      value: $md      },
-                        { title: "Replay phase",           value: $replay  }
-                      ]
-                    }
-                  ],
-                  actions: [
-                    { type: "Action.OpenUrl", title: "Open run report", url: $report_url },
-                    { type: "Action.OpenUrl", title: "Run history",     url: $history_url },
-                    { type: "Action.OpenUrl", title: "Actions run",     url: $run_url }
-                  ]
-                }
-              }]
-            }')
-
-          curl -sS --fail-with-body -X POST \
-            "$TEAMS_WEBHOOK_URL" \
-            -H "Content-Type: application/json" \
-            --data "$payload"
-
-          echo "Teams notification posted."
