@@ -37,8 +37,9 @@ from it. Nothing is written back.
 
 ### What it costs
 
-- **~US$13/month** for a small Azure web server that hosts the report. This is
-  the only recurring cost.
+- **A small Azure web server** that hosts the report. It runs on the cheapest
+  Linux App Service plan and is the only recurring cost. Check current Azure
+  pricing for your region before you commit.
 - **GitHub Actions minutes.** A full run is 45–60 minutes of `ubuntu` and
   `windows` time, and Windows minutes bill at a higher multiplier. A weekly run
   sits comfortably inside a Team plan's included minutes.
@@ -77,13 +78,13 @@ rather than stalling halfway.
 | Added | Notes |
 |---|---|
 | `.github/workflows/WaveReadinessValidation.yaml` | Runs on manual trigger only; never on push or PR |
-| `.github/workflows/UpdateWaveReadiness.yaml` | Weekly self-update; inert until you give it a token (phase 12) |
+| `.github/workflows/UpdateWaveReadiness.yaml` | Weekly self-update; inert until you give it a token (phase 11) |
 | `.github/actions/`, four files under `.github/scripts/` | Helper pieces. Anything else you keep there is untouched |
 | `WAVE-READINESS-SETUP.md` | This guide |
 | `PageScriptLibrary/` | Empty skeleton; yours to fill |
 | `.pipeline-version` | Records which version you installed |
 | A `report-site` deployment environment | The deploy target |
-| A `wave-readiness-history` branch | Created on first run; holds the rolling report history |
+| A `wave-readiness-history` branch | Created on first run; a single-commit snapshot of the last seven reports, rewritten each run. Safe to delete; never merge it |
 
 If any of those paths already exist, the installer stops and lists them rather
 than overwriting. Nothing else in your repo is read or modified.
@@ -103,10 +104,9 @@ several phases later.
 | 5 | The replay user | BC + M365 admin | 15 min |
 | 6 | The Page Scripting role | Business Central | 5 min |
 | 7 | The report website | Terminal | 10 min |
-| 8 | Teams notifications *(optional)* | Teams | 10 min |
-| 9 | Store the settings | Terminal | 10 min |
-| 10 | Record your processes | Business Central | Open-ended |
-| 11 | First run | GitHub | 45–60 min, mostly waiting |
+| 8 | Store the settings | Terminal | 10 min |
+| 9 | Record your processes | Business Central | Open-ended |
+| 10 | First run | GitHub | 45–60 min, mostly waiting |
 
 ---
 
@@ -148,12 +148,24 @@ listed in phase 0.
 
 ## 2. Prepare the repository
 
-A GitHub repository is where the automation lives. Any repository works — it
-can be one you already use.
+A GitHub repository is where the automation lives. Give it **one of its own,
+one per Business Central environment**, rather than a folder in a repository
+that holds code. Three reasons:
 
-If you do not have one, create a new empty repository and set its visibility to
-**Private**. If you are adding this to an existing repository, confirm that one
-is private too.
+- The people recording processes and reading reports are business users, and
+  the reports contain screenshots and recordings of your data. A repository of
+  its own lets you decide who sees that without also deciding who sees code.
+- The workflow needs to write to the repository (a branch and issues) and to
+  sign in to Azure. That is easier to grant to a repository holding only
+  recordings and reports.
+- Rules written for code review — required pull requests, signed commits, no
+  force-pushes — block the workflow's own branch. A repository of its own has
+  no such rules to work around.
+
+Create a new empty repository and set its visibility to **Private**. If you
+decide to use an existing repository instead, confirm that it is private, and
+make sure any branch rules exclude the branch `wave-readiness-history`, which
+the workflow rewrites on every run.
 
 Get a copy on your computer:
 
@@ -172,6 +184,11 @@ ran `git clone` from.
 > that was created with `git init` rather than in the clone — perhaps one
 > level above it. The installer needs the clone: it is how the settings and
 > the deploy environment find your repository on GitHub.
+
+> [!NOTE]
+> Once the pipeline has run, the repository carries a branch of reports that
+> can reach a few hundred megabytes. Anyone cloning after that point who only wants the
+> recordings can skip it with `git clone --single-branch`.
 
 ---
 
@@ -250,7 +267,7 @@ for a program rather than a person.
 2. Name it something recognisable, e.g. `BC Wave Readiness`. Leave the other
    options as they are. Click **Register**.
 3. On the overview page, copy the **Application (client) ID** and the
-   **Directory (tenant) ID**. You need both in phase 9.
+   **Directory (tenant) ID**. You need both in phase 8.
 4. Go to **API permissions** → **Add a permission** → **APIs my organization
    uses** → search for **Dynamics 365 Business Central**.
 5. Choose **Application permissions** (not Delegated), tick
@@ -284,7 +301,7 @@ You should now have three things written down: **tenant ID**, **client ID**,
 > **Check it worked.** In Entra, open your app → **API permissions**. The row
 > for `AdminCenter.ReadWrite.All` shows a green tick and **Granted for [your
 > organisation]**. If it says "Not granted", consent was not completed and
-> phase 11 fails with a 403.
+> phase 10 fails with a 403.
 
 ---
 
@@ -318,7 +335,7 @@ interactive sign-in.
 The robot cannot tap "Approve" on a phone. You have two workable options, and
 choosing the wrong combination is a common cause of failure.
 
-| Option | What to do | In phase 9 |
+| Option | What to do | In phase 8 |
 |---|---|---|
 | **No MFA** — simplest | Exclude this account from your conditional access / MFA policy. Suitable for a non-production robot account; discuss with whoever owns security policy | Do **not** set `BC_REPLAY_TOTP_SECRET` |
 | **MFA by authenticator code** | Add a TOTP method to the account and keep the setup key — the long string behind the QR code | Set `BC_REPLAY_TOTP_SECRET` to that key |
@@ -367,7 +384,7 @@ roles list for that text. If nothing matches, it waits two minutes and gives up.
 > [!TIP]
 > **Check it worked.** Sign in as the replay user, open **My Settings**, click
 > the **Role** field's lookup, and type `Page Scripting`. Exactly one row
-> should appear. If the list comes back empty, phase 11 hangs.
+> should appear. If the list comes back empty, phase 10 hangs.
 
 ---
 
@@ -408,23 +425,7 @@ Add `--dry-run` to see what it would do without doing it.
 
 ---
 
-## 8. Teams notifications *(optional)*
-
-Skip this whole phase if you do not want Teams messages on failure. Email
-notifications work without it.
-
-1. In the target Teams channel: **+** (add tab) → **Workflows** → choose
-   **Post to a channel when a webhook request is received**.
-2. Pick the team and channel → **Next** → **Add workflow** → copy the resulting
-   URL.
-3. Save it as the `TEAMS_WEBHOOK_URL` secret in phase 9.
-
-The workflow posts an adaptive card payload as-is; the default "Post to
-channel" action forwards the request body directly, which is what we need.
-
----
-
-## 9. Store the settings
+## 8. Store the settings
 
 Passwords go into GitHub's encrypted secret store, never into files.
 
@@ -466,7 +467,6 @@ variables** → **Actions**.
 | `AZURE_DEPLOY_CLIENT_ID` | Written by phase 7 | Yes |
 | `AZURE_DEPLOY_TENANT_ID` | Written by phase 7 | Yes |
 | `AZURE_DEPLOY_SUBSCRIPTION_ID` | Written by phase 7 | Yes |
-| `TEAMS_WEBHOOK_URL` | Phase 8 | Optional |
 
 ### Variables — plain settings, visible to your team
 
@@ -479,6 +479,7 @@ variables** → **Actions**.
 | `NOTIFY_FROM` | Mailbox in your tenant for outbound notifications | Only for email |
 | `NOTIFY_TO` | Mailbox to receive the notification email | Only for email |
 | `BC_ADMIN_API_BASE` | Override the admin API URL | Only if Microsoft retires `v2.28` |
+| `REPORT_KEEP_SUMMARY` | `true` or `false`: keep a one-line pass/fail summary of every run (phase 11) | Only to turn it off |
 
 > [!WARNING]
 > `BC_TARGET_ENV` does not need to exist yet — the copy creates it. Naming an
@@ -492,7 +493,7 @@ variables** → **Actions**.
 
 ---
 
-## 10. Record your processes
+## 9. Record your processes
 
 This is the part only you can do — nobody else knows what your business
 actually does. It is also the part that decides whether any of this is useful.
@@ -552,12 +553,12 @@ git push
 > [!TIP]
 > **Check it worked.** On GitHub, browse into `PageScriptLibrary/` and confirm
 > your `.yml` files are there inside their area folders. If the library is
-> empty, the run in phase 11 finishes in about 20 seconds, reports success, and
+> empty, the run in phase 10 finishes in about 20 seconds, reports success, and
 > tests nothing at all.
 
 ---
 
-## 11. First run
+## 10. First run
 
 Everything is in place. This takes 45–60 minutes, most of it waiting.
 
@@ -595,11 +596,11 @@ running.
 > [!TIP]
 > **Check it worked.** The run finishes green and your report URL from phase 7
 > now shows results, with video and screenshots for each recording. If anything
-> failed, go to phase 13 — and do not trust the first error message you see.
+> failed, go to phase 12 — and do not trust the first error message you see.
 
 ---
 
-## 12. Keeping it running
+## 11. Keeping it running
 
 ### Routine
 
@@ -638,6 +639,28 @@ red on a repo that never opted in.
 > under `PageScriptLibrary/` are outside that set, so no update can undo your
 > configuration or touch your recordings.
 
+### The report branch
+
+Every run rewrites the branch `wave-readiness-history` with the last seven
+reports and a small `summary/` folder that keeps one line of pass/fail per run
+for as long as the branch exists. It is a snapshot, not a history: the branch
+holds one commit, the run that wrote it, and nothing older.
+
+The `summary/` folder is the only thing that outlives the seven runs. It holds
+no screenshots or recordings, just the run number, date, target version and
+counts. If you would rather keep nothing at all, set the repository variable
+`REPORT_KEEP_SUMMARY` to `false`: the next run stops writing summaries and
+deletes the ones already there.
+
+- **Do not commit to it.** The next run overwrites whatever is there.
+- **Do not merge it.** It has nothing in common with your other branches, and
+  git refuses the merge anyway.
+- **Delete it if it looks wrong.** The next run creates it again. You lose the
+  seven retained reports and the `summary/` record, nothing else.
+- **Keep branch rules off it.** A rule that requires pull requests or signed
+  commits, or that forbids force-pushes, fails the `deploy-report` job with a
+  *protected branch* error from `git push`.
+
 ### Calendar items
 
 Two credentials expire and take the pipeline down the morning they do:
@@ -656,11 +679,12 @@ az group delete --name YOUR-RESOURCE-GROUP --yes
 Then delete the two app registrations in Entra (`GH Deploy - …` and
 `BC Wave Reports - …`), and delete the throwaway sandbox in the BC admin
 centre. The Azure resource group is the only thing costing money, so delete
-that first.
+that first. If the repository stays, delete the `wave-readiness-history`
+branch too: it holds screenshots and recordings of your data.
 
 ---
 
-## 13. When something fails
+## 12. When something fails
 
 Read this before you start changing things. The most common mistake is fixing
 the wrong problem.
@@ -694,6 +718,7 @@ the wrong problem.
 | `setup` reports `hasScripts=false`, run ends in ~20s "successfully" | No recordings were found, so nothing was tested | Area folders must sit directly under `PageScriptLibrary/` with `.yml` at their root — not nested deeper |
 | Run sits at the very first step doing nothing | Someone added required reviewers to the `report-site` environment | Approve it in the Actions tab, or remove the reviewer rule under **Settings → Environments** for unattended runs |
 | Report site returns 404 after a successful deploy | `REPORT_SITE_URL` is wrong | It must end with a **trailing slash** |
+| `deploy-report` fails at **Publish history branch** with *protected branch* or *cannot force-push* | A branch rule covers `wave-readiness-history` | Exclude that branch from the rule; it is rewritten on every run — phase 11 |
 | Recordings pass individually but fail in a full run | They depend on data a `MasterData - 1` recording creates, and that one failed | Fix the master-data recording first |
 
 ### The rule that explains most surprises
@@ -710,7 +735,7 @@ the wrong problem.
 
 ---
 
-## 14. Configuration reference
+## 13. Configuration reference
 
 The values most likely changed during adoption. If something stops behaving,
 start here.
@@ -723,6 +748,7 @@ start here.
 | Workflow `env:` (fixed) | `MASTER_DATA_AREA` | `MasterData - 1` |
 | Workflow `env:` (overridable via vars) | `NOTIFY_FROM` / `NOTIFY_TO` | *(unset — email skipped)* |
 | `build-report-site.sh` env | `MAX_RUNS` | `7` |
+| `build-report-site.sh` env (overridable via `vars.REPORT_KEEP_SUMMARY`) | `KEEP_SUMMARY` | `true` |
 | `setup-bc-replay` input | `node-version` | `24` |
 
 The workflow falls back to the placeholder defaults `PRODUCTION` and
@@ -731,7 +757,7 @@ names before running.
 
 ---
 
-## 15. Renaming, transferring, or forking the repository
+## 14. Renaming, transferring, or forking the repository
 
 The federated credential's subject is **read from GitHub** rather than built
 from your owner and repo name. GitHub issues one of two forms, and which one a
@@ -761,7 +787,8 @@ Checklist after a rename or transfer, in order:
    `owner/repo@ref` and will not match a SHA pin; allow `actions/*`, `azure/*`,
    or the specific SHAs. Confirm the default `GITHUB_TOKEN` permissions are not
    locked below what `deploy-report` requests (`contents: write`,
-   `issues: write`, `id-token: write`).
+   `issues: write`, `id-token: write`), and that no organisation ruleset
+   forbids force-pushes to `wave-readiness-history`.
 4. **Verify secrets and variables survived**: `gh secret list`,
    `gh variable list`.
 5. **Update local clones**:
@@ -775,7 +802,7 @@ Checklist after a rename or transfer, in order:
 
 ---
 
-## 16. Plain-English glossary
+## 15. Plain-English glossary
 
 | Term | What it actually means here |
 |---|---|
@@ -793,3 +820,4 @@ Checklist after a rename or transfer, in order:
 | **Secret** | An encrypted value stored in GitHub. Can be written, never read back |
 | **Easy Auth** | Azure's built-in sign-in wall, used to keep the report private |
 | **OIDC / federated credential** | How GitHub proves its identity to Azure without a stored password |
+| **History branch** | `wave-readiness-history`: where the workflow keeps the last seven reports. Rewritten every run, safe to delete, never merged |
