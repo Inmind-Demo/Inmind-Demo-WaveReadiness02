@@ -48,6 +48,14 @@ steps:
     modal: false
     runtimeId: e802
     description: Page <caption>Vendor Card</caption> was shown.
+  - type: validate
+    target:
+      - page: Vendor Card
+        runtimeRef: e802
+      - field: Balance (LCY)
+    operation: =
+    value: 0
+    description: Validate <caption>Balance ($)</caption> <operation>is</operation> <value>0</value>
   - type: invoke
     target:
       - page: Vendor Card

@@ -189,27 +189,6 @@ steps:
       page: null
     runtimeId: d905
     description: Page <caption>Confirm</caption> was closed.
-  - type: page-shown
-    source:
-      page: null
-      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
-      caption: Confirm
-    modal: true
-    runtimeId: d906
-    description: Page <caption>Confirm</caption> was shown.
-  - type: invoke
-    target:
-      - page: null
-        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
-        caption: Confirm
-        runtimeRef: d906
-    invokeType: No
-    description: Invoke No on <caption>Confirm</caption>
-  - type: page-closed
-    source:
-      page: null
-    runtimeId: d906
-    description: Page <caption>Confirm</caption> was closed.
   - type: page-closed
     source:
       page: Purchase Invoice
