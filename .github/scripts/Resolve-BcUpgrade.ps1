@@ -1,3 +1,5 @@
+# Copyright (c) 2026 inMind Technologies. Licensed under the MIT License.
+# SPDX-License-Identifier: MIT
 <#
 .SYNOPSIS
   Resolve a user-supplied target version against the BC admin API's /updates

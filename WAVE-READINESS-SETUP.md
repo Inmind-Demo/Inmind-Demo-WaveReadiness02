@@ -35,6 +35,14 @@ reaches anyone.
 Your **production environment is only ever read** — the BC admin API copies
 from it. Nothing is written back.
 
+### A helper, not a managed service
+
+This pipeline is free, open-source tooling under the MIT licence. It is
+provided as is, without warranty, and you run it in your own tenant, on your
+own data, at your own risk. Read each phase before you do it and watch the
+first few runs closely; the phase checks and the failure issues exist so that
+problems surface early, while they are still cheap to fix.
+
 ### What it costs
 
 - **A small Azure web server** that hosts the report. It runs on the cheapest
@@ -528,7 +536,8 @@ PageScriptLibrary/
   failure blocks every later area by design.
 - Other folders run sequentially in folder-name sort order. The numeric suffix
   controls the order.
-- Inside each folder, scripts run in file-name sort order.
+- Inside each folder, scripts run in file-name order, with numbers compared by
+  value: `Script 2` runs before `Script 10`.
 
 **`MasterData - 1` should create what your other recordings depend on** — the
 vendors, items and posting setup. The sandbox is a fresh copy of production

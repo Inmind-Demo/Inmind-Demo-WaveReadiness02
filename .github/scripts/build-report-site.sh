@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 inMind Technologies. Licensed under the MIT License.
+# SPDX-License-Identifier: MIT
 # Build the Wave Readiness report site, retaining the last $MAX_RUNS runs.
 #
 # State persists across executions on a dedicated history branch (the

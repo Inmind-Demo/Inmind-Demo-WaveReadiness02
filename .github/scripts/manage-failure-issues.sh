@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright (c) 2026 inMind Technologies. Licensed under the MIT License.
+# SPDX-License-Identifier: MIT
 # Open / comment / close GitHub issues per Wave Readiness script failure.
 #
 # Walks the run report tree built by build-report-site.sh. For each script:
