@@ -1,0 +1,21 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="15.090813">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-15T00:09:03.234Z" hostname="chromium" tests="1" failures="0" skipped="0" time="14.454" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\MasterData - 1\DynamicsCon - Page Scripting 4 - Update Vendor City.yml)" classname="dist\player.spec.js" time="14.454">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA71WW2_aMBR-51f4ByzUzsVAhCZ1bK0qrdPUdntASJMbnzBriR3ZDox_PzsBGi5dC6vGC-hwfPxdjo9toYASrF7d8BQx8hhmEY8DSHIaxJiQYIgxCfD2Q0jPWKhM2kMoQHZVQYokW4g5s-BCCFmm52DT5rdPqdjcpXyojZBgDLpl0gU0ulMFoAlIC3qbyjIrlEzRd5BcadPEOZhMi6r948t6I2QVGmesib5fZ48vNoFmXaHmGwzGQbIpCnFIAzwKSPKAcYpHKYn7eISn6yxea9buEpOkQ87jD8xPtZRNolG1zmBTuiXXIkCfhbFNvFScFSnKWWFaTXQtrSjBK8wJJofEvro6f2GElsygBkP_BHJ0MJp2iAi5UL_-5tE-jQ7yO8g70P0SDRU4J3SKJkparYqnv3IBBfdmle1u7cYPDYgrUbhFH1YTVdRlq2jFtMt0UbMB9M3AJV8wmQFv84Wcp8jqGg6Vu2mK79VFSj6p6XGc1RwDPDrSHOGOpFVt30pRkylfM2-YbNP3xVywooZ1w9y3Msj5MVkcMjRust_vJo8v2qhD3z1G58s0oIcyDcPB_269bpt94sI-01yXxZKtzESVpbDdM3qsq7Ra7rTSZr8zdEr6NCKHOiUJPmvWTJjmr5k14etmTVPv3-YN7YdhOD39cGyZHPE83J8pE2FX3WNw6w0BVrxwADZpz7S-r3qGpY5xcsRSMow6KmSFMhB4xm8hxQ7FiS_dVHjBzhMYxfTIhUjCgyZtaPFXd-mbNWW77yldSQmenunHy-PolX6c8zhxyKPBES8iOjrPjC2bN3mNnGrEsI-jeNqTbhqn6OPKfYvMTWHpmOxeT4gQF_tWcf_O2zSCP_Y7EK-E5Ah-O0p-yV6FRbPqHarbIn71O2TYAnotPIe10spdtP4ivbz-hO4ndzdfH26-XPfWVJ6jgaP-YNS40nEkDql_MC4EB-W4pTM2-2GhrGYWjA00mLqwZtavCrZaajH_aQNXXOTutWsCPIsHENNkmNGcUkzDPB7yKBklFCePdJCzqL-Ex7L3B8ZTxeOmCwAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c58b7-4---Update-Vendor-City-yml--chromium\attachments\Recording-5e4dfbcbc9194ec8403243d906cb3267149e62af.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c58b7-4---Update-Vendor-City-yml--chromium\attachments\Replay-log-eaf8297229197b71eeabb59fd2b0d240ca4134a2.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c58b7-4---Update-Vendor-City-yml--chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c58b7-4---Update-Vendor-City-yml--chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

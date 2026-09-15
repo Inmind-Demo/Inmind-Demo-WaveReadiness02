@@ -1,0 +1,110 @@
+telemetryId: 34bc593f-78da-4c67-9df6-0cf8baed6cc8
+name: DynamicsCon - Page Scripting 1 - My Settings
+description: Test recording
+start:
+  profile: PAGE SCRIPTING
+steps:
+  - type: invoke
+    invokeType: OpenSettings
+    description: Invoke OpenSettings
+    log:
+      start: 2026-09-15T00:08:09.415Z
+      duration: 311
+  - type: page-shown
+    source:
+      page: User Settings
+    modal: false
+    runtimeId: b4y
+    description: Page <caption>My Settings</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:09.753Z
+  - type: invoke
+    target:
+      - page: User Settings
+        runtimeRef: b4y
+      - field: UserRoleCenter
+    invokeType: AssistEdit
+    description: Invoke AssistEdit on <caption>Role</caption>
+    log:
+      start: 2026-09-15T00:08:09.779Z
+      duration: 170
+  - type: page-shown
+    source:
+      page: Roles
+    modal: true
+    runtimeId: b5l
+    description: Page <caption>Available Roles</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:10.039Z
+  - type: input
+    target:
+      - page: Roles
+        runtimeRef: b5l
+      - scope: filter
+        field: filter:system:search
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Search</caption>
+    log:
+      start: 2026-09-15T00:08:10.065Z
+      duration: 50
+  - type: invoke
+    target:
+      - page: Roles
+        runtimeRef: b5l
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Available Roles</caption>
+    log:
+      start: 2026-09-15T00:08:10.142Z
+      duration: 374
+  - type: page-closed
+    source:
+      page: Roles
+    runtimeId: b5l
+    description: Page <caption>Available Roles</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:10.543Z
+  - type: scope
+    condition:
+      type: value
+      target:
+        - page: User Settings
+          runtimeRef: b4y
+        - field: Teaching Tips
+      operation: =
+      value: true
+    description: When <caption>Teaching Tips</caption> <operation>is</operation>
+      <value>Yes</value>
+    log:
+      start: 2026-09-15T00:08:10.570Z
+    steps:
+      - type: input
+        target:
+          - page: User Settings
+            runtimeRef: b4y
+          - field: Teaching Tips
+        value: false
+        description: Input <value>false</value> into <caption>Teaching Tips</caption>
+        log:
+          start: 2026-09-15T00:08:10.596Z
+          duration: 33
+      - type: invoke
+        target:
+          - page: User Settings
+            runtimeRef: b4y
+        invokeType: Ok
+        description: Invoke Ok on <caption>My Settings</caption>
+        log:
+          start: 2026-09-15T00:08:10.655Z
+          duration: -1789430889316
+      - type: page-closed
+        source:
+          page: User Settings
+        runtimeId: b4y
+        description: Page <caption>My Settings</caption> was closed.
+        log:
+          start: 2026-09-15T00:08:15.904Z
+log:
+  start: 2026-09-15T00:07:48.291Z
+  duration: 27640
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\7f835f8cb933bb618b34509d1889d1ed.webm

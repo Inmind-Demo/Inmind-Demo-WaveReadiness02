@@ -1,0 +1,111 @@
+telemetryId: a1b2c3d4-e5f6-4018-8001-000000000018
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Vendors
+    description: Navigate to <caption>Vendors</caption>
+    log:
+      start: 2026-09-15T01:00:21.135Z
+      duration: 662
+  - type: page-shown
+    source:
+      page: Vendor List
+    modal: false
+    runtimeId: d801
+    description: Page <caption>Vendors</caption> was shown.
+    log:
+      start: 2026-09-15T01:00:22.103Z
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: d801
+      - repeater: Control1
+      - field: Name
+    invokeType: FilterByColumn
+    parameters:
+      UseAdvancedFiltering: true
+    description: Invoke FilterByColumn on <caption>Name</caption>
+    log:
+      start: 2026-09-15T01:00:22.192Z
+      duration: 76
+  - type: input
+    target:
+      - page: Vendor List
+        runtimeRef: d801
+      - scope: filter
+        field: Name
+    value: Page Scripting
+    description: Input <value>Page Scripting</value> into <caption>Name</caption>
+    log:
+      start: 2026-09-15T01:00:22.336Z
+      duration: 828
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: d801
+      - repeater: Control1
+    invokeType: Edit
+    parameters:
+      AlwaysCommit: false
+    description: Invoke row on <caption>Control1</caption>
+    log:
+      start: 2026-09-15T01:00:23.209Z
+      duration: 1092
+  - type: page-shown
+    source:
+      page: Vendor Card
+    modal: false
+    runtimeId: d802
+    description: Page <caption>Vendor Card</caption> was shown.
+    log:
+      start: 2026-09-15T01:00:24.351Z
+  - type: validate
+    target:
+      - page: Vendor Card
+        runtimeRef: d802
+      - field: Name
+    operation: =
+    value: Page Scripting
+    description: Validate <caption>Name</caption> <operation>is</operation>
+      <value>Page Scripting</value>
+    log:
+      start: 2026-09-15T01:00:24.412Z
+  - type: close-page
+    target:
+      - page: Vendor Card
+        runtimeRef: d802
+    description: Close page <caption>Vendor Card</caption>
+    log:
+      start: 2026-09-15T01:00:24.514Z
+      duration: 230
+  - type: page-closed
+    source:
+      page: Vendor Card
+    runtimeId: d802
+    description: Page <caption>Vendor Card</caption> was closed.
+    log:
+      start: 2026-09-15T01:00:24.775Z
+  - type: close-page
+    target:
+      - page: Vendor List
+        runtimeRef: d801
+    description: Close page <caption>Vendors</caption>
+    log:
+      start: 2026-09-15T01:00:24.802Z
+      duration: 166
+  - type: page-closed
+    source:
+      page: Vendor List
+    runtimeId: d801
+    description: Page <caption>Vendors</caption> was closed.
+    log:
+      start: 2026-09-15T01:00:25.001Z
+name: DynamicsCon - Page Scripting 18 - Open Vendor Validate Name
+description: Open existing Page Scripting vendor card and validate Name field
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-15T01:00:08.846Z
+  duration: 16183
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\c6f1b8d77613be0409d0f4dec2afcaf5.webm

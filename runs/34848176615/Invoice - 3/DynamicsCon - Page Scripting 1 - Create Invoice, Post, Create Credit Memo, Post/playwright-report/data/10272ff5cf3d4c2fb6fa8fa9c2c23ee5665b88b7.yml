@@ -1,0 +1,440 @@
+telemetryId: 6639a7f6-c652-423b-afd2-a3f767a1c75c
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: <Page Purchase Invoices>
+    description: Navigate to <caption>Purchase Invoices</caption>
+    log:
+      start: 2026-09-14T14:02:10.096Z
+      duration: 1039
+  - type: page-shown
+    source:
+      page: Purchase Invoices
+    modal: false
+    runtimeId: b90h
+    description: Page <caption>Purchase Invoices</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:11.554Z
+  - type: invoke
+    target:
+      - page: Purchase Invoices
+        runtimeRef: b90h
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+    log:
+      start: 2026-09-14T14:02:11.594Z
+      duration: 2160
+  - type: page-shown
+    source:
+      page: Purchase Invoice
+    modal: false
+    runtimeId: b97f
+    description: Page <caption>New - Purchase Invoice</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:13.785Z
+  - type: focus
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b97f
+      - field: Buy-from Vendor Name
+    description: Focus <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-14T14:02:13.869Z
+      duration: 42
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b97f
+      - field: Buy-from Vendor Name
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-14T14:02:13.937Z
+      duration: 273
+  - type: page-shown
+    source:
+      page: lookup:Buy-from Vendor Name
+    modal: false
+    runtimeId: b9ov
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:14.275Z
+  - type: invoke
+    target:
+      - page: lookup:Buy-from Vendor Name
+        runtimeRef: b9ov
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+    log:
+      start: 2026-09-14T14:02:14.300Z
+      duration: 614
+  - type: page-closed
+    source:
+      page: lookup:Buy-from Vendor Name
+    runtimeId: b9ov
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:15.180Z
+  - type: copy-value
+    source:
+      - page: Purchase Invoice
+        runtimeRef: b97f
+      - field: No.
+    name: Purchase Invoice - No.
+    valueType: string
+    description: Copy value from <caption>No.</caption>
+    log:
+      start: 2026-09-14T14:02:15.264Z
+      copiedValue: "107222"
+      duration: 7
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b97f
+      - field: Vendor Invoice No.
+    value: =Clipboard.'Purchase Invoice - No.'
+    description: Input <value>Clipboard.'Purchase Invoice - No.'</value> into
+      <caption>Vendor Invoice No.</caption>
+    log:
+      start: 2026-09-14T14:02:15.298Z
+      duration: 1796
+  - type: focus
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b97f
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - field: null
+        automationId: fb8cccf3-54ac-4d77-9ad8-136cec25583a
+        caption: null
+    description: Focus <caption>null</caption>
+    log:
+      start: 2026-09-14T14:02:17.121Z
+      duration: 128
+  - type: invoke
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b97f
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - action: GetReceiptLines
+    description: Invoke <caption>Get Receipt Lines...</caption>
+    log:
+      start: 2026-09-14T14:02:17.276Z
+      duration: 610
+  - type: page-shown
+    source:
+      page: Get Receipt Lines
+    modal: true
+    runtimeId: b9wa
+    description: Page <caption>Get Receipt Lines</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:18.147Z
+  - type: invoke
+    target:
+      - page: Get Receipt Lines
+        runtimeRef: b9wa
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Get Receipt Lines</caption>
+    log:
+      start: 2026-09-14T14:02:18.181Z
+      duration: 1614
+  - type: page-closed
+    source:
+      page: Get Receipt Lines
+    runtimeId: b9wa
+    description: Page <caption>Get Receipt Lines</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:19.872Z
+  - type: invoke
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b97f
+      - action: Post
+    description: Invoke <caption>Post</caption>
+    log:
+      start: 2026-09-14T14:02:19.898Z
+      duration: 195
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: ba0r
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:20.119Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: ba0r
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+    log:
+      start: 2026-09-14T14:02:20.174Z
+      duration: 2375
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: ba0r
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:22.588Z
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: ba0x
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:22.614Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: ba0x
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+    log:
+      start: 2026-09-14T14:02:22.639Z
+      duration: 1197
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: ba0x
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:23.892Z
+  - type: page-closed
+    source:
+      page: Purchase Invoice
+    runtimeId: b97f
+    description: Page <caption>Purchase Invoice</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:23.918Z
+  - type: page-shown
+    source:
+      page: Posted Purchase Invoice
+    modal: false
+    runtimeId: ba17
+    description: Page <caption>Posted Purchase Invoice</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:23.953Z
+  - type: invoke
+    target:
+      - page: Posted Purchase Invoice
+        runtimeRef: ba17
+      - action: CreateCreditMemo
+    description: Invoke <caption>Create Corrective Credit Memo</caption>
+    log:
+      start: 2026-09-14T14:02:23.981Z
+      duration: 161
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: baex
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:24.168Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: baex
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+    log:
+      start: 2026-09-14T14:02:24.194Z
+      duration: 2446
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: baex
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:26.709Z
+  - type: page-closed
+    source:
+      page: Posted Purchase Invoice
+    runtimeId: ba17
+    description: Page <caption>Posted Purchase Invoice</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:26.781Z
+  - type: page-shown
+    source:
+      page: Purchase Credit Memo
+    modal: false
+    runtimeId: baf6
+    description: Page <caption>Purchase Credit Memo</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:26.807Z
+  - type: copy-value
+    source:
+      - page: Purchase Credit Memo
+        runtimeRef: baf6
+      - field: No.
+    name: Purchase Credit Memo - No.
+    valueType: string
+    description: Copy value from <caption>No.</caption>
+    log:
+      start: 2026-09-14T14:02:26.832Z
+      copiedValue: "1011"
+      duration: 1
+  - type: input
+    target:
+      - page: Purchase Credit Memo
+        runtimeRef: baf6
+      - field: Vendor Cr. Memo No.
+    value: =Clipboard.'Purchase Credit Memo - No.'
+    description: Input <value>Clipboard.'Purchase Credit Memo - No.'</value> into
+      <caption>Vendor Cr. Memo No.</caption>
+    log:
+      start: 2026-09-14T14:02:26.863Z
+      duration: 175
+  - type: set-current-row
+    target:
+      - page: Purchase Credit Memo
+        runtimeRef: baf6
+      - part: PurchLines
+      - page: Purch. Cr. Memo Subform
+      - repeater: Control1
+    targetRecord:
+      relative: 2
+    description: Set current row in <caption>Control1</caption>
+    log:
+      start: 2026-09-14T14:02:27.066Z
+      duration: 148
+  - type: input
+    target:
+      - page: Purchase Credit Memo
+        runtimeRef: baf6
+      - part: PurchLines
+      - page: Purch. Cr. Memo Subform
+      - repeater: Control1
+      - field: Quantity
+    value: "1"
+    description: Input <value>1</value> into <caption>Quantity</caption>
+    log:
+      start: 2026-09-14T14:02:27.250Z
+      duration: 291
+  - type: focus
+    target:
+      - page: Purchase Credit Memo
+        runtimeRef: baf6
+      - field: null
+        automationId: fb8cccf3-54ac-4d77-9ad8-136cec25583a
+        caption: null
+    description: Focus <caption>null</caption>
+    log:
+      start: 2026-09-14T14:02:27.568Z
+      duration: 35
+  - type: invoke
+    target:
+      - page: Purchase Credit Memo
+        runtimeRef: baf6
+      - action: Post
+    description: Invoke <caption>Post</caption>
+    log:
+      start: 2026-09-14T14:02:27.629Z
+      duration: 136
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: baza
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:27.791Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: baza
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+    log:
+      start: 2026-09-14T14:02:27.818Z
+      duration: 2482
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: baza
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:30.352Z
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: bazg
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-14T14:02:30.378Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: bazg
+    invokeType: No
+    description: Invoke No on <caption>Confirm</caption>
+    log:
+      start: 2026-09-14T14:02:30.403Z
+      duration: 471
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: bazg
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:30.904Z
+  - type: page-closed
+    source:
+      page: Purchase Credit Memo
+    runtimeId: baf6
+    description: Page <caption>Purchase Credit Memo</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:30.947Z
+  - type: close-page
+    target:
+      - page: Purchase Invoices
+        runtimeRef: b90h
+    description: Close page <caption>Purchase Invoices</caption>
+    log:
+      start: 2026-09-14T14:02:30.974Z
+      duration: 209
+  - type: page-closed
+    source:
+      page: Purchase Invoices
+    runtimeId: b90h
+    description: Page <caption>Purchase Invoices</caption> was closed.
+    log:
+      start: 2026-09-14T14:02:31.212Z
+name: DynamicsCon - Page Scripting 4 - Create Invoice, Post, Create Credit Memo, Post
+description: Test recording
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-14T14:01:59.277Z
+  duration: 31987
+  video: D:\a\_temp\test-results\.playwright-artifacts-1\9ddefc2998282e37265579dc656f4a3e.webm

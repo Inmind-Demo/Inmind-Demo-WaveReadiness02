@@ -1,0 +1,78 @@
+name: DynamicsCon - Page Scripting 1 - My Settings
+telemetryId: 34bc593f-78da-4c67-9df6-0cf8baed6cc8
+start:
+  profile: PAGE SCRIPTING
+steps:
+  - type: invoke
+    invokeType: OpenSettings
+    description: Invoke OpenSettings
+  - type: page-shown
+    source:
+      page: User Settings
+    modal: false
+    runtimeId: b4y
+    description: Page <caption>My Settings</caption> was shown.
+  - type: invoke
+    target:
+      - page: User Settings
+        runtimeRef: b4y
+      - field: UserRoleCenter
+    invokeType: AssistEdit
+    description: Invoke AssistEdit on <caption>Role</caption>
+  - type: page-shown
+    source:
+      page: Roles
+    modal: true
+    runtimeId: b5l
+    description: Page <caption>Available Roles</caption> was shown.
+  - type: input
+    target:
+      - page: Roles
+        runtimeRef: b5l
+      - scope: filter
+        field: filter:system:search
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Search</caption>
+  - type: invoke
+    target:
+      - page: Roles
+        runtimeRef: b5l
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Available Roles</caption>
+  - type: page-closed
+    source:
+      page: Roles
+    runtimeId: b5l
+    description: Page <caption>Available Roles</caption> was closed.
+  - type: scope
+    condition:
+      type: value
+      target:
+        - page: User Settings
+          runtimeRef: b4y
+        - field: Teaching Tips
+      operation: =
+      value: true
+    steps:
+      - type: input
+        target:
+          - page: User Settings
+            runtimeRef: b4y
+          - field: Teaching Tips
+        value: false
+        description: Input <value>false</value> into <caption>Teaching Tips</caption>
+      - type: invoke
+        target:
+          - page: User Settings
+            runtimeRef: b4y
+        invokeType: Ok
+        description: Invoke Ok on <caption>My Settings</caption>
+      - type: page-closed
+        source:
+          page: User Settings
+        runtimeId: b4y
+        description: Page <caption>My Settings</caption> was closed.
+    description: When <caption>Teaching Tips</caption> <operation>is</operation>
+      <value>Yes</value>
+description: Test recording

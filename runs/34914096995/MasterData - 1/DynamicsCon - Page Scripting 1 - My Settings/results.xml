@@ -1,0 +1,21 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="24.911097">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-15T00:50:53.269Z" hostname="chromium" tests="1" failures="0" skipped="0" time="23.785" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\MasterData - 1\DynamicsCon - Page Scripting 1 - My Settings.yml)" classname="dist\player.spec.js" time="23.785">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA61WbW_aMBD-zq_wHwgl7y9ilVDXVUjbWhWmqRXSZJILRIQ4ih0q_v1s54WEkNF0jZBIzufz3XPPnY9BDHtg2XEeeEg31r7p6qFiOwFWDN-yFTcILWXih84aQ2D5vjNK8B489PXI_yOf3pEEKegJbwAt_CxKWZRskMpFP45oAUx80lEAtFgjiYeWQBnKwCdZwBdHlOGMeSOE0oyEUcxNP80e7tHi7nn-tJz_fOAKkFKhoCB2TPl6lBzIDrgAla9LKX5MIalPFIutU-dSs6sUk40nXxAqPEHaROMRu4pqLicTz1Q9VRubqvVaagV5hguTmq03vEo5BArdkrdEKlKSZz5UpsWih35RyFDr9D0JcOyhEMe0CCjLExbtQSRjbRy7YUigpz6Wn7cNjKc3lRC9YYqkI-MBETq6-XoZY75nA6wyofTG0nD_GcKT_2JPGEEcFJueSQx3kDDIOhmcURpRdh9ErDd_JxXEiVcDIYyeEBgStqVdSKzuDEusOL6VUJbl3Xya8bV8zg44ivE6hsLi_-VUH2um1s5pmrN_pPQURSeVpetCl_pEGOOlWqVQPGWCC6lHj7xo9x4FnPlbqXPAcQ7eWZ8oCEC_yU0z-kLyggc1emcM4O6jqbR02zY0vSmkPERGTnAu5Pkf4AWHzra7vLDdIRVyHc4m978TssvTx10v8yuFFu97CTMgVN3Ru6Eaaqe3-TGhELyjBj6T88WhQ0jvaC3SS7rKXT5JeNsQHpRGCgXJnErSSuS1ZtfX7hoNbwnY34obcRml1UbuT4Xyl1JUVsdl3v_eQiPjLYsNsKa12duIy09f5RFl3bwIhIvXIZgaTkGR-i4uojzvK5cwvI5iP45XkKyBO92fF6qn0TWkXk-z6AG2ttpA6hpatvna0DwVlWV2kKt7yGdD15qMdn3YFDNRu6dcHCo-AINr2ZdhUFTbcQ1dN2zNsNQzSM5bjTyk1W7E844ZpDlCdSJ_7xjVbD9DorfHtiiZUv2yGv8ZY811BUjN2cOQ18whCoDwMdtb4dUffpmmK8bnZiUDmseMrsZpjI9vWbTZMoUbj0LsM6pMVirooepOLD6vm4YB4cTFoeFqxnodqKq5dsZvsN6P_gLw_Keo9QsAAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-30b3b-ipting-1---My-Settings-yml--chromium\attachments\Recording-000c613e64f793514561e4d46d6a0c5eb07c99d6.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-30b3b-ipting-1---My-Settings-yml--chromium\attachments\Replay-log-ceb1d8c9c8ecf2ed556b59853fd0dec962e209a9.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-30b3b-ipting-1---My-Settings-yml--chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-30b3b-ipting-1---My-Settings-yml--chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

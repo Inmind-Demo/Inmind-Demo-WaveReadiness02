@@ -1,0 +1,153 @@
+name: DynamicsCon - Page Scripting 16 - Create Quote Save As Draft
+description: Create purchase quote with item line, save as draft without converting to order
+telemetryId: a1b2c3d4-e5f6-4016-8001-000000000016
+start:
+  profile: PAGE SCRIPTING
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Purchase Quotes
+    description: Navigate to <caption>Purchase Quotes</caption>
+  - type: page-shown
+    source:
+      page: Purchase Quotes
+    modal: false
+    runtimeId: d601
+    description: Page <caption>Purchase Quotes</caption> was shown.
+  - type: invoke
+    target:
+      - page: Purchase Quotes
+        runtimeRef: d601
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+  - type: page-shown
+    source:
+      page: Purchase Quote
+    modal: false
+    runtimeId: d602
+    description: Page <caption>New - Purchase Quote</caption> was shown.
+  - type: focus
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - field: Buy-from Vendor Name
+    description: Focus <caption>Vendor Name</caption>
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - field: Buy-from Vendor Name
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Vendor Name</caption>
+  - type: page-shown
+    source:
+      page: lookup:Buy-from Vendor Name
+    modal: false
+    runtimeId: d603
+    description: Page <caption>Select</caption> was shown.
+  - type: invoke
+    target:
+      - page: lookup:Buy-from Vendor Name
+        runtimeRef: d603
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+  - type: page-closed
+    source:
+      page: lookup:Buy-from Vendor Name
+    runtimeId: d603
+    description: Page <caption>Select</caption> was closed.
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: No.
+    value: ""
+    isFilterAsYouType: true
+    description: Input <value></value> into <caption>No.</caption>
+  - type: focus
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: No.
+    description: Focus <caption>No.</caption>
+  - type: page-shown
+    source:
+      page: lookup:No.
+    modal: false
+    runtimeId: d604
+    description: Page <caption>Select</caption> was shown.
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: No.
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>No.</caption>
+  - type: invoke
+    target:
+      - page: lookup:No.
+        runtimeRef: d604
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+  - type: page-closed
+    source:
+      page: lookup:No.
+    runtimeId: d604
+    description: Page <caption>Select</caption> was closed.
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: Quantity
+    value: "3"
+    description: Input <value>3</value> into <caption>Quantity</caption>
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: Direct Unit Cost
+    value: "1500"
+    description: Input <value>1500</value> into <caption>Direct Unit Cost Excl. Tax</caption>
+  - type: close-page
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+    description: Close page <caption>Purchase Quote</caption>
+  - type: page-closed
+    source:
+      page: Purchase Quote
+    runtimeId: d602
+    description: Page <caption>Purchase Quote</caption> was closed.
+  - type: close-page
+    target:
+      - page: Purchase Quotes
+        runtimeRef: d601
+    description: Close page <caption>Purchase Quotes</caption>
+  - type: page-closed
+    source:
+      page: Purchase Quotes
+    runtimeId: d601
+    description: Page <caption>Purchase Quotes</caption> was closed.

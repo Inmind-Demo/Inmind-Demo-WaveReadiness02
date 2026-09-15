@@ -1,0 +1,330 @@
+telemetryId: a1b2c3d4-e5f6-4010-8001-000000000010
+steps:
+  - type: navigate
+    target:
+      - page: Payment Journal
+    description: Navigate to Payment Journals
+    log:
+      start: 2026-09-15T00:34:39.523Z
+      duration: 576
+  - type: page-shown
+    source:
+      page: Payment Journal
+    modal: false
+    runtimeId: bemh
+    description: Page <caption>Payment Journals</caption> was shown.
+    log:
+      start: 2026-09-15T00:34:40.514Z
+  - type: input
+    target:
+      - page: Payment Journal
+        runtimeRef: ca01
+      - field: CurrentJnlBatchName
+    value: GENERAL
+    description: Input <value>GENERAL</value> into <caption>Batch Name</caption>
+    log:
+      start: 2026-09-15T00:34:40.566Z
+      duration: 148
+  - type: focus
+    target:
+      - page: Payment Journal
+        runtimeRef: ca01
+      - repeater: Control1
+      - field: Posting Date
+    description: Focus <caption>Posting Date</caption>
+    log:
+      start: 2026-09-15T00:34:40.741Z
+      duration: 45
+  - type: input
+    target:
+      - page: Payment Journal
+        runtimeRef: ca01
+      - repeater: Control1
+      - field: Document Type
+    value: Payment
+    description: Input <value>Payment</value> into <caption>Document Type</caption>
+    log:
+      start: 2026-09-15T00:34:40.813Z
+      duration: 71
+  - type: input
+    target:
+      - page: Payment Journal
+        runtimeRef: ca01
+      - repeater: Control1
+      - field: Account Type
+    value: Vendor
+    description: Input <value>Vendor</value> into <caption>Account Type</caption>
+    log:
+      start: 2026-09-15T00:34:40.910Z
+      duration: 72
+  - type: focus
+    target:
+      - page: Payment Journal
+        runtimeRef: ca01
+      - repeater: Control1
+      - field: Account No.
+    description: Focus <caption>Account No.</caption>
+    log:
+      start: 2026-09-15T00:34:41.015Z
+      duration: 45
+  - type: invoke
+    target:
+      - page: Payment Journal
+        runtimeRef: ca01
+      - repeater: Control1
+      - field: Account No.
+    invokeType: Lookup
+    description: Invoke Lookup on <caption>Account No.</caption>
+    log:
+      start: 2026-09-15T00:34:41.086Z
+      duration: 189
+  - type: page-shown
+    source:
+      page: lookup:Account No.
+    modal: false
+    runtimeId: ca02
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-15T00:34:41.323Z
+  - type: input
+    target:
+      - page: Payment Journal
+        runtimeRef: bf0t
+      - repeater: Control1
+      - field: Account No.
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Account No.</caption>
+    log:
+      start: 2026-09-15T00:34:41.350Z
+      duration: 81
+  - type: invoke
+    target:
+      - page: lookup:Account No.
+        runtimeRef: bff5
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+    log:
+      start: 2026-09-15T00:34:41.458Z
+      duration: 147
+  - type: page-closed
+    source:
+      page: lookup:Account No.
+    runtimeId: bff5
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-15T00:34:41.648Z
+  - type: input
+    target:
+      - page: Payment Journal
+        runtimeRef: ca01
+      - repeater: Control1
+      - field: Bal. Account Type
+    value: Bank Account
+    description: Input <value>Bank Account</value> into <caption>Bal. Account Type</caption>
+    log:
+      start: 2026-09-15T00:34:41.674Z
+      duration: 247
+  - type: invoke
+    target:
+      - page: Payment Journal
+        runtimeRef: bfgk
+      - repeater: Control1
+      - field: Bal. Account No.
+    invokeType: Lookup
+    description: Invoke Lookup on <caption>Bal. Account No.</caption>
+    log:
+      start: 2026-09-15T00:34:41.948Z
+      duration: 119
+  - type: page-shown
+    source:
+      page: lookup:Bal. Account No.
+    modal: false
+    runtimeId: bfwr
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-15T00:34:42.093Z
+  - type: invoke
+    target:
+      - page: lookup:Bal. Account No.
+        runtimeRef: bfwr
+      - action: system:fulllist
+    description: Invoke <caption>Select from full list</caption>
+    log:
+      start: 2026-09-15T00:34:42.118Z
+      duration: 348
+  - type: page-closed
+    source:
+      page: lookup:Bal. Account No.
+    runtimeId: bfwr
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-15T00:34:42.564Z
+  - type: page-shown
+    source:
+      page: Bank Account List
+    modal: false
+    runtimeId: bfx8
+    description: Page <caption>Select - Bank Accounts</caption> was shown.
+    log:
+      start: 2026-09-15T00:34:42.595Z
+  - type: input
+    target:
+      - page: Bank Account List
+        runtimeRef: bfx8
+      - scope: filter
+        field: filter:system:search
+    value: CHECKING
+    isFilterAsYouType: true
+    description: Input <value>CHECKING</value> into <caption>Search</caption>
+    log:
+      start: 2026-09-15T00:34:42.621Z
+      duration: 72
+  - type: invoke
+    target:
+      - page: Bank Account List
+        runtimeRef: bfx8
+      - repeater: Control1
+    parameters:
+      AlwaysCommit: false
+    description: Invoke row on <caption>Control1</caption>
+    log:
+      start: 2026-09-15T00:34:42.720Z
+      duration: 523
+  - type: page-closed
+    source:
+      page: Bank Account List
+    runtimeId: bfx8
+    description: Page <caption>Select - Bank Accounts</caption> was closed.
+    log:
+      start: 2026-09-15T00:34:43.269Z
+  - type: close-page
+    target:
+      - page: lookup:Account No.
+        runtimeRef: bfuv
+    description: Close page <caption>Select</caption>
+    log:
+      start: 2026-09-15T00:34:43.295Z
+      duration: 0
+  - type: invoke
+    target:
+      - page: Payment Journal
+        runtimeRef: bfgk
+      - action: ApplyEntries
+    description: Invoke <caption>Apply Entries...</caption>
+    log:
+      start: 2026-09-15T00:34:43.322Z
+      duration: 476
+  - type: page-shown
+    source:
+      page: Apply Vendor Entries
+    modal: true
+    runtimeId: bg27
+    description: Page <caption>Apply Vendor Entries</caption> was shown.
+    log:
+      start: 2026-09-15T00:34:43.990Z
+  - type: invoke
+    target:
+      - page: Apply Vendor Entries
+        runtimeRef: bg27
+      - action: ActionSetAppliesToID
+    description: Invoke <caption>Set Applies-to ID</caption>
+    log:
+      start: 2026-09-15T00:34:44.037Z
+      duration: 207
+  - type: invoke
+    target:
+      - page: Apply Vendor Entries
+        runtimeRef: bg27
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Apply Vendor Entries</caption>
+    log:
+      start: 2026-09-15T00:34:44.269Z
+      duration: 734
+  - type: page-closed
+    source:
+      page: Apply Vendor Entries
+    runtimeId: bg27
+    description: Page <caption>Apply Vendor Entries</caption> was closed.
+    log:
+      start: 2026-09-15T00:34:45.034Z
+  - type: invoke
+    target:
+      - page: Payment Journal
+        runtimeRef: bfgk
+      - action: Post
+    description: Invoke <caption>Post</caption>
+    log:
+      start: 2026-09-15T00:34:45.060Z
+      duration: 106
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: bg90
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-15T00:34:45.192Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: bg90
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+    log:
+      start: 2026-09-15T00:34:45.218Z
+      duration: 659
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: bg90
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-15T00:34:45.904Z
+  - type: message
+    automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+    text: The journal lines were successfully posted.
+    description: "Message: <value>The journal lines were successfully posted.</value>"
+    log:
+      start: 2026-09-15T00:34:45.930Z
+      duration: 358
+  - type: focus
+    target:
+      - page: Payment Journal
+        runtimeRef: bfgk
+      - field: null
+        automationId: fb8cccf3-54ac-4d77-9ad8-136cec25583a
+        caption: null
+    description: Focus <caption>null</caption>
+    log:
+      start: 2026-09-15T00:34:46.313Z
+      duration: 47
+  - type: close-page
+    target:
+      - page: Payment Journal
+        runtimeRef: bfgk
+    description: Close page <caption>Payment Journals</caption>
+    log:
+      start: 2026-09-15T00:34:46.386Z
+      duration: 180
+  - type: page-closed
+    source:
+      page: Payment Journal
+    runtimeId: bfgk
+    description: Page <caption>Payment Journals</caption> was closed.
+    log:
+      start: 2026-09-15T00:34:46.596Z
+name: DynamicsCon - Page Scripting 10 - Payment Journal Manual and Post
+description: Create payment journal line manually for vendor, apply to open entries, post
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-15T00:34:28.592Z
+  duration: 18068
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\f74bf172c34e9baa0d01d0ae58262c8d.webm

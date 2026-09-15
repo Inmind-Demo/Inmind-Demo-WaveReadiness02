@@ -1,0 +1,21 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="18.080986">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-14T18:47:41.191Z" hostname="chromium" tests="1" failures="0" skipped="0" time="16.971" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Payment - 5\DynamicsCon - Page Scripting 3 - Drill Balance Close Vendor Ledger.yml)" classname="dist\player.spec.js" time="16.971">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA71X227bOBB991fwYR-2QKXqLlkICiRutgjQG9JsgRYGCkYaO8RSpEBSNvz3pUjblWy1VdR0_WJjNBqeM2cutAIKFSixuylzhP37oAjLyIF4lTiRF2RO5nm-4x0_QTaTCmqZzxBykNrVkCOGN2SNFWgTQgqLNajc_G5darzWLleNJAykRG8x0waBbjkFtACmQBxdcaEIZzn6BKzkQhp7CbIQpLYP3u0PQoqjiwIb68u998WLg8G8R_n6gEFqSCpHgRckjjd3_OjOz_IozePQjbP4y96rbAS2p6Se3yHX4nfkA98y4yh5Iwo4hLbkLAL0hkhl7BUvMc3RClNpcyIapkgFbYYhM9FPiH3QcX7CCG2xRAaDO5pc5CZz_0uHCGEb_t_PNDql0UF-C6sO9PYVATVoJUSOFpwpwen3RysCtGzFquxp9uA7A-IfQvVLV7sFp01lM1pjoT21VR4A_SvhstxgVkBp_Qlb50iJBs4zd2OCn8RFnH3PZotjQnFEbhon58WReb2U1o16qozKgrcxV4bJ0f00mRtMG9gXzEebBrYeSotGhi6M98u-88ULa9Xou200OU1ZEg2kKZj_36XXLbPrkqgfFNcl3eKdXPCqIqrbo0NVJfi2V0qH8ybkKXbTIDvPk-_56aRhs8CiHDNsgnHDxsT7vYGTuHpVTBk4RyoDqgenU-UK03YwoL_fLD4_O9P9lSCUvjqkb0jSo0dP2GPUv55N0FYzT71zbWMvm7ZHoGw35LWuNQJyjMjhSJH7kX9P7lTLHXTlLiiX4LRMRjT6OcUB8QdoLdpDTKzR5B7DKErPZQyy4FRGQ7WcoOMfkM1iGa9b5gb-ZN1-3apj1erPm8egD-cDGiXRNI2OhJ5saj5ejzjMJvfRLxfmSD2m9ItGPrT6_SSc2C8HMk9yXX68Dmmi_wwwfV3Qe2Snv0mhrwlMM-nfn_RA0DazR47byCa2166zHuL3NTC0sc8LXTTPUdkLoG9ig83-3PJAW6IeuL7R2b9IM8tCU6oF1xfG9kJ4-foafVzc3ny4u3n3erZn_CO2UeD6mdGuq1vix9qyISVwnYJ8iZdfFVT1UoFUjgDZUCWXbk3xbivI-kE5OjhZaUjS8ZaxNy-z1dyDMgwhWd1jD8exH-IsnccACbhbuK9m3wDtqI7Abg4AAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Recording-743773df74b831948a23a0c01d5ce5d2e6105e21.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Replay-log-c23e4f886d0a2ced5a94dbf3244f827d6a767131.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

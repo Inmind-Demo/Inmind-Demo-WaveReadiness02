@@ -1,0 +1,213 @@
+telemetryId: a1b2c3d4-e5f6-4016-8001-000000000016
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Purchase Quotes
+    description: Navigate to <caption>Purchase Quotes</caption>
+    log:
+      start: 2026-09-14T18:30:24.338Z
+      duration: 551
+  - type: page-shown
+    source:
+      page: Purchase Quotes
+    modal: false
+    runtimeId: d601
+    description: Page <caption>Purchase Quotes</caption> was shown.
+    log:
+      start: 2026-09-14T18:30:25.219Z
+  - type: invoke
+    target:
+      - page: Purchase Quotes
+        runtimeRef: d601
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+    log:
+      start: 2026-09-14T18:30:25.273Z
+      duration: 1221
+  - type: page-shown
+    source:
+      page: Purchase Quote
+    modal: false
+    runtimeId: d602
+    description: Page <caption>New - Purchase Quote</caption> was shown.
+    log:
+      start: 2026-09-14T18:30:26.522Z
+  - type: focus
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - field: Buy-from Vendor Name
+    description: Focus <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-14T18:30:26.598Z
+      duration: 47
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - field: Buy-from Vendor Name
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-14T18:30:26.670Z
+      duration: 214
+  - type: page-shown
+    source:
+      page: lookup:Buy-from Vendor Name
+    modal: false
+    runtimeId: d603
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-14T18:30:26.942Z
+  - type: invoke
+    target:
+      - page: lookup:Buy-from Vendor Name
+        runtimeRef: d603
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+    log:
+      start: 2026-09-14T18:30:26.985Z
+      duration: 365
+  - type: page-closed
+    source:
+      page: lookup:Buy-from Vendor Name
+    runtimeId: d603
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-14T18:30:27.479Z
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: No.
+    value: ""
+    isFilterAsYouType: true
+    description: Input <value></value> into <caption>No.</caption>
+    log:
+      start: 2026-09-14T18:30:27.541Z
+      duration: 243
+  - type: focus
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: No.
+    description: Focus <caption>No.</caption>
+    log:
+      start: 2026-09-14T18:30:27.814Z
+      duration: 48
+  - type: page-shown
+    source:
+      page: lookup:No.
+    modal: false
+    runtimeId: d604
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-14T18:30:27.888Z
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: No.
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>No.</caption>
+    log:
+      start: 2026-09-14T18:30:27.919Z
+      duration: 74
+  - type: invoke
+    target:
+      - page: lookup:No.
+        runtimeRef: d604
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+    log:
+      start: 2026-09-14T18:30:28.034Z
+      duration: 223
+  - type: page-closed
+    source:
+      page: lookup:No.
+    runtimeId: d604
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-14T18:30:28.315Z
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: Quantity
+    value: "3"
+    description: Input <value>3</value> into <caption>Quantity</caption>
+    log:
+      start: 2026-09-14T18:30:28.342Z
+      duration: 253
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: Direct Unit Cost
+    value: "1500"
+    description: Input <value>1500</value> into <caption>Direct Unit Cost Excl.
+      Tax</caption>
+    log:
+      start: 2026-09-14T18:30:28.622Z
+      duration: 221
+  - type: close-page
+    target:
+      - page: Purchase Quote
+        runtimeRef: d602
+    description: Close page <caption>Purchase Quote</caption>
+    log:
+      start: 2026-09-14T18:30:28.870Z
+      duration: 186
+  - type: page-closed
+    source:
+      page: Purchase Quote
+    runtimeId: d602
+    description: Page <caption>Purchase Quote</caption> was closed.
+    log:
+      start: 2026-09-14T18:30:29.100Z
+  - type: close-page
+    target:
+      - page: Purchase Quotes
+        runtimeRef: d601
+    description: Close page <caption>Purchase Quotes</caption>
+    log:
+      start: 2026-09-14T18:30:29.126Z
+      duration: 185
+  - type: page-closed
+    source:
+      page: Purchase Quotes
+    runtimeId: d601
+    description: Page <caption>Purchase Quotes</caption> was closed.
+    log:
+      start: 2026-09-14T18:30:29.337Z
+name: DynamicsCon - Page Scripting 16 - Create Quote Save As Draft
+description: Create purchase quote with item line, save as draft without converting to order
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-14T18:30:13.662Z
+  duration: 15735
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\f85573f398d8806140946f32fa141a44.webm

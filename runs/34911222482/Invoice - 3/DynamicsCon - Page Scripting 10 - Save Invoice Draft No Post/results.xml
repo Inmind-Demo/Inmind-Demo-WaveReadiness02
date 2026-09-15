@@ -1,0 +1,27 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="147.50864">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-15T00:28:55.203Z" hostname="chromium" tests="1" failures="0" skipped="0" time="145.584" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Invoice - 3\DynamicsCon - Page Scripting 10 - Save Invoice Draft No Post.yml)" classname="dist\player.spec.js" time="145.584">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA91ZW2-jOBR-z6-w-jIvC2NzTVC3UjedGUXaqbptd6QZVRoZMCkqwcg2zWR__dpcUiikKSTqrtqHNDGH4_N954oRJCErIthmEXoAI98IzNDSiB05mgUNV5tCiDS4_TPcCRck494EAA2ITUY8kOLHeIkFkUsACMyWRHjFdyWS4aUU-SPncUo4B19xKhcYuKYJAXOSCsK2ojgQMU09cHolRcBVzoJ7zAlYpI80Dgg_KwRDwgMWZ6XkZbUzEBScBrhYPevcePqxvlRoSOiyNo9La4UHDGg4GpxpyL6F0DORhywd2vaPSirMGS73cyBq4FbQNH5P12khyKncmNSqS9wdW4qrKxrixAMRTnhJGstTEa-IcgFxiz2eAS0YeQ1CsMYcFDbprwZr6xC5PxrAYqn24SV39sNqILkmUQNK07lzmgpGk5-XZF1cK_e6Lfat11rQF4WAugZo-sSB_D3CrxKqg7p-RebUOcyxr_Grsc-vCqPWUX2Ycx3dmqKmcyMa5HyAb3e51tjeF8UkCVWOb7SI0RX4RtKQMpmcK9JF_Flt_wS5ITvCnY5uOz1piqDbiuYsF28K-BEnOamce1NCT5dltPPPcSJr3jn_TvMy6AXLe2haKKPBaaHprK3o9GO5KoE1y96hTDqzaZdJw4bD8iKh9CHPvJ3U7EkRc1-K3Mh2FYjDUsKV9Q4Nqnf7UPVEi7lVwUhGZI9i3vbbpOSLydvlL17vdp6s8YbP6WoVi91xUVRDRtvVsNY8wvOSDdPpa3Wz554PEspJONr1x_B0acIQV7tuy9UBzTZakT89OA6uCJe0NC2VmLtqpFwtUFhQ5j8XrK4OLTbm0tJSDhR0PnUJqo9y89TcJrhkISbht7JMnchyaZjopFtG36KIVlFSU9QiyAO_z5M48ylmof6hn84Pe2rnfgWtelqZ97yqNswbx31vm3Js59gU-84_D437lD3FfX-q8btPob7FdpP7EWWrnrpVCF4QgeNE6dkV9ZXPTk4OaHU7mts43me6bc26vJuGfex56L-k_aXxaixvM9QTryNngdrOPa3feoPWb0AdGtN2638fSfe2s-aosFLk2z2ThjubDB_FavjPXbENpP__5CX5QH0Po8asc8jwusmr5uQYeTVw0JJYbPQ-EuuvHEsDxKbV0oyTPWlj7MiUWtuo8LAdsyc8psZ7oPkiZjLqwN9pLOSoy0WLbmRDuI9xJbOD9Oe6wadfQVLXi1v8a5Qzpm5frprNUaJIGk3xdLBH7Jz1PBIo_YWa3WeBI7AhHZk9gYZmA_t9midJtYBzQVeFHlWFpiF2EIlCdY5sqA9TgzZ0NejDECFkIheF9ZMJ3j7-pFFcBVY1OWzrcqPA-U4U7CtwlarDJgekm-5s0KFBg44DCNlBSTeFKx6a56nfq-zt62PyWquPdUgawIyFrG74WPZ0YBvbEnYU_w7tYEifwdZRwWtM7k3mpvm9efzyaf7hOGyrdeQxpir1n-j7dirGlaURL2EUkinsqbnQPtBLvOumPlzDXroM9ZOhG8g5NN46SI7x-mgEEuWn8tDrYiP_x4EcplP1LqP1NAEMV67d4MenI5gLhiMhH2bAlZoB2mHF1CQBstrauLplHYt7kMiR4rfS0mKBysEgkyrULnIU4GoPCSVU6iel5RJGxmgUJ4rH8y-fwM38enF1u7j8MqlQ7kIIDd2FRSQ2u6ODFNOPcUiohO3d4bufgqyyO0G40BjheSL4nZ4leLNm8fJeaFJ5HOFAcA3dYZ-EPjYggoFvuTPHxdC3iOUSHMHInRr6mviryb_9fQZlnR0AAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-1de13--Invoice-Draft-No-Post-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-1de13--Invoice-Draft-No-Post-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-1de13--Invoice-Draft-No-Post-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-1de13--Invoice-Draft-No-Post-yml--chromium-retry1\attachments\Recording-8633c7ed70877db9fd07614e9b3978c78ff19e03.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-1de13--Invoice-Draft-No-Post-yml--chromium-retry1\attachments\Replay-log-89441fe41cda294fcc758b2753335f26349b2bff.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-1de13--Invoice-Draft-No-Post-yml--chromium-retry1\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-1de13--Invoice-Draft-No-Post-yml--chromium-retry1\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

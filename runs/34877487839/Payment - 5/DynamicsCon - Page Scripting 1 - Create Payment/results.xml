@@ -1,0 +1,27 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="165.078401">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-14T18:44:26.224Z" hostname="chromium" tests="1" failures="0" skipped="0" time="162.796" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Payment - 5\DynamicsCon - Page Scripting 1 - Create Payment.yml)" classname="dist\player.spec.js" time="162.796">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA71aW2_bNhR-z68gij2sD1JFiboiKJC6aZYtvSzJBrQIENASlWjRxROlOP73o26OLrRlSu5e4oCiDs93vnMjxYyEJCJZurn0HLC0XbzUfSIpCGoS0kxfsj1oS4oG7SWxbG-p6yc0IyvqnAAggWyzIg6I8XPwgDPChgDIcPpAMqf8v5iywg9syoecBjGhFHzGMRtIwXUSErAgcUbS7VTsZkESO-BbnrqPmJL7v0nsJelVQLNyjkeomwaratKXelGQJeDUxeXo--oFevquGSjfC5OHRh_K1MscoCqqISm2BNEttBxkOLohq0j9Uc_y8hRXq1gmagEtsEhumFDilTNpwjQljewKaaM8-DNPMkLLZ2keZ0FESgsvV09DMN_Yq68oeiJe0YA1pqBaXz4YmSkjXfvRR0Efk3W8E0RlR7C1fJR4OHSAj0NKBoi86N8xRANeSiSlDiJAdE1pAwni5-Rpn9f1YbQ0vyZ-S_XilZSsCPOn1AGLJM7SJITbR35AQq9wuaharVr4tlTiUxCylz5sFkmYR5VFVzhlM9kobRT6i5Iz7xnHLvGq-UH84IAszcnQcpel8J5ckMSv1iz0mODizH66OXRxG3ZMusqzY1mUukkh0y-RbKf3jfmMw5zUDnNTmSF-4JmFaQZOy9nvu5NP31WjTPt2MphsJsNEPDNp_7frtd3s3AuyHc51Fq7xhi6SKAqydozyvCpN1h1XatabYCdLNjROxoSKYUxKNguceuPJhiD9sGRTypuXcGzZ1PUpCWcLZcB6o34rq3zAYZEYwK9Xi-9vB7x_TIMw_NiYj0fpdkaH2K3UX95O4NaWLdUecqvbg2p4WB0hXlHzz5mvBXVJ3E_yMj2Q5K7kGXSbjqLINrQn1ZchvCHxy2Gfs0iLqGfANhFrhHYS_BqsnfmitFYIDX1IK9IsMVo5itd8bktah04euC6du6BN4RHKyBALWw6eIYHbB63IzdxHfldwlSRP-WonpdXjXsA2wiYQC2WdF6-aaCq-IDFJcQh-Z89i9lsq1Y1YPsOJNcbwDtHzqFZlperaD-1f9gEcUl6jGu1lqlGHbtjWKHIowax_b_c2F-dfzq_PriovoVVnd0a_J3nlLLv6wFbDU0vY0enclCtO8BtVhlAZ-o1pi0TPJJsOg-UrZ1_UCZevT52AGXUoASuokNPxoY4ZDtn77bPETwkXob1gidRUxUrc5NQYP4Ez103y-tnc5PgqbhLBpm5w0qOm9Qnenx7DUjNnAG5_M0PdMbJvSEjcmVVPY6EsVvV2oRnyWyNo9y51rvPzMAy55zP95qXCCPw0iUDxFihem8Alw4kgh0tzUOpGgnUX_GNwJxqXmmyonTp2gDO2FT_wpIbwiOLBYXq0xc-s0gydYYhUaT40jl--5p1Z9Xnx2_nij8svFzMKdCPi2BWa2c7m7LLFKrSgPefX5jEvEoBv2pwzK2TrgtHON8HPCA7R2Eey1j_W3B8dE0tyPR8UvLadXx3xbHWHS7flTWCWwebVZF3olE3EFG2v3uPPPU-evedGMtI4e25oQ9HukgP2mLtsUb81GDBDsGY1PlN3tQdUrBc6Bqonc2atMmRdMYTaKB6moRO-0O1r289cySF9UzFrgtsxHJrGcTtVEWMsZq1aPYDzLIlKOQU1locNSHxPUhRFLf5okqIrpqQsFQ9CqEETNmegtfLl6bYfpFGbdu5xgu9qo65ciZpLtmGKbYda5phhkB0mGXhNY4d26vpOOBFROw171j_d7xpJwDKmzjlQgrox8J-RrLW12FEIFk1SlqxZqM1wRChl65zM4C8jL2yt20cC_qk352HxbRusSUoAzV2XLVHscDZgxWK30bYD9c3nSg2nKbIC0ppy_EbACEjhkInUdq31Ezenx0xzdduxJ2L8peW6rq9JOsKuhDzTlGzsWRLUDJe4qq5bGh5GzFZgx6KfCvVfvaeYNMHtLdkyLV7WbFuq9EFp1XjREczVQbIoxJdSDqlxB0OzZUXldNKqOTj7H7vgwEF23JItGuQ2ayU7afwghiZ8vBnlaeSrlAAixDuXVaEoWbtB_oTvbeK8md1eS4S38W-sh7LV_VAsor3GOTVWhW8M9QEd7XO3IB9QkRXUOULce7Fr-xWzukJwX9zoum_d6Bq_rdW6AyZu_0Jbk3MQaKiDQ91Db2wVXVTgcuLDXRujKa0vZDYXJhI-ERy7ZLd3q-W7nLLaBdlfYFb3XUC0GIExjop7Dhv2G7iUeROD3L3fAyAb6u1-O1reEpqBlLhJ6hV3h6oV2fKrNPGDsKD47OIc3CyuL7_dFsd8tXa7rj8gTdZhWSvbYa0pxUnJc-CRhKnr3OG7-4xEq7uMLS6lhOZhRu_kVYg36zR4eMwkJjzwWZRQCd5hhLBiI-SaWNeh7iFiQM0n5pItBAlrt9dkGZ38Bz1jqXOMKQAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c33a5-ing-1---Create-Payment-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c33a5-ing-1---Create-Payment-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c33a5-ing-1---Create-Payment-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c33a5-ing-1---Create-Payment-yml--chromium-retry1\attachments\Recording-1fdf357a497722f081d04818dcb8e4b8218bad0e.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c33a5-ing-1---Create-Payment-yml--chromium-retry1\attachments\Replay-log-b442bebbb2a1d96a1d7ad6499029ad94477c9bb6.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c33a5-ing-1---Create-Payment-yml--chromium-retry1\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-c33a5-ing-1---Create-Payment-yml--chromium-retry1\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

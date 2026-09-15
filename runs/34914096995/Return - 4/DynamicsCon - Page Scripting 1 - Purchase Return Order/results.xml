@@ -1,0 +1,21 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="21.134491">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-15T01:22:29.103Z" hostname="chromium" tests="1" failures="0" skipped="0" time="20.096" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Return - 4\DynamicsCon - Page Scripting 1 - Purchase Return Order.yml)" classname="dist\player.spec.js" time="20.096">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA91Z227bOBB991cQeenLSiV1l5AtkHUvCNCm3SQtsEWAgpaoRIgsCiSV1P36pW62FFOxJSdZbPOQOPJoNHMOZ-aIFCQlSyLY6jQKAEYLIzQjSyN27GiWD33NgxBpcPPjz7ggOQ9mAGhArHISgAzfJddYEHkJAIHZNRFB9bk0yfG1NPmr4ElGOAefcCYvMHBOUwLmJBOErU1xKBKaBeBLwcIbzAk4J6JgGfjMIsJ4ZRYRHrIkr-3OmucCQcFxiKurb9Q3H79uv6_cpPS6jZDLgEUADGg4mkwX2ZcQBYYRWFCHpvm9sYoKhuuHItuEndzL9DR-Q--zypJT-XjS-q5zV0YEPiZcVGZLGuE0ADFOeY0gKzKRLEnJxyLk8XbeX6Tb_RMG95iDKkJ979yRbvv-906aSXZHbx8jeEeSnbzOSRyA0Idoi_c5zQSj6Y8zcl99Vz_0sgqgvdYD4rQyKL8DNNsgIv-fwDfSXeSp-DbcJ-B7J9USEWMX1WWimtr_YXybutHnO6ZhwcfSPcS0sb45Tkgald1gpcWMLsE3kkWUyUJeku3c35cxbJLv2E5g19RN395m17d7izwvxMsnfYfTgjRUX9TpZ9d1AfD3SSo75An_hxZ1HQhWKKA6LSMHx5WnN31Hx6_rqzK7bps8FE0bKdA0kDmuVFJKb4s8GIRmR8GYuwrmQg63UBxaG649rhfuykqxWsy1C0ZyImcaC9afZjVeTN4u_-Pt007Se7zic7pcJmJ4XVQNktF-g2w9T2Le9RTMW4bzkPkwpZxEk6l_CqbrEPan2tJNx-hSHdJ8pVX1o8jjadrCGa3jy2TiQ2NUW1tVsdSdgAvW9okeLnMZc20HKmA304PqEwi3dMvwW8IlHgmJvtUN6whBhI62B-aLddRmycyZDj6RJe2DFIA_52mSLyhmkf7qEVxf7Wine3rp9dkm0ofdthvpNCpsRe0hx_WeH_O8Cqq6-WMp5ffSfxfFIqZsqWhujdZDQ-XQcHh0dMAgHBh908B3dOSoRp7XVRDPJJteGPvHVNhU8CyV-rKtSXKhjXOHOrBeQh04ugONvjr4jcrvZTXp1LXlbAbUZm157my8ZGvTV1Bh_V8UmqO7lqFoVO5Wse2n0FpMnqK4xgoyV0fQ-n2q6-8CywDEqjfhGgk1XDtooFxabxPWiMTVRQoVj6zfBuu3CZPrD3zNEiFtmm2oNeY2hDthlzYDyD_0Dd79DNO2c1zin5MYcZBit9Ew_OeXFw1iWZGma2NcCLqsgigLPl54YRjGpmZbONSsyHU1H0eehkwnJKFh256J17c2uXccPiYoSqNJeHmOYrfOHtX1J-K13qdul5Wqo2_2Z6WVrk-ZbK7u21Ch983uK9YesqlDbJ9WL8IOInFU7u8b5S9TgzZ0NbiAEULyOS6KZg9Ind9Qynu7M-vB1p8Q9q4JUXs6TH55ckC4YwbEI4t8BBpqPBSLxn5YZCcfg4vL80_vzr52GxLc0YuGGtHG24TlJbEzFULB8seU0H-CZ_dg4PPtYAl-vu1pqofrbQRQhupkwLO2djt3KKo1WE9RKWO1lK8jo_emsk_Ewx1y5NHFPocWEzKyvN52XelAKyN_kqa_iBzF6du8fEjla-_sxmTkWgoV4HvPwZs6v5fgza7n2uG8DZ8wLsJfh5A35cRY5uW6e52KTGFvk2rvgFiV5YQD4vEceobzfVbvWr9dyb9JKF91s_J8sveuD_yhI8tZnxlWCnqQt5astqSl5R8gL1V2c4nfJPmSZEI293Q1qyOU4eaMxklaonfy4R24mJ-ffrk8Pfswa7IZysSEOrSqd6GOwvI9VE7BuyQiVKYXXOGrH4Is8ytBuNAY4UUq-JWep3h1z5LrG6FJ50kshSHX4FVMDNfAlkPCOMQWcl2XmCa0LA9GEXYJ1u_JYjn7F6-YKqR5IQAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\attachments\Recording-c103b9b3fef1be3f21f513896bb20ee49665c696.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\attachments\Replay-log-da4c125ab7d365715497f81833bc04975bd961c9.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

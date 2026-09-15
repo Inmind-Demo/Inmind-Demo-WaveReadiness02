@@ -1,0 +1,209 @@
+telemetryId: 43ba2a34-2cd4-4d97-b788-d3e6efd4c118
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Items
+    description: Navigate to <caption>Items</caption>
+    log:
+      start: 2026-09-15T00:08:52.526Z
+      duration: 1798
+  - type: page-shown
+    source:
+      page: Item List
+    modal: false
+    runtimeId: b2pf
+    description: Page <caption>Items</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:54.738Z
+  - type: invoke
+    target:
+      - page: Item List
+        runtimeRef: b2pf
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+    log:
+      start: 2026-09-15T00:08:54.797Z
+      duration: 850
+  - type: page-shown
+    source:
+      page: Select Item Templ. List
+    modal: true
+    runtimeId: b346
+    description: Page <caption>Select a template for a new item</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:55.689Z
+  - type: input
+    target:
+      - page: Select Item Templ. List
+        runtimeRef: b346
+      - scope: filter
+        field: filter:system:search
+    value: "*ITEM"
+    isFilterAsYouType: true
+    description: Input <value>*ITEM</value> into <caption>Search</caption>
+    log:
+      start: 2026-09-15T00:08:55.714Z
+      duration: 50
+  - type: invoke
+    target:
+      - page: Select Item Templ. List
+        runtimeRef: b346
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Select a template for a new item</caption>
+    log:
+      start: 2026-09-15T00:08:55.790Z
+      duration: 1673
+  - type: page-closed
+    source:
+      page: Select Item Templ. List
+    runtimeId: b346
+    description: Page <caption>Select a template for a new item</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:57.503Z
+  - type: page-shown
+    source:
+      page: Item Card
+    modal: false
+    runtimeId: b355
+    description: Page <caption>Item Card</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:57.565Z
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b355
+      - field: Description
+    value: Page Scripting
+    description: Input <value>Page Scripting</value> into <caption>Description</caption>
+    log:
+      start: 2026-09-15T00:08:57.595Z
+      duration: 143
+  - type: focus
+    target:
+      - page: Item Card
+        runtimeRef: b355
+      - field: Tax Group Code
+    description: Focus <caption>Tax Group Code</caption>
+    log:
+      start: 2026-09-15T00:08:57.764Z
+      duration: 615
+  - type: invoke
+    target:
+      - page: Item Card
+        runtimeRef: b355
+      - field: Tax Group Code
+    invokeType: Lookup
+    description: Invoke Lookup on <caption>Tax Group Code</caption>
+    log:
+      start: 2026-09-15T00:08:58.408Z
+      duration: 116
+  - type: page-shown
+    source:
+      page: lookup:Tax Group Code
+    modal: false
+    runtimeId: b3de
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:58.550Z
+  - type: invoke
+    target:
+      - page: lookup:Tax Group Code
+        runtimeRef: b3de
+      - action: system:fulllist
+    description: Invoke <caption>Select from full list</caption>
+    log:
+      start: 2026-09-15T00:08:58.576Z
+      duration: 157
+  - type: page-closed
+    source:
+      page: lookup:Tax Group Code
+    runtimeId: b3de
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:58.782Z
+  - type: page-shown
+    source:
+      page: Tax Groups
+    modal: false
+    runtimeId: b3dw
+    description: Page <caption>Select - Tax Groups</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:58.808Z
+  - type: input
+    target:
+      - page: Tax Groups
+        runtimeRef: b3dw
+      - scope: filter
+        field: filter:system:search
+    value: MATERIALS
+    isFilterAsYouType: true
+    description: Input <value>MATERIALS</value> into <caption>Search</caption>
+    log:
+      start: 2026-09-15T00:08:58.835Z
+      duration: 47
+  - type: invoke
+    target:
+      - page: Tax Groups
+        runtimeRef: b3dw
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Select - Tax Groups</caption>
+    log:
+      start: 2026-09-15T00:08:58.907Z
+      duration: 465
+  - type: page-closed
+    source:
+      page: Tax Groups
+    runtimeId: b3dw
+    description: Page <caption>Select - Tax Groups</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:59.401Z
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b355
+      - field: Unit Price
+    value: "1500"
+    description: Input <value>1500</value> into <caption>Unit Price</caption>
+    log:
+      start: 2026-09-15T00:08:59.426Z
+      duration: 681
+  - type: close-page
+    target:
+      - page: Item Card
+        runtimeRef: b355
+    description: Close page <caption>Item Card</caption>
+    log:
+      start: 2026-09-15T00:09:00.133Z
+      duration: 218
+  - type: page-closed
+    source:
+      page: Item Card
+    runtimeId: b355
+    description: Page <caption>Item Card</caption> was closed.
+    log:
+      start: 2026-09-15T00:09:00.383Z
+  - type: close-page
+    target:
+      - page: Item List
+        runtimeRef: b2pf
+    description: Close page <caption>Items</caption>
+    log:
+      start: 2026-09-15T00:09:00.428Z
+      duration: 152
+  - type: page-closed
+    source:
+      page: Item List
+    runtimeId: b2pf
+    description: Page <caption>Items</caption> was closed.
+    log:
+      start: 2026-09-15T00:09:00.606Z
+name: DynamicsCon - Page Scripting 2 - Create Item
+description: Test recording
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-15T00:08:42.094Z
+  duration: 18556
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\509ab1828e56c528240aa01910b61ba9.webm

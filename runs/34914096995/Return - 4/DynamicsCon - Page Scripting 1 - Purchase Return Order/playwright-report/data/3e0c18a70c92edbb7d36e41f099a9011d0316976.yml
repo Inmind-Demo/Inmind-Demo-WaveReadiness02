@@ -1,0 +1,303 @@
+telemetryId: a1b2c3d4-e5f6-4909-8001-000000000009
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Purchase Return Orders
+    description: Navigate to <caption>Purchase Return Orders</caption>
+    log:
+      start: 2026-09-15T01:22:40.033Z
+      duration: 1530
+  - type: page-shown
+    source:
+      page: Purchase Return Order List
+    modal: false
+    runtimeId: bcsf
+    description: Page <caption>Purchase Return Orders</caption> was shown.
+    log:
+      start: 2026-09-15T01:22:41.599Z
+  - type: invoke
+    target:
+      - page: Purchase Return Order List
+        runtimeRef: c901
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+    log:
+      start: 2026-09-15T01:22:41.718Z
+      duration: 1527
+  - type: page-shown
+    source:
+      page: Purchase Return Order
+    modal: false
+    runtimeId: c902
+    description: Page <caption>New - Purchase Return Order</caption> was shown.
+    log:
+      start: 2026-09-15T01:22:43.299Z
+  - type: focus
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - field: Buy-from Vendor Name
+    description: Focus <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-15T01:22:43.395Z
+      duration: 95
+  - type: input
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - field: Buy-from Vendor Name
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-15T01:22:43.515Z
+      duration: 213
+  - type: page-shown
+    source:
+      page: lookup:Buy-from Vendor Name
+    modal: false
+    runtimeId: c903
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-15T01:22:43.759Z
+  - type: invoke
+    target:
+      - page: lookup:Buy-from Vendor Name
+        runtimeRef: c903
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+    log:
+      start: 2026-09-15T01:22:43.785Z
+      duration: 426
+  - type: page-closed
+    source:
+      page: lookup:Buy-from Vendor Name
+    runtimeId: c903
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-15T01:22:44.362Z
+  - type: copy-value
+    source:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - field: No.
+    name: Purchase Return Order - No.
+    valueType: string
+    description: Copy value from <caption>No.</caption>
+    log:
+      start: 2026-09-15T01:22:44.429Z
+      copiedValue: "1011"
+      duration: 1
+  - type: input
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - field: Vendor Cr. Memo No.
+    value: =Clipboard.'Purchase Return Order - No.'
+    description: Input <value>Clipboard.'Purchase Return Order - No.'</value> into
+      <caption>Vendor Cr. Memo No.</caption>
+    log:
+      start: 2026-09-15T01:22:44.455Z
+      duration: 1678
+  - type: input
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - part: PurchLines
+      - page: Purchase Return Order Subform
+      - repeater: Control1
+      - field: No.
+    value: ""
+    isFilterAsYouType: true
+    description: Input <value></value> into <caption>No.</caption>
+    log:
+      start: 2026-09-15T01:22:46.165Z
+      duration: 285
+  - type: focus
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - part: PurchLines
+      - page: Purchase Return Order Subform
+      - repeater: Control1
+      - field: No.
+    description: Focus <caption>No.</caption>
+    log:
+      start: 2026-09-15T01:22:46.495Z
+      duration: 54
+  - type: page-shown
+    source:
+      page: lookup:No.
+    modal: false
+    runtimeId: c904
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-15T01:22:46.602Z
+  - type: input
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - part: PurchLines
+      - page: Purchase Return Order Subform
+      - repeater: Control1
+      - field: No.
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>No.</caption>
+    log:
+      start: 2026-09-15T01:22:46.629Z
+      duration: 87
+  - type: invoke
+    target:
+      - page: lookup:No.
+        runtimeRef: c904
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+    log:
+      start: 2026-09-15T01:22:46.742Z
+      duration: 274
+  - type: page-closed
+    source:
+      page: lookup:No.
+    runtimeId: c904
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-15T01:22:47.104Z
+  - type: input
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - part: PurchLines
+      - page: Purchase Return Order Subform
+      - repeater: Control1
+      - field: Quantity
+    value: "1"
+    description: Input <value>1</value> into <caption>Quantity</caption>
+    log:
+      start: 2026-09-15T01:22:47.171Z
+      duration: 414
+  - type: input
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - part: PurchLines
+      - page: Purchase Return Order Subform
+      - repeater: Control1
+      - field: Direct Unit Cost
+    value: "1500"
+    description: Input <value>1500</value> into <caption>Direct Unit Cost Excl.
+      Tax</caption>
+    log:
+      start: 2026-09-15T01:22:47.613Z
+      duration: 229
+  - type: focus
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - field: null
+        automationId: fb8cccf3-54ac-4d77-9ad8-136cec25583a
+        caption: null
+    description: Focus <caption>null</caption>
+    log:
+      start: 2026-09-15T01:22:47.868Z
+      duration: 57
+  - type: invoke
+    target:
+      - page: Purchase Return Order
+        runtimeRef: c902
+      - action: Post
+    description: Invoke <caption>Post...</caption>
+    log:
+      start: 2026-09-15T01:22:47.950Z
+      duration: 131
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Choose
+    modal: true
+    runtimeId: c905
+    description: Page <caption>Choose</caption> was shown.
+    log:
+      start: 2026-09-15T01:22:48.107Z
+  - type: input
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: c905
+      - field: AL:STRMENU
+    value: 0
+    description: Input <value>0</value> into <caption>AL:STRMENU</caption>
+    log:
+      start: 2026-09-15T01:22:48.132Z
+      duration: 49
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: c905
+    invokeType: Ok
+    description: Invoke Ok on <caption>Choose</caption>
+    log:
+      start: 2026-09-15T01:22:48.218Z
+      duration: 843
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: c905
+    description: Page <caption>Choose</caption> was closed.
+    log:
+      start: 2026-09-15T01:22:49.122Z
+  - type: page-closed
+    source:
+      page: Purchase Return Order
+    runtimeId: c902
+    description: Page <caption>Purchase Return Order</caption> was closed.
+    log:
+      start: 2026-09-15T01:22:49.148Z
+  - type: close-page
+    target:
+      - page: Purchase Return Order
+        runtimeRef: bd6f
+    description: Close page <caption>Purchase Return Order</caption>
+    log:
+      start: 2026-09-15T01:22:49.174Z
+      duration: 298
+  - type: page-closed
+    source:
+      page: Purchase Return Order
+    runtimeId: bd6f
+    description: Page <caption>Purchase Return Order</caption> was closed.
+    log:
+      start: 2026-09-15T01:22:49.550Z
+  - type: close-page
+    target:
+      - page: Purchase Return Order List
+        runtimeRef: bczf
+    description: Close page <caption>Purchase Return Orders</caption>
+    log:
+      start: 2026-09-15T01:22:49.577Z
+      duration: 213
+  - type: page-closed
+    source:
+      page: Purchase Return Order List
+    runtimeId: bczf
+    description: Page <caption>Purchase Return Orders</caption> was closed.
+    log:
+      start: 2026-09-15T01:22:49.826Z
+name: DynamicsCon - Page Scripting 9 - Purchase Return Order
+description: Create purchase return order, post return shipment only
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-15T01:22:30.041Z
+  duration: 19819
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\fe272a46ecfca41777e3304480dda7ea.webm

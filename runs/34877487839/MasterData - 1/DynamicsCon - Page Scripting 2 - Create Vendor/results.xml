@@ -1,0 +1,21 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="21.978651000000003">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-14T18:20:39.918Z" hostname="chromium" tests="1" failures="0" skipped="0" time="20.933" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\MasterData - 1\DynamicsCon - Page Scripting 2 - Create Vendor.yml)" classname="dist\player.spec.js" time="20.933">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA91Z227jNhB991fwB6TV_YZggdTd3RrdpEFiFGgQYEFLtKOuLBoiHcd_X4qSbF0oW5SdomheklDkcM6cmTmkRFGC1ohm-1kUgMg0NT-0HcXwfFexQsdQPN3wlWjhRZrt-MgMlxNC0YYEEwAUQPcbFIAUvsUrSBEbAoDCbIVowP_Op2zgik35ZUviFBEC7mDKBjLwiBMEpiilKDtMhSGNcRqAP1Ea4Yzw8QiRMIs3xYP7ciNAMbgJIR_9XM6--VQN8HUJXlU-EOYSDYChGY6i-YpuzXUvMLTA1lXfsJ_LWdE2g8Uuumn5NXQ5AIW84l3KZxK8zUJU2S7QFS6A7zGhfHyNI5gEYAkTUgQl26Y0XqM8xIvFOukie2B2TkACO0gA90EdjM5Ubdt9rgGJ0zf88xRJbRg1zx_RsuZ6nawpTmmGkx_3aMefFbvM-Y7VWAPqjE_InwGcHjGz_0dQaKqOYXQptA27BpyEeFPgDnEaxXxKuURIcZvkiuYnViohrcI0R-tNotaj1WB59yqAvmwRXVqEgObG8sxeMssQpCw4b3yb_hw4lGHBR8XxZnskr0lznepzUETkl4gqQzyqLMnj5FjDxc8yRklUPQnInnm6DgiCWXi08AaT7THlHlBGcHp4GJOvfO0t-Qtvi1Si2RYdnrfyiUEGN9zg54a9m0_FIItKvWE8cU9aydZKuJNJZ6mmbj7XZh4Tz7E6hByK7kMZqZfdd4x_bjd__OyLF6-_alKjCE_kY82NdmaOCKClWeIA6rZjtkLIqzNMMEHRYUm7QIeWqLhIOzG6sEoLZ1XpuDiqpnvPg5ufpRpeo8MPl6opzKIBUvWeDpMqbu8yuXJU3XSaclW1spNqdUDSLY_39LCkbEn3cF2gLNsPx_JUYEtXIq2q9Zbm5J7mku8wQscYek_r6pjpebWILHG4JVeOyBy-s_qAiwR10X_N9ztCO04dBdCxBGctX9M-mPIWwJL4g5z0051P6SH5oki4qu3q3Ujwtvd_YNpVHUeAz24SPewoKg3wNkOQHUkj1DmLFnrXexwtHjfEsGFvVCBc0xNcL2xLrmUn3LWgC-9k7w6txbneXejaZW3bVX3dl7pl9MLpcFxBqF83ytPkcpskSSXrIj7b4r3M8Brkq0C-bBSbvmV12TQso81m7agiRec12KufPIag8lTT0CSPEAfPh913Q1vAkvCApRxMX3j1ZagsqbNEF1I3GW16WCS--py79pTScze7vZsV7enENadfl_h6mavNwIi5pqBpWxOJypaIYu91RfaqIswZCdiWLYBtubJF3YV-7RKQr2zf0aQa8xjNfYD7NUopuEP0FUfXUl6B1VHk-p7TJde19VH62wf1TPP7V1TYV13HHKPCfaAEhfsf0mIG1_MFWuyabWaHaXFfFK7BpFTd6oGmqbrrSCpy038yIC3dvwc3pJbxCxKVozM0KWUWQesmZwnnYm2e_vZl-vsF2szXX1Wbi5iZApFypC5UUnG8ojr3Zo8EfFMXFLvlae0iOVPsohB8TFHI17zXfPfFDSi529fQ6wagaW6aWzjzEk_Ge0fwDUb3Ozp7hqA2oKu9ipTlQ1c1Xx_Lx_nPZwP5GFMsuqqbgveIhuuM40J4nB39BVOeByu_c6dwzTz6dc9-xyGZsj6jtN7cAp0NTdmpmaLS80nDuTkiFGQoxFmUv-ctNmS7bzLMJCHvDbffvoCn6ePsYT67_zYpnes7gFgs5W0e5lqINcdw2chbHCHMvA1e4MuP_IPBC2WbKxki24SSF3WTwP0ui1evVGHG4yU7TBFFe_G8hactTN-HmuG7y9AzbTdyoeZHpmsYlq7u0GI9-QcCY9AbrR8AAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-de7bb-ting-2---Create-Vendor-yml--chromium\attachments\Recording-e72ed4da14a70755ee95c2617cad72296f887775.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-de7bb-ting-2---Create-Vendor-yml--chromium\attachments\Replay-log-c527c2accd9d6b3b185ead274ded661bfa7db1dc.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-de7bb-ting-2---Create-Vendor-yml--chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-de7bb-ting-2---Create-Vendor-yml--chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

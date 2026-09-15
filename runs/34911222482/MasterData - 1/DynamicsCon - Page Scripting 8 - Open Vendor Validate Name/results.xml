@@ -1,0 +1,27 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="138.36049400000002">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-15T00:12:20.969Z" hostname="chromium" tests="1" failures="0" skipped="0" time="137.118" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\MasterData - 1\DynamicsCon - Page Scripting 8 - Open Vendor Validate Name.yml)" classname="dist\player.spec.js" time="137.118">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA71W227iMBB95yv8A6FOAsSJ2Eot260q7aVqu32okFZuPKHWJnZkO7D8_ToO0EChBRYtL6XDeHzOmTOTGMihAKPmNyxB1H8O0pD1POhnA6-HfeIRjH0Prz4-6WgDpU46CHnIzEtIkKBTPqEGbAghQ9UETOK-1yklndiUy0pzAVqjb1TYgEJ3Mgc0AmFArVJpargUCXoEwaTSLs5Ap4qXzQ_fFxchI9EwpS56vsgeni0D7lwuJ0sM2kIyCQpwMPBw7Pn9B4wTv5eEg65P-k-LLFYp2tzSi8IWuRq_p1_kTLhELSuVwrJ0Q65BgL5ybVy8kIzmCcporhtNVCUML6BWmBHsvyV2a-u8wwjNqEYOQ_cAcmQQPbWIcDGVv9_r0SaNFvI7yFrQ6yMKSrCdUAkaSWGUzF9_yjjkrG5W0dzWXPzgQHzhuT10OR_JvCoaRUuqbKaN6iWgnxou2JSKFFiTz8UkQUZV8Fa5G1d8oy6S4lXNGsdR5ogj_NYcsb8maVmZUymqU1nXzByTVfqmmFOaV7AwzH0jg5hsk8UiQ0OXfb6ePDxrohZ9e4yOlCnqYjJ4K1NE8P-2XttmV4ybHea6yGd0rkeyKLhpz-g2Vyk5W7PS8r6jdCJxuEWngBy1a0ZUsX12TbDfrnH1_m3fkO6g77f3jXUZZ-8_FTbJbGl7sHOt2GlZqvjpkNF4XODaZX00XFU-53YJv_63gPLuVB2iF-m19UpzqcGrhTmFYmuUR3VpV-GDxh-APvK32NkPgk07O1psbz-fzL7NvYf4lwz8Y_vx8eLasx_HvMZY5IRs6QXGx_ViReYkry2H9iHu4sA-d4WdyQR9ntu_PLXrWlgm6xOHfGJjP0oQS-CryXY7Yg2pS4M_lll9cqPQtDmeWhMhKthqc7k6zd7pNHgt-FJJ-4iu98zF9RW6H93d3D7cfL_uLLjt4hX0u34_rrvU6lBISGwjU85AWrLJmI5_GSjKsQFtPAW6yo0ed8uczmeKT16MZ4vzzL4na88fhxk8p3EYBNFzHKU4DHCWDkJKM0xIlDHWncFz0fkLizz0HOALAAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-cde65-n-Vendor-Validate-Name-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-cde65-n-Vendor-Validate-Name-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-cde65-n-Vendor-Validate-Name-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-cde65-n-Vendor-Validate-Name-yml--chromium-retry1\attachments\Recording-92001cd09c01c12173a61089ea87111a8f86a32e.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-cde65-n-Vendor-Validate-Name-yml--chromium-retry1\attachments\Replay-log-59e4982a2fcbf64c5ddb67482b4e04b3bded0e44.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-cde65-n-Vendor-Validate-Name-yml--chromium-retry1\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-cde65-n-Vendor-Validate-Name-yml--chromium-retry1\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

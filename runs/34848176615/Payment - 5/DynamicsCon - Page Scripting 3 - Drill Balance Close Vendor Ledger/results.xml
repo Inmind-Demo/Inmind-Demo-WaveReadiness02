@@ -1,0 +1,91 @@
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="36.264934000000004">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-14T14:12:36.971Z" hostname="chromium" tests="1" failures="1" skipped="0" time="34.071" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Payment - 5\DynamicsCon - Page Scripting 3 - Drill Balance Close Vendor Ledger.yml)" classname="dist\player.spec.js" time="34.071">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA71XbW_aSBD-zq_YDyflKtXUXgM2Fo2U0FwVqder0lxPVyFViz2Q1dlea3cN5d_feI2NDW7qkrR8gczOzj7zzGs0xJCAlrvbKCDMWdLQjUYWjFcTa2RT3_Jt27Hs-kP9gdKQqWBAiEX0LoOApGzD10wDigjRTK5BB-Z3oZKxNapc54qnoBT5k6UokOROxEDmkGqQtSoLNRdpQD5BGgmpjDwCFUqelQfv9w8RLcgsZEZ6udeevaoE5l4s1hUGhZB0QKhNJ5Y9tZzRvTMKHDewp0PH9T7vtaJcsvIVb-o0nCvwW-pBbFOjqEQuQ6hMl86VCMg7rrSRJyJicUBWLFYlJzJPNU-gYBh82zl17APaecQjsmWKGAzDvs459pC6o88NR3i6Ef89FqNjNxrI72DVgF5ckZABRkIGZC5SLUV8OFpxiKMiWEn5WvnwvQHxB4_x0vVuLuI8KRnNmERNlKoK0N8KrqINS0OISn2ergOiZQ6nzN0a40d2iUgPbBY4fjw5kD_X9U-TY-y1KM1y_VyMqlAUNlfGk1r9mMwNi3PYJ8zHkoZ03UULIiMzo33ZVp69KqWIvllGZ9M0os4pTf7E-9Wp10yzm4jrbyTXVbxlOzUXScJ1s0a7skqKbSuVqvfO4MnBdKKnPE3dyVm9Zs5k1KfX0H69xth7Wr-hQ5dOm_0Gs4xHj0-FY2c6wk6P28o1i4vOQH5_N__3hTnEsqnofN2sEfvU9097TAf_a3O_vWj4P6ttXnLsw4e_9mj2hWVXtfQjLPn1yAEphQxqz1u04WP1QYKD0_D1D4YFvmYQFnVMLuwLssQqXwtNLlw6dv2LYX3nhBTzoLkLUcVN8cGhmxcZZAycUbNPDF6zat9IHsdvquzvKshao1WWnTE8b4RDVCwnN1jmHFSfAnN7Fljb8rdKrUIcxkKBVUDr0TRPMXeEogPnvHjE2OqN9phUgzM6g9WfQGKJ5VwWv5_Gfblrt9LzGKvRPFs3fxo73x_MPdl5ei5VSJ5lp65YSXFJwP6zw28e4nKQIrT21kSojzLTf-ouVrrZys1BC8JfGaRkU56HGJOXJGoZwP2rM7NflsDIlusHgR2-_MdoUE4V9DSTAtfEYg28entDPs7vbj_c375_O9hPoO7pQ4OxP6SeW0yfwwLijBxalN-GRyCQgmDBFl80JNlCg9KWBJXHWi2GWcx2W8nXD9pC43yFkJTlLByHjUc-8-zl0kPb3nSKAjahIZ349sRzhltYJoP_AVfWtUlkDgAA&amp;zip=1">
+</property>
+</properties>
+<failure message="player.spec.js:64:21  (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Payment - 5\DynamicsCon - Page Scripting 3 - Drill Balance Close Vendor Ledger.yml)" type="FAILURE">
+<![CDATA[  [chromium] › dist\player.spec.js:64:21 ›  (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Payment - 5\DynamicsCon - Page Scripting 3 - Drill Balance Close Vendor Ledger.yml) 
+
+    Error: An error occurred during replaying the recording. See replay log for further info.
+
+    expect(received).toBeFalsy()
+
+    Received: "Was expecting '0' but got '32538'."
+        at playRecording (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:118:134)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\player.spec.js:64:88
+
+    attachment #1: Recording (text/plain) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Recording-743773df74b831948a23a0c01d5ce5d2e6105e21.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: Replay log (text/plain) ─────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Replay-log-c23e4f886d0a2ced5a94dbf3244f827d6a767131.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: An error occurred during replaying the recording. See replay log for further info.
+
+    expect(received).toBeFalsy()
+
+    Received: "Was expecting '0' but got '32538'."
+        at playRecording (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:118:134)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\player.spec.js:64:88
+
+    attachment #1: Recording (text/plain) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\attachments\Recording-743773df74b831948a23a0c01d5ce5d2e6105e21.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: Replay log (text/plain) ─────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\attachments\Replay-log-47cf5a6251745503427b8eea70c60c21c03ae4da.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Recording-743773df74b831948a23a0c01d5ce5d2e6105e21.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Replay-log-c23e4f886d0a2ced5a94dbf3244f827d6a767131.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\attachments\Recording-743773df74b831948a23a0c01d5ce5d2e6105e21.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\attachments\Replay-log-47cf5a6251745503427b8eea70c60c21c03ae4da.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

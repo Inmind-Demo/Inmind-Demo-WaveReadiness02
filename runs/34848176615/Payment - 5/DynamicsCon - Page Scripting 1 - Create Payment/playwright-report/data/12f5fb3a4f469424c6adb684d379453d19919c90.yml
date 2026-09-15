@@ -1,0 +1,384 @@
+telemetryId: b9cab5fe-0413-437f-9d19-0319be89db55
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Purchase_VendorList
+    description: Navigate to <caption>Vendors</caption>
+    log:
+      start: 2026-09-14T14:11:25.422Z
+      duration: 1111
+  - type: page-closed
+    source:
+      page: Purchase Quotes
+    runtimeId: bbpk
+    description: Page <caption>Purchase Quotes</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:26.985Z
+  - type: page-shown
+    source:
+      page: Vendor List
+    modal: false
+    runtimeId: bdmq
+    description: Page <caption>Vendors</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:27.036Z
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: bdmq
+      - repeater: Control1
+      - field: Name
+    invokeType: FilterByColumn
+    parameters:
+      UseAdvancedFiltering: true
+    description: Invoke FilterByColumn on <caption>Name</caption>
+    log:
+      start: 2026-09-14T14:11:27.121Z
+      duration: 187
+  - type: input
+    target:
+      - page: Vendor List
+        runtimeRef: bdmq
+      - scope: filter
+        field: Name
+    value: Page Scripting
+    description: Input <value>Page Scripting</value> into <caption>Name</caption>
+    log:
+      start: 2026-09-14T14:11:27.333Z
+      duration: 921
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: bdmq
+      - repeater: Control1
+    invokeType: Edit
+    parameters:
+      AlwaysCommit: false
+    description: Invoke row on <caption>Control1</caption>
+    log:
+      start: 2026-09-14T14:11:28.298Z
+      duration: 1162
+  - type: page-shown
+    source:
+      page: Vendor Card
+    modal: false
+    runtimeId: be45
+    description: Page <caption>Vendor Card</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:29.512Z
+  - type: invoke
+    target:
+      - page: Vendor Card
+        runtimeRef: be45
+      - field: Balance (LCY)
+    invokeType: DrillDown
+    description: Invoke DrillDown on <caption>Balance ($)</caption>
+    log:
+      start: 2026-09-14T14:11:29.597Z
+      duration: 687
+  - type: page-shown
+    source:
+      page: Vendor Ledger Entries
+    modal: false
+    runtimeId: bebr
+    description: Page <caption>Vendor Ledger Entries</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:30.852Z
+  - type: invoke
+    target:
+      - page: Vendor Ledger Entries
+        runtimeRef: bebr
+      - action: Create Payment
+    description: Invoke <caption>Create Payment</caption>
+    log:
+      start: 2026-09-14T14:11:30.960Z
+      duration: 443
+  - type: page-shown
+    source:
+      page: Create Payment
+    modal: true
+    runtimeId: bent
+    description: Page <caption>Create Payment</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:31.471Z
+  - type: invoke
+    target:
+      - page: Create Payment
+        runtimeRef: bent
+      - field: Batch Name
+    invokeType: Lookup
+    description: Invoke Lookup on <caption>Batch Name</caption>
+    log:
+      start: 2026-09-14T14:11:31.563Z
+      duration: 385
+  - type: page-shown
+    source:
+      page: General Journal Batches
+    modal: true
+    runtimeId: beo8
+    description: Page <caption>General Journal Batches</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:32.112Z
+  - type: input
+    target:
+      - page: General Journal Batches
+        runtimeRef: beo8
+      - scope: filter
+        field: filter:system:search
+    value: GENERAL
+    isFilterAsYouType: true
+    description: Input <value>GENERAL</value> into <caption>Search</caption>
+    log:
+      start: 2026-09-14T14:11:32.196Z
+      duration: 71
+  - type: invoke
+    target:
+      - page: General Journal Batches
+        runtimeRef: beo8
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>General Journal Batches</caption>
+    log:
+      start: 2026-09-14T14:11:32.293Z
+      duration: 457
+  - type: page-closed
+    source:
+      page: General Journal Batches
+    runtimeId: beo8
+    description: Page <caption>General Journal Batches</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:32.785Z
+  - type: invoke
+    target:
+      - page: Create Payment
+        runtimeRef: bent
+      - field: Bank Account
+    invokeType: Lookup
+    description: Invoke Lookup on <caption>Bank Account</caption>
+    log:
+      start: 2026-09-14T14:11:32.811Z
+      duration: 474
+  - type: page-shown
+    source:
+      page: lookup:Bank Account
+    modal: false
+    runtimeId: besc
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:33.311Z
+  - type: invoke
+    target:
+      - page: lookup:Bank Account
+        runtimeRef: besc
+      - action: system:fulllist
+    description: Invoke <caption>Select from full list</caption>
+    log:
+      start: 2026-09-14T14:11:33.338Z
+      duration: 509
+  - type: page-closed
+    source:
+      page: lookup:Bank Account
+    runtimeId: besc
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:33.948Z
+  - type: page-shown
+    source:
+      page: Bank Account List
+    modal: false
+    runtimeId: best
+    description: Page <caption>Select - Bank Accounts</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:34.003Z
+  - type: input
+    target:
+      - page: Bank Account List
+        runtimeRef: best
+      - scope: filter
+        field: filter:system:search
+    value: CHECKING
+    isFilterAsYouType: true
+    description: Input <value>CHECKING</value> into <caption>Search</caption>
+    log:
+      start: 2026-09-14T14:11:34.029Z
+      duration: 89
+  - type: invoke
+    target:
+      - page: Bank Account List
+        runtimeRef: best
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Select - Bank Accounts</caption>
+    log:
+      start: 2026-09-14T14:11:34.145Z
+      duration: 452
+  - type: page-closed
+    source:
+      page: Bank Account List
+    runtimeId: best
+    description: Page <caption>Select - Bank Accounts</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:34.631Z
+  - type: input
+    target:
+      - page: Create Payment
+        runtimeRef: bent
+      - field: Payment Type
+    value: 2
+    description: Input <value>2</value> into <caption>Payment Type</caption>
+    log:
+      start: 2026-09-14T14:11:34.657Z
+      duration: 41
+  - type: invoke
+    target:
+      - page: Create Payment
+        runtimeRef: bent
+    invokeType: Ok
+    description: Invoke Ok on <caption>Create Payment</caption>
+    log:
+      start: 2026-09-14T14:11:34.724Z
+      duration: 2402
+  - type: page-closed
+    source:
+      page: Create Payment
+    runtimeId: bent
+    description: Page <caption>Create Payment</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:37.203Z
+  - type: page-shown
+    source:
+      page: Payment Journal
+    modal: false
+    runtimeId: bexs
+    description: Page <caption>Payment Journals</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:37.244Z
+  - type: invoke
+    target:
+      - page: Payment Journal
+        runtimeRef: bexs
+      - action: Post
+    description: Invoke <caption>Post</caption>
+    log:
+      start: 2026-09-14T14:11:37.271Z
+      duration: 141
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: bfc3
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:37.437Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: bfc3
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+    log:
+      start: 2026-09-14T14:11:37.551Z
+      duration: 2179
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: bfc3
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:39.795Z
+  - type: message
+    automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+    text: The journal lines were successfully posted.
+    description: "Message: <value>The journal lines were successfully posted.</value>"
+    log:
+      start: 2026-09-14T14:11:39.822Z
+      duration: 419
+  - type: focus
+    target:
+      - page: Payment Journal
+        runtimeRef: bexs
+      - field: null
+        automationId: fb8cccf3-54ac-4d77-9ad8-136cec25583a
+        caption: null
+    description: Focus <caption>null</caption>
+    log:
+      start: 2026-09-14T14:11:40.292Z
+      duration: 104
+  - type: close-page
+    target:
+      - page: Payment Journal
+        runtimeRef: bexs
+    description: Close page <caption>Payment Journals</caption>
+    log:
+      start: 2026-09-14T14:11:40.422Z
+      duration: 304
+  - type: page-closed
+    source:
+      page: Payment Journal
+    runtimeId: bexs
+    description: Page <caption>Payment Journals</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:40.780Z
+  - type: close-page
+    target:
+      - page: Vendor Ledger Entries
+        runtimeRef: bebr
+    description: Close page <caption>Vendor Ledger Entries</caption>
+    log:
+      start: 2026-09-14T14:11:40.824Z
+      duration: 322
+  - type: page-closed
+    source:
+      page: Vendor Ledger Entries
+    runtimeId: bebr
+    description: Page <caption>Vendor Ledger Entries</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:41.225Z
+  - type: close-page
+    target:
+      - page: Vendor Card
+        runtimeRef: be45
+    description: Close page <caption>Vendor Card</caption>
+    log:
+      start: 2026-09-14T14:11:41.251Z
+      duration: 227
+  - type: page-closed
+    source:
+      page: Vendor Card
+    runtimeId: be45
+    description: Page <caption>Vendor Card</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:41.511Z
+  - type: navigate
+    target:
+      - action: Control_Role_Center
+    description: Navigate to <caption>Role Center</caption>
+    log:
+      start: 2026-09-14T14:11:41.537Z
+      duration: 654
+  - type: page-closed
+    source:
+      page: Purchase Invoices
+    runtimeId: bcw6
+    description: Page <caption>Purchase Invoices</caption> was closed.
+    log:
+      start: 2026-09-14T14:11:42.240Z
+  - type: page-shown
+    source:
+      page: Business Manager Role Center
+    modal: false
+    runtimeId: bfcl
+    description: Page <caption>Business Manager</caption> was shown.
+    log:
+      start: 2026-09-14T14:11:42.283Z
+name: DynamicsCon - Page Scripting 1 - Create Payment
+description: Test recording
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-14T14:11:14.309Z
+  duration: 28012
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\9248b365256672947f95a3c4e47c745a.webm

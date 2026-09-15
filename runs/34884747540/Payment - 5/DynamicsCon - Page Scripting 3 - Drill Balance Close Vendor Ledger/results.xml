@@ -1,0 +1,81 @@
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="139.738482">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-14T19:57:35.529Z" hostname="chromium" tests="1" failures="1" skipped="0" time="138.306" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Payment - 5\DynamicsCon - Page Scripting 3 - Drill Balance Close Vendor Ledger.yml)" classname="dist\player.spec.js" time="138.306">
+<failure message="player.spec.js:64:21  (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Payment - 5\DynamicsCon - Page Scripting 3 - Drill Balance Close Vendor Ledger.yml)" type="FAILURE">
+<![CDATA[  [chromium] › dist\player.spec.js:64:21 ›  (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Payment - 5\DynamicsCon - Page Scripting 3 - Drill Balance Close Vendor Ledger.yml) 
+
+    Error: An error occurred during replaying the recording. See replay log for further info.
+
+    expect(received).toBeFalsy()
+
+    Received: "Was expecting '0' but got '32538'."
+        at playRecording (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:118:134)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\player.spec.js:64:88
+
+    attachment #1: Recording (text/plain) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Recording-743773df74b831948a23a0c01d5ce5d2e6105e21.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: Replay log (text/plain) ─────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Replay-log-c23e4f886d0a2ced5a94dbf3244f827d6a767131.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: page.waitForNavigation: Test timeout of 120000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation until "load"
+    ============================================================
+        at authenticateWithTotp (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:276:14)
+        at authenticateAadMfa (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:226:13)
+        at aadAuthenticate (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:206:9)
+        at authenticate (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:187:13)
+        at navigateAndAuthenticate (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:167:5)
+        at playRecording (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:64:9)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\player.spec.js:64:88
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\..\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Recording-743773df74b831948a23a0c01d5ce5d2e6105e21.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\attachments\Replay-log-c23e4f886d0a2ced5a94dbf3244f827d6a767131.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

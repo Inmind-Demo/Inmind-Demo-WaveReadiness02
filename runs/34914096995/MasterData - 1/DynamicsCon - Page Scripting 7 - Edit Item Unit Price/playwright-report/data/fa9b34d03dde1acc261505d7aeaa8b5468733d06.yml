@@ -1,0 +1,121 @@
+telemetryId: a1b2c3d4-e5f6-4015-8001-000000000015
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Items
+    description: Navigate to <caption>Items</caption>
+    log:
+      start: 2026-09-15T00:59:56.201Z
+      duration: 786
+  - type: page-shown
+    source:
+      page: Item List
+    modal: false
+    runtimeId: d501
+    description: Page <caption>Items</caption> was shown.
+    log:
+      start: 2026-09-15T00:59:57.711Z
+  - type: invoke
+    target:
+      - page: Item List
+        runtimeRef: d501
+      - repeater: Control1
+      - field: Description
+    invokeType: FilterByColumn
+    parameters:
+      UseAdvancedFiltering: true
+    description: Invoke FilterByColumn on <caption>Description</caption>
+    log:
+      start: 2026-09-15T00:59:57.779Z
+      duration: 70
+  - type: input
+    target:
+      - page: Item List
+        runtimeRef: d501
+      - scope: filter
+        field: Description
+    description: Input <value>"Page Scripting 2"</value> into <caption>Description</caption>
+    value: ="Page Scripting 2"
+    log:
+      start: 2026-09-15T00:59:57.885Z
+      duration: 2661
+  - type: invoke
+    target:
+      - page: Item List
+        runtimeRef: d501
+      - repeater: Control1
+    invokeType: Edit
+    parameters:
+      AlwaysCommit: false
+    description: Invoke row on <caption>Control1</caption>
+    log:
+      start: 2026-09-15T01:00:00.595Z
+      duration: 1277
+  - type: page-shown
+    source:
+      page: Item Card
+    modal: false
+    runtimeId: d502
+    description: Page <caption>Item Card</caption> was shown.
+    log:
+      start: 2026-09-15T01:00:01.941Z
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: d502
+      - field: Unit Price
+    value: "2000"
+    description: Input <value>2000</value> into <caption>Unit Price</caption>
+    log:
+      start: 2026-09-15T01:00:02.002Z
+      duration: 643
+  - type: validate
+    target:
+      - page: Item Card
+        runtimeRef: d502
+      - field: Unit Price
+    operation: =
+    value: 2000
+    description: Validate <caption>Unit Price</caption> <operation>is</operation>
+      <value>2000</value>
+    log:
+      start: 2026-09-15T01:00:02.671Z
+  - type: close-page
+    target:
+      - page: Item Card
+        runtimeRef: d502
+    description: Close page <caption>Item Card</caption>
+    log:
+      start: 2026-09-15T01:00:02.700Z
+      duration: 234
+  - type: page-closed
+    source:
+      page: Item Card
+    runtimeId: d502
+    description: Page <caption>Item Card</caption> was closed.
+    log:
+      start: 2026-09-15T01:00:02.998Z
+  - type: close-page
+    target:
+      - page: Item List
+        runtimeRef: d501
+    description: Close page <caption>Items</caption>
+    log:
+      start: 2026-09-15T01:00:03.025Z
+      duration: 411
+  - type: page-closed
+    source:
+      page: Item List
+    runtimeId: d501
+    description: Page <caption>Items</caption> was closed.
+    log:
+      start: 2026-09-15T01:00:03.462Z
+name: DynamicsCon - Page Scripting 15 - Edit Item Unit Price
+description: Find existing Page Scripting item, update Unit Price, validate change
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-15T00:59:44.490Z
+  duration: 19000
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\4640d4f6f5515fafd3e30a5366dd4298.webm

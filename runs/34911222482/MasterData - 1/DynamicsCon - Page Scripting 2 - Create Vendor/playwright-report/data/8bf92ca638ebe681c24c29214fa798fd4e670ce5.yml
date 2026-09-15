@@ -1,0 +1,291 @@
+telemetryId: d3309c56-2897-4c62-8129-db8d0569e3cf
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Vendors
+    description: Navigate to <caption>Vendors</caption>
+    log:
+      start: 2026-09-15T00:08:29.642Z
+      duration: 1396
+  - type: page-shown
+    source:
+      page: Vendor List
+    modal: false
+    runtimeId: bbml
+    description: Page <caption>Vendors</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:31.242Z
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: bbml
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+    log:
+      start: 2026-09-15T00:08:31.267Z
+      duration: 524
+  - type: scope
+    condition:
+      type: page-shown
+      source:
+        page: Select Vendor Templ. List
+      runtimeId: bbwh
+    description: If Page <caption>Select a template for a new vendor</caption> was shown.
+    steps:
+      - type: input
+        target:
+          - page: Select Vendor Templ. List
+            runtimeRef: bbwh
+          - scope: filter
+            field: filter:system:search
+        value: Vendor Person
+        isFilterAsYouType: true
+        description: Input <value>Vendor Person</value> into <caption>Search</caption>
+        log:
+          start: 2026-09-15T00:08:31.895Z
+          duration: 52
+      - type: invoke
+        target:
+          - page: Select Vendor Templ. List
+            runtimeRef: bbwh
+        invokeType: LookupOk
+        description: Invoke LookupOk on <caption>Select a template for a new
+          vendor</caption>
+        log:
+          start: 2026-09-15T00:08:31.973Z
+          duration: 2285
+      - type: page-closed
+        source:
+          page: Select Vendor Templ. List
+        runtimeId: bbwh
+        description: Page <caption>Select a template for a new vendor</caption> was closed.
+        log:
+          start: 2026-09-15T00:08:34.287Z
+    log:
+      start: 2026-09-15T00:08:31.868Z
+  - type: page-shown
+    source:
+      page: Vendor Card
+    modal: false
+    runtimeId: bbxn
+    description: Page <caption>Vendor Card</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:34.412Z
+  - type: input
+    target:
+      - page: Vendor Card
+        runtimeRef: bbxn
+      - field: Name
+    value: Page Scripting
+    description: Input <value>Page Scripting</value> into <caption>Name</caption>
+    log:
+      start: 2026-09-15T00:08:34.439Z
+      duration: 339
+  - type: focus
+    target:
+      - page: Vendor Card
+        runtimeRef: bbxn
+      - field: Tax Liable
+    description: Focus <caption>Tax Liable</caption>
+    log:
+      start: 2026-09-15T00:08:34.816Z
+      duration: 956
+  - type: input
+    target:
+      - page: Vendor Card
+        runtimeRef: bbxn
+      - field: Tax Liable
+    value: true
+    description: Input <value>true</value> into <caption>Tax Liable</caption>
+    log:
+      start: 2026-09-15T00:08:35.798Z
+      duration: 59
+  - type: focus
+    target:
+      - page: Vendor Card
+        runtimeRef: bbxn
+      - field: Tax Liable
+    description: Focus <caption>Tax Liable</caption>
+    log:
+      start: 2026-09-15T00:08:35.883Z
+      duration: 41
+  - type: invoke
+    target:
+      - page: Vendor Card
+        runtimeRef: bbxn
+      - field: Tax Area Code
+    invokeType: Lookup
+    description: Invoke Lookup on <caption>Tax Area Code</caption>
+    log:
+      start: 2026-09-15T00:08:35.950Z
+      duration: 130
+  - type: page-shown
+    source:
+      page: lookup:Tax Area Code
+    modal: false
+    runtimeId: bc4b
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:36.106Z
+  - type: invoke
+    target:
+      - page: lookup:Tax Area Code
+        runtimeRef: bc4b
+      - action: system:fulllist
+    description: Invoke <caption>Select from full list</caption>
+    log:
+      start: 2026-09-15T00:08:36.132Z
+      duration: 173
+  - type: page-closed
+    source:
+      page: lookup:Tax Area Code
+    runtimeId: bc4b
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:36.368Z
+  - type: page-shown
+    source:
+      page: Tax Area List
+    modal: false
+    runtimeId: bc5t
+    description: Page <caption>Select - Tax Areas</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:36.393Z
+  - type: input
+    target:
+      - page: Tax Area List
+        runtimeRef: bc5t
+      - scope: filter
+        field: filter:system:search
+    value: MIAMI
+    isFilterAsYouType: true
+    description: Input <value>MIAMI</value> into <caption>Search</caption>
+    log:
+      start: 2026-09-15T00:08:36.419Z
+      duration: 47
+  - type: invoke
+    target:
+      - page: Tax Area List
+        runtimeRef: bc5t
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Select - Tax Areas</caption>
+    log:
+      start: 2026-09-15T00:08:36.492Z
+      duration: 438
+  - type: page-closed
+    source:
+      page: Tax Area List
+    runtimeId: bc5t
+    description: Page <caption>Select - Tax Areas</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:36.956Z
+  - type: invoke
+    target:
+      - page: Vendor Card
+        runtimeRef: bbxn
+      - field: Payment Method Code
+    invokeType: Lookup
+    description: Invoke Lookup on <caption>Payment Method Code</caption>
+    log:
+      start: 2026-09-15T00:08:36.984Z
+      duration: 695
+  - type: page-shown
+    source:
+      page: lookup:Payment Method Code
+    modal: false
+    runtimeId: bc5b
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:37.704Z
+  - type: invoke
+    target:
+      - page: lookup:Payment Method Code
+        runtimeRef: bc5b
+      - action: system:fulllist
+    description: Invoke <caption>Select from full list</caption>
+    log:
+      start: 2026-09-15T00:08:37.731Z
+      duration: 202
+  - type: page-closed
+    source:
+      page: lookup:Payment Method Code
+    runtimeId: bc5b
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:38.008Z
+  - type: page-shown
+    source:
+      page: Payment Methods
+    modal: false
+    runtimeId: bc7j
+    description: Page <caption>Select - Payment Methods</caption> was shown.
+    log:
+      start: 2026-09-15T00:08:38.035Z
+  - type: input
+    target:
+      - page: Payment Methods
+        runtimeRef: bc7j
+      - scope: filter
+        field: filter:system:search
+    value: CHECK
+    isFilterAsYouType: true
+    description: Input <value>CHECK</value> into <caption>Search</caption>
+    log:
+      start: 2026-09-15T00:08:38.060Z
+      duration: 52
+  - type: invoke
+    target:
+      - page: Payment Methods
+        runtimeRef: bc7j
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Select - Payment Methods</caption>
+    log:
+      start: 2026-09-15T00:08:38.138Z
+      duration: 420
+  - type: page-closed
+    source:
+      page: Payment Methods
+    runtimeId: bc7j
+    description: Page <caption>Select - Payment Methods</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:38.588Z
+  - type: close-page
+    target:
+      - page: Vendor Card
+        runtimeRef: bbxn
+    description: Close page <caption>Vendor Card</caption>
+    log:
+      start: 2026-09-15T00:08:38.615Z
+      duration: 133
+  - type: page-closed
+    source:
+      page: Vendor Card
+    runtimeId: bbxn
+    description: Page <caption>Vendor Card</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:38.776Z
+  - type: close-page
+    target:
+      - page: Vendor List
+        runtimeRef: bbml
+    description: Close page <caption>Vendors</caption>
+    log:
+      start: 2026-09-15T00:08:38.813Z
+      duration: 101
+  - type: page-closed
+    source:
+      page: Vendor List
+    runtimeId: bbml
+    description: Page <caption>Vendors</caption> was closed.
+    log:
+      start: 2026-09-15T00:08:38.940Z
+name: DynamicsCon - Page Scripting 1 - Create Vendor
+description: Test recording
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-15T00:08:19.025Z
+  duration: 19946
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\f8fa43a2bc0ebd7aba80edcf00297756.webm
