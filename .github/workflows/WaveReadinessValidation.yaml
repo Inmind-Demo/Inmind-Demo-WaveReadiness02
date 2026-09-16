@@ -719,7 +719,7 @@ jobs:
           HISTORY_DIR: history
           RUN_ID: ${{ github.run_id }}
           RUN_NUMBER: ${{ github.run_number }}
-          MAX_RUNS: '7'
+          MAX_RUNS: '2'
           # 'false' drops the permanent per-run summary and removes any
           # already on the branch; anything else keeps it.
           KEEP_SUMMARY: ${{ vars.REPORT_KEEP_SUMMARY || 'true' }}
@@ -926,7 +926,7 @@ jobs:
 
           ## Open this run's report: $RUN_REPORT_URL
 
-          ## Browse run history (last 7 runs): $URL
+          ## Browse run history (last 2 runs): $URL
 
           | | |
           |---|---|
@@ -1073,7 +1073,7 @@ jobs:
             <p>
               <a href="${RUN_REPORT_URL}">Open this run's report</a>
               &nbsp;&middot;&nbsp;
-              <a href="${PAGE_URL}">Browse run history (last 7 runs)</a>
+              <a href="${PAGE_URL}">Browse run history (last 2 runs)</a>
             </p>
             <table cellpadding="6" style="border-collapse:collapse;">
               <tr><td><b>Target version</b></td><td>${h_target}</td></tr>

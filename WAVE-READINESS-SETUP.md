@@ -764,7 +764,7 @@ start here.
 | Workflow `env:` (overridable via vars) | `ADMIN_API_BASE` | `…/admin/v2.28/applications/BusinessCentral` |
 | Workflow `env:` (fixed) | `MASTER_DATA_AREA` | `MasterData - 1` |
 | Workflow `env:` (overridable via vars) | `NOTIFY_FROM` / `NOTIFY_TO` | *(unset — email skipped)* |
-| `build-report-site.sh` env | `MAX_RUNS` | `7` |
+| `build-report-site.sh` env | `MAX_RUNS` | `2` |
 | `build-report-site.sh` env (overridable via `vars.REPORT_KEEP_SUMMARY`) | `KEEP_SUMMARY` | `true` |
 | `setup-bc-replay` input | `node-version` | `24` |
 
