@@ -141,8 +141,8 @@ steps:
       - page: Purchase Return Order Subform
       - repeater: Control1
       - field: Direct Unit Cost
-    value: "1500"
-    description: Input <value>1500</value> into <caption>Direct Unit Cost Excl.
+    value: "1500 USD"
+    description: Input <value>1500 USD</value> into <caption>Direct Unit Cost Excl.
       Tax</caption>
   - type: focus
     target:
