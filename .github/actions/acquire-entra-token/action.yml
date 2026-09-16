@@ -4,8 +4,11 @@ name: 'Acquire Entra access token'
 description: >
   Client-credentials OAuth flow against an Entra tenant. Used by the Wave
   Readiness workflow to mint tokens for both the BC admin API and Microsoft
-  Graph. Emits ::add-mask:: so the token is never surfaced in the run log,
-  even if a later step accidentally echoes it.
+  Graph. The flow itself lives in .github/scripts/Get-EntraToken.ps1, which
+  the long polls in copy-and-upgrade also call from inside their loops so a
+  token can be renewed mid-poll; that script emits ::add-mask:: so the token
+  is never surfaced in the run log, even if a later step accidentally echoes
+  it. Requires a checkout, like any local action.
 
 inputs:
   tenant-id:
@@ -38,15 +41,7 @@ runs:
         SCOPE: ${{ inputs.scope }}
       run: |
         $ErrorActionPreference = 'Stop'
-        $body = @{
-          grant_type    = 'client_credentials'
-          client_id     = $env:CLIENT_ID
-          client_secret = $env:CLIENT_SECRET
-          scope         = $env:SCOPE
-        }
-        $uri = "https://login.microsoftonline.com/$($env:TENANT_ID)/oauth2/v2.0/token"
-        $resp = Invoke-RestMethod -Method Post -Uri $uri -Body $body -ContentType 'application/x-www-form-urlencoded'
-        $token = $resp.access_token
-        if (-not $token) { throw "Token endpoint returned no access_token for scope '$($env:SCOPE)'." }
-        Write-Host "::add-mask::$token"
+        $token = & "$env:GITHUB_WORKSPACE/.github/scripts/Get-EntraToken.ps1" `
+          -TenantId $env:TENANT_ID -ClientId $env:CLIENT_ID `
+          -ClientSecret $env:CLIENT_SECRET -Scope $env:SCOPE
         "token=$token" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8

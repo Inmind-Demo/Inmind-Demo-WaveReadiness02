@@ -264,7 +264,12 @@ jobs:
       resolvedVersion: ${{ steps.upgrade.outputs.resolved }}
       resolvedType: ${{ steps.upgrade.outputs.resolvedType }}
       upgradeSkipped: ${{ steps.upgrade.outputs.skipped }}
-      currentVersion: ${{ steps.upgrade.outputs.currentVersion }}
+      # The schedule step reads the version as a by-product of resolving the
+      # target. When that step is gated off (skipUpgrade, or a blank target)
+      # the read step below supplies it instead, so the report, the failure
+      # issues and the email always name a real version rather than the raw
+      # 'latest' alias from the dispatch form.
+      currentVersion: ${{ steps.upgrade.outputs.currentVersion || steps.version.outputs.currentVersion }}
       skipReason: ${{ steps.upgrade.outputs.skipReason }}
     steps:
       - name: Checkout
@@ -331,17 +336,29 @@ jobs:
           Write-Host "Copy requested. Operation id: $($resp.id)"
           "opId=$($resp.id)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
 
+      # Mints its own token and renews it every 45 minutes instead of
+      # reusing the one from before the delete: an access token lives about
+      # an hour, a copy can take that long, and a 401 mid-poll would fail the
+      # job while the copy is still running.
       - name: Poll copy operation
         if: github.event.inputs.refreshSandbox != 'false'
         env:
-          TOKEN: ${{ steps.token1.outputs.token }}
           OP_ID: ${{ steps.copy.outputs.opId }}
+          TENANT_ID: ${{ secrets.BC_ADMIN_TENANT_ID }}
+          CLIENT_ID: ${{ secrets.BC_ADMIN_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.BC_ADMIN_CLIENT_SECRET }}
         run: |
           $ErrorActionPreference = 'Stop'
-          $headers = @{ Authorization = "Bearer $env:TOKEN" }
           $uri = "${{ env.ADMIN_API_BASE }}/environments/${{ env.SOURCE_ENV }}/operations/$env:OP_ID"
           $deadline = (Get-Date).AddMinutes(60)
+          $tokenAt = [datetime]::MinValue
           while ((Get-Date) -lt $deadline) {
+            if (((Get-Date) - $tokenAt).TotalMinutes -ge 45) {
+              $token = & "$env:GITHUB_WORKSPACE/.github/scripts/Get-EntraToken.ps1" -TenantId $env:TENANT_ID -ClientId $env:CLIENT_ID -ClientSecret $env:CLIENT_SECRET -Scope 'https://api.businesscentral.dynamics.com/.default'
+              $headers = @{ Authorization = "Bearer $token" }
+              $tokenAt = Get-Date
+              Write-Host "Admin API token acquired."
+            }
             $op = Invoke-RestMethod -Method Get -Uri $uri -Headers $headers
             Write-Host "Copy status: $($op.status)"
             switch ($op.status) {
@@ -352,8 +369,36 @@ jobs:
           }
           throw "Timeout waiting for copy to complete."
 
+      # Runs only when the schedule step will not: it is the only other
+      # place the sandbox version is read, and every downstream label
+      # (report header, failure issues, email, step summary) is built from
+      # it. Mints its own token because the copy above can outlive the one
+      # from token1. A failed read is a label problem, not a replay problem,
+      # so it degrades to '(unknown)' instead of failing the run.
+      - name: Read sandbox version
+        id: version
+        if: github.event.inputs.skipUpgrade == 'true' || github.event.inputs.targetVersion == ''
+        env:
+          TENANT_ID: ${{ secrets.BC_ADMIN_TENANT_ID }}
+          CLIENT_ID: ${{ secrets.BC_ADMIN_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.BC_ADMIN_CLIENT_SECRET }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $current = '(unknown)'
+          try {
+            $token = & "$env:GITHUB_WORKSPACE/.github/scripts/Get-EntraToken.ps1" -TenantId $env:TENANT_ID -ClientId $env:CLIENT_ID -ClientSecret $env:CLIENT_SECRET -Scope 'https://api.businesscentral.dynamics.com/.default'
+            $uri = "${{ env.ADMIN_API_BASE }}/environments/${{ env.TARGET_ENV }}"
+            $envInfo = Invoke-RestMethod -Method Get -Uri $uri -Headers @{ Authorization = "Bearer $token" }
+            if ($envInfo.applicationVersion) { $current = $envInfo.applicationVersion }
+            elseif ($envInfo.version)        { $current = $envInfo.version }
+          } catch {
+            Write-Host "::warning::Could not read the sandbox version: $($_.Exception.Message). The report will show '(unknown)'."
+          }
+          Write-Host "Sandbox current version: $current"
+          "currentVersion=$current" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
       # Re-acquire: copy can run longer than the token's 60-min lifetime, so
-      # everything after this step uses a fresh token.
+      # the schedule step below uses a fresh token. The polls mint their own.
       - name: Re-acquire admin API token
         id: token2
         if: github.event.inputs.skipUpgrade != 'true' && github.event.inputs.targetVersion != ''
@@ -394,19 +439,32 @@ jobs:
             "resolvedType=$($result.ResolvedType)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
           }
 
+      # Mints its own token and renews it every 45 minutes. The deadline is
+      # four hours and a major-version upgrade regularly runs past the hour
+      # a token lives (28.4 -> 29.0 was still running after 65 minutes on the demo);
+      # holding the token minted before the schedule step turned that into
+      # a 401 with the upgrade still running.
       - name: Poll upgrade operation
         if: github.event.inputs.skipUpgrade != 'true' && github.event.inputs.targetVersion != '' && steps.upgrade.outputs.skipped != 'true'
         env:
-          TOKEN: ${{ steps.token2.outputs.token }}
+          TENANT_ID: ${{ secrets.BC_ADMIN_TENANT_ID }}
+          CLIENT_ID: ${{ secrets.BC_ADMIN_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.BC_ADMIN_CLIENT_SECRET }}
         run: |
           $ErrorActionPreference = 'Stop'
-          $headers = @{ Authorization = "Bearer $env:TOKEN" }
           $opsUri = "${{ env.ADMIN_API_BASE }}/environments/${{ env.TARGET_ENV }}/operations"
           $deadline = (Get-Date).AddHours(4)
           $seenId = $null
           $scheduledAt = Get-Date
+          $tokenAt = [datetime]::MinValue
           while ((Get-Date) -lt $deadline) {
             Start-Sleep -Seconds 60
+            if (((Get-Date) - $tokenAt).TotalMinutes -ge 45) {
+              $token = & "$env:GITHUB_WORKSPACE/.github/scripts/Get-EntraToken.ps1" -TenantId $env:TENANT_ID -ClientId $env:CLIENT_ID -ClientSecret $env:CLIENT_SECRET -Scope 'https://api.businesscentral.dynamics.com/.default'
+              $headers = @{ Authorization = "Bearer $token" }
+              $tokenAt = Get-Date
+              Write-Host "Admin API token acquired."
+            }
             $ops = Invoke-RestMethod -Method Get -Uri $opsUri -Headers $headers
             $update = $ops.value |
               Where-Object { $_.type -eq 'Update' } |
@@ -652,12 +710,12 @@ jobs:
         id: build
         shell: bash
         env:
-          # Prefer the version actually installed (resolved from 'latest' /
-          # bare major) over the raw input alias, so the report reflects
-          # reality. When the upgrade was skipped because the sandbox was
-          # already at the latest available version, fall through to the
-          # current version so the report doesn't mislead with e.g. 'latest'.
-          TARGET_VERSION: ${{ needs.copy-and-upgrade.outputs.resolvedVersion || needs.copy-and-upgrade.outputs.currentVersion || github.event.inputs.targetVersion }}
+          # The version actually installed (resolved from 'latest' / bare
+          # major), else the version the sandbox was already on (upgrade
+          # skipped by request, or nothing newer offered). The raw input is
+          # never used: 'latest' is an alias, not a version, and the report
+          # is read months later when it no longer means the same thing.
+          TARGET_VERSION: ${{ needs.copy-and-upgrade.outputs.resolvedVersion || needs.copy-and-upgrade.outputs.currentVersion || '(unknown)' }}
           HISTORY_DIR: history
           RUN_ID: ${{ github.run_id }}
           RUN_NUMBER: ${{ github.run_number }}
@@ -665,6 +723,8 @@ jobs:
           # 'false' drops the permanent per-run summary and removes any
           # already on the branch; anything else keeps it.
           KEEP_SUMMARY: ${{ vars.REPORT_KEEP_SUMMARY || 'true' }}
+          # Failed scripts + causes, picked up by "Write step summary".
+          FAILURES_MD: ${{ runner.temp }}/failures.md
         run: bash .github/scripts/build-report-site.sh
 
       # Publish the regenerated tree as the history branch. The branch is
@@ -790,7 +850,10 @@ jobs:
           RUN_NUMBER: ${{ github.run_number }}
           PAGE_URL: ${{ env.REPORT_SITE_URL }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          TARGET_VERSION: ${{ needs.copy-and-upgrade.outputs.resolvedVersion || needs.copy-and-upgrade.outputs.currentVersion || github.event.inputs.targetVersion }}
+          # Same rule as the report: an installed or current version, never
+          # the 'latest' alias. An issue is read by a developer who needs to
+          # know which build broke the script.
+          TARGET_VERSION: ${{ needs.copy-and-upgrade.outputs.resolvedVersion || needs.copy-and-upgrade.outputs.currentVersion || '(unknown)' }}
         run: bash .github/scripts/manage-failure-issues.sh
 
       - name: Write step summary
@@ -805,6 +868,7 @@ jobs:
           RESOLVED="${{ needs.copy-and-upgrade.outputs.resolvedVersion }}"
           RESOLVED_TYPE="${{ needs.copy-and-upgrade.outputs.resolvedType }}"
           REQUESTED="${{ github.event.inputs.targetVersion }}"
+          SKIP_REQUESTED="${{ github.event.inputs.skipUpgrade }}"
           SKIPPED="${{ needs.copy-and-upgrade.outputs.upgradeSkipped }}"
           CURRENT="${{ needs.copy-and-upgrade.outputs.currentVersion }}"
           SKIP_REASON="${{ needs.copy-and-upgrade.outputs.skipReason }}"
@@ -823,9 +887,11 @@ jobs:
               TARGET="${RESOLVED}${TYPE_SUFFIX} (resolved from '$REQUESTED')"
             fi
           elif [ "$SKIPPED" = "true" ]; then
-            TARGET="${CURRENT:-current} (upgrade skipped — ${SKIP_REASON:-no newer version available})"
+            TARGET="${CURRENT:-(unknown)} (upgrade skipped — ${SKIP_REASON:-no newer version available})"
+          elif [ "$SKIP_REQUESTED" = "true" ]; then
+            TARGET="${CURRENT:-(unknown)} (upgrade skipped by request)"
           elif [ -z "$REQUESTED" ]; then
-            TARGET="(no upgrade — replay at current sandbox version)"
+            TARGET="${CURRENT:-(unknown)} (no upgrade requested)"
           else
             TARGET="$REQUESTED (upgrade did not complete)"
           fi
@@ -843,7 +909,14 @@ jobs:
             BANNER="Master-data seeding failed. The remaining phases did not run because they depend on the seed data. Open the report below to see which master-data step broke."
           else
             HEADLINE="# Wave readiness: FAIL"
-            BANNER="One or more scenarios broke. Open the report below to see which step failed and on which page."
+            BANNER="One or more scenarios broke. Each failed script and its cause is listed below; open the report for the screenshot and video."
+          fi
+
+          # Per-script causes, written by build-report-site.sh. Empty file
+          # (or none, if that step did not run) means nothing to list.
+          FAILURES=""
+          if [ -s "${{ runner.temp }}/failures.md" ]; then
+            FAILURES="$(printf '## Failed scripts\n\n'; cat "${{ runner.temp }}/failures.md")"
           fi
 
           cat >> "$GITHUB_STEP_SUMMARY" <<EOF
@@ -862,6 +935,8 @@ jobs:
           | Scripts total / failed | ${total:-?} / ${failed:-?} |
           | Master-data phase | $MD_STATUS |
           | Replay phase | $REPLAY_STATUS |
+
+          $FAILURES
 
           ---
 
@@ -907,6 +982,7 @@ jobs:
           TOTAL: ${{ needs.deploy-report.outputs.total }}
           FAILED: ${{ needs.deploy-report.outputs.failed }}
           REQUESTED: ${{ github.event.inputs.targetVersion }}
+          SKIP_REQUESTED: ${{ github.event.inputs.skipUpgrade }}
           RESOLVED: ${{ needs.copy-and-upgrade.outputs.resolvedVersion }}
           RESOLVED_TYPE: ${{ needs.copy-and-upgrade.outputs.resolvedType }}
           CURRENT: ${{ needs.copy-and-upgrade.outputs.currentVersion }}
@@ -944,9 +1020,11 @@ jobs:
               target="${RESOLVED}${type_suffix} (resolved from '${REQUESTED:-}')"
             fi
           elif [ "${SKIPPED:-}" = "true" ]; then
-            target="${CURRENT:-current} (upgrade skipped — ${SKIP_REASON:-no newer version available})"
+            target="${CURRENT:-(unknown)} (upgrade skipped — ${SKIP_REASON:-no newer version available})"
+          elif [ "${SKIP_REQUESTED:-}" = "true" ]; then
+            target="${CURRENT:-(unknown)} (upgrade skipped by request)"
           elif [ -z "${REQUESTED:-}" ]; then
-            target="(no upgrade — replay at current sandbox version)"
+            target="${CURRENT:-(unknown)} (no upgrade requested)"
           else
             target="${REQUESTED} (upgrade did not complete)"
           fi
