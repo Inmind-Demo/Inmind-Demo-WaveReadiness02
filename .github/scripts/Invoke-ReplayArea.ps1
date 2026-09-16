@@ -27,7 +27,9 @@
     $WorkspaceRoot/replay-results/$AreaName/<script-name>/
 
 .OUTPUTS
-  [pscustomobject] with Area, Total, Failed. Does NOT throw on failures —
+  [pscustomobject] with Area, Total, Failed and Causes (script name -> the
+  one-line cause from Get-ReplayFailureCause.ps1, also written to
+  <script-result-dir>/failure-cause.txt). Does NOT throw on failures —
   the caller decides whether to throw, and with what message, because the
   wording differs across phases (master-data blocks the matrix, plain replay
   reports the failed area list, etc.).
@@ -66,6 +68,7 @@ if (-not $replayHome) {
 }
 
 $failed = New-Object System.Collections.Generic.List[string]
+$causes = [ordered]@{}
 Push-Location $replayHome
 try {
   foreach ($script in $scripts) {
@@ -90,8 +93,21 @@ try {
     $exit = $LASTEXITCODE
     Write-Host "::endgroup::"
     if ($exit -ne 0) {
-      Write-Host "::error::Script $($script.Name) failed with exit code $exit"
+      # bc-replay only prints "One or more test recordings failed." Work out
+      # the actual cause from what it wrote to the result dir, and keep it
+      # next to results.xml so the report site and the failure issue show
+      # the same line without re-deriving it.
+      $cause = & (Join-Path $PSScriptRoot 'Get-ReplayFailureCause.ps1') -ScriptResultDir $scriptResultDir
+      Set-Content -LiteralPath (Join-Path $scriptResultDir 'failure-cause.txt') -Value $cause -Encoding utf8 -NoNewline
+      Write-Host "FAILED: $($script.Name)"
+      Write-Host "  Cause: $cause"
+      # Workflow-command escaping: the title property treats %, : and , as
+      # delimiters; the message treats %, CR and LF as such.
+      $title = $script.Name -replace '%', '%25' -replace ':', '%3A' -replace ',', '%2C'
+      $msg   = $cause -replace '%', '%25' -replace "`r", '%0D' -replace "`n", '%0A'
+      Write-Host "::error title=$title::$msg"
       $failed.Add($script.Name)
+      $causes[$script.Name] = $cause
     }
   }
 }
@@ -103,4 +119,5 @@ finally {
   Area   = $AreaName
   Total  = $scripts.Count
   Failed = $failed
+  Causes = $causes
 }

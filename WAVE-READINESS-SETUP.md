@@ -703,12 +703,20 @@ the wrong problem.
 > [!IMPORTANT]
 > The GitHub log often shows a message that is **not** the real cause — a
 > passing network error, or nine recordings "failing" for one shared reason.
-> The truth is in the test results attached to the run.
 >
-> Open the run on GitHub, scroll to **Artifacts** at the bottom, download
-> `replay-results`, and open `results.xml` for a failing recording. It names
-> the actual error. Next to it, `error-context.md` describes what was on screen
-> at the moment it gave up — which usually makes the cause obvious.
+> Start with the one-line cause the pipeline works out for every failed
+> recording. It appears in three places: the run's annotations (one per failed
+> script), the **Cause** column on the report site, and the body of the
+> failure issue. It names the step that failed and bc-replay's message, or, for
+> a timeout, what was on screen when the recording gave up (an unanswered
+> dialog, the sign-in page). When an earlier attempt failed differently, that
+> is noted too, so a flaky sign-in is not mistaken for the real problem.
+>
+> When that line is not enough: open the run on GitHub, scroll to
+> **Artifacts** at the bottom, download `replay-results`, and open
+> `results.xml` for the failing recording. It holds Playwright's full error
+> text for every attempt. Next to it, `error-context.md` describes what was on
+> screen at the moment it gave up.
 
 ### Errors you are likely to meet
 

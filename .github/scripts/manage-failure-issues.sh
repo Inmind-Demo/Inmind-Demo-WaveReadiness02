@@ -96,6 +96,13 @@ while IFS= read -r script_dir; do
     fails="1"
   fi
 
+  # One-line cause written by Invoke-ReplayArea.ps1 next to results.xml.
+  cause=""
+  if [ -f "$script_dir/failure-cause.txt" ]; then
+    cause=$(tr -d '\r\n' < "$script_dir/failure-cause.txt")
+  fi
+  [ -n "$cause" ] || cause="Not recorded; open the Playwright report."
+
   title="[Wave Readiness] ${area_name} / ${script_name}"
   # Encode spaces in path components so the Markdown link in the issue body
   # isn't truncated at the first whitespace by GitHub's parser.
@@ -108,6 +115,11 @@ while IFS= read -r script_dir; do
     if [ -n "$existing_num" ]; then
       gh issue comment "$existing_num" --body "Still failing on run [#${run_number}](${run_url}) (target \`${target}\`).
 
+**Cause:**
+\`\`\`text
+${cause}
+\`\`\`
+
 [Open Playwright report](${report_url})" >/dev/null
       commented=$((commented+1))
       echo "Commented on #${existing_num}: ${area_name} / ${script_name}"
@@ -118,6 +130,10 @@ while IFS= read -r script_dir; do
         --body "**Script:** \`${area_name} / ${script_name}\`
 **Status:** failing on run [#${run_number}](${run_url})
 **Target version:** \`${target}\`
+**Cause:**
+\`\`\`text
+${cause}
+\`\`\`
 
 [Open Playwright report](${report_url})
 

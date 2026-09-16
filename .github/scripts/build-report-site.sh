@@ -39,6 +39,9 @@
 #                        branch (the new run survives any prune).
 #   KEEP_SUMMARY         'false' disables summary/ and deletes it if
 #                        present. Anything else (default 'true') keeps it.
+#   FAILURES_MD          Optional. Path to write a Markdown table of the
+#                        failed scripts and their one-line causes, for the
+#                        step summary. Written empty when nothing failed.
 #
 # Outputs:
 #   $HISTORY_DIR/runs/<id>/        Per-run report tree (added by this run).
@@ -89,7 +92,19 @@ done
 
 # Build the per-run index.html. For each area, list each script with
 # pass/fail derived from the presence of a non-empty results.xml with
-# failures=0, plus a link to that script's Playwright report.
+# failures=0, the one-line cause Invoke-ReplayArea.ps1 left in
+# failure-cause.txt for a failed script, plus a link to that script's
+# Playwright report.
+# sed rather than ${s//x/y}: from bash 5.2 an unescaped & in the replacement
+# of a parameter expansion stands for the matched text, so "&quot;" would
+# come out as "\"quot;".
+html_esc() {
+  printf '%s' "${1:-}" | sed 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g; s/"/\&quot;/g'
+}
+md_cell() {
+  printf '%s' "${1:-}" | sed 's/|/\\|/g'
+}
+failure_rows=()
 {
   echo '<!doctype html>'
   echo '<html><head><meta charset="utf-8"><title>Wave Readiness Report</title>'
@@ -103,6 +118,7 @@ done
   echo '.pass{color:#0a7d1a;font-weight:600}'
   echo '.fail{color:#c62828;font-weight:600}'
   echo '.meta{color:#666;font-size:.9rem}'
+  echo '.cause{color:#444;font-size:.9rem;max-width:32rem;overflow-wrap:anywhere}'
   echo 'a.back{display:inline-block;margin-bottom:1rem;color:#1565c0;text-decoration:none}'
   echo 'a.back:hover{text-decoration:underline}'
   echo '</style></head><body>'
@@ -115,7 +131,7 @@ done
     [ -d "$area_path" ] || continue
     area_name=$(basename "$area_path")
     echo "<h2>$area_name</h2>"
-    echo '<table><thead><tr><th>Script</th><th>Status</th><th>Tests</th><th>Report</th></tr></thead><tbody>'
+    echo '<table><thead><tr><th>Script</th><th>Status</th><th>Tests</th><th>Cause</th><th>Report</th></tr></thead><tbody>'
     while IFS= read -r script_path; do
       [ -d "$script_path" ] || continue
       script_name=$(basename "$script_path")
@@ -131,9 +147,19 @@ done
           status_cls="fail"; status_txt="FAIL"
         fi
       fi
+      cause=""
+      if [ -f "$script_path/failure-cause.txt" ]; then
+        cause=$(tr -d '\r\n' < "$script_path/failure-cause.txt")
+      fi
+      if [ "$status_txt" != "PASS" ] && [ -z "$cause" ]; then
+        cause="No cause recorded: bc-replay did not get as far as writing results. Check the job log."
+      fi
       total=$((total+1))
-      if [ "$status_txt" != "PASS" ]; then failed=$((failed+1)); fi
-      echo "<tr><td>$script_name</td><td class=\"$status_cls\">$status_txt</td><td>$tests tests / $fails failures</td><td><a href=\"$report_link\">open</a></td></tr>"
+      if [ "$status_txt" != "PASS" ]; then
+        failed=$((failed+1))
+        failure_rows+=("| $area_name | $script_name | $(md_cell "$cause") |")
+      fi
+      echo "<tr><td>$script_name</td><td class=\"$status_cls\">$status_txt</td><td>$tests tests / $fails failures</td><td class=\"cause\">$(html_esc "$cause")</td><td><a href=\"$report_link\">open</a></td></tr>"
     done < <(find "$area_path" -mindepth 1 -maxdepth 1 -type d | sort)
     echo '</tbody></table>'
   done < <(find "$run_dir" -mindepth 1 -maxdepth 1 -type d | sort -t'-' -k2 -n)
@@ -251,3 +277,18 @@ json_num() {
   echo "total=$total"
   echo "failed=$failed"
 } >> "$GITHUB_OUTPUT"
+
+# A Markdown table of the failed scripts and their causes, for the job's
+# step summary. Only written when the workflow asks for it via FAILURES_MD;
+# an empty file means nothing failed.
+if [ -n "${FAILURES_MD:-}" ]; then
+  if [ "${#failure_rows[@]}" -gt 0 ]; then
+    {
+      echo '| Area | Script | Cause |'
+      echo '|---|---|---|'
+      printf '%s\n' "${failure_rows[@]}"
+    } > "$FAILURES_MD"
+  else
+    : > "$FAILURES_MD"
+  fi
+fi
