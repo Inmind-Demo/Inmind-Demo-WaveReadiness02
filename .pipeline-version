@@ -1,6 +1,6 @@
 {
-  "sourceRepo": "inmindtechnologies/bc-wave-readiness",
-  "ref": "main",
-  "commit": "356d27eda15ef557eeddbc50c234cdcf2b805b9d",
-  "installedAt": "2026-09-16T02:01:02Z"
+  "source": "npm",
+  "package": "@inmindtechnologies/bc-wave-readiness",
+  "version": "1.0.0-rc.13",
+  "installedAt": "2026-09-16T14:31:34Z"
 }
