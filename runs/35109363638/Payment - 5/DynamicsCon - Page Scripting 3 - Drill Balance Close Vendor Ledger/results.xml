@@ -1,0 +1,27 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="146.16891800000002">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-16T15:09:52.032Z" hostname="chromium" tests="1" failures="0" skipped="0" time="144.26" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Payment - 5\DynamicsCon - Page Scripting 3 - Drill Balance Close Vendor Ledger.yml)" classname="dist\player.spec.js" time="144.26">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA71XbW-bSBD-7l-xH-7DVSoUlhcDiiolbq6KlOtVaa5SI0unDQzOqguLdhdb_ve3sLYLgWsxzdWKZGsYZp9nnpnZiQIGBSixv8kSRNxHnHqZb0GQh5bv4MiKHMe1nNMHRwupoJLJAiELqX0FCSrJlm6IAm1CSBGxAZW0vxuXimy0y1UtaQlSoj9JqQ0C3XEGaAWlAnFyJamivEzQZygzLmRrz0CmglbmwYfDQUhxdJGS1vr24H3x5mho32N8c8QgNSSVIOzg0HJiyw3v3SBxsf6zA9d7OHhltSDmlDB2OuQa_JZ84ruydZS8FikcQxtyBgG6pVK19oJnhCUoJ0yanIi6VLSAJsMQOe6Q2Ecd5zuM0I5I1GKwJ5Pz7MCLHzpEaLnlX7-n0XMaHeR3kHegN68IqEArIRK04qUSnH17lFNgWSNWYU4zB9-3IP6gTL90tV9xVhcmoxUR2lNb5RHQ3xIusy0pU8iMPy03CVKihmHmbtrgz-IiXn7LZoNjRnHo_MXLYXEEbi-lVa1eKqMy5U3MvGVycn-ezC1hNRwK5pNJQ7kZS4tGhi5a77d954s3xqrRd9todprCpT9MU-wsf3XpdcvsOqPqP4rrku3IXq54UVDV7dGxqhJ81yul43kz8uTboRuM5CnyZ82aFRHZlFmDp82aNt7PzZvADoNgzrw5URkRHT8fKleENXMB_X67-vJqIPs7QRl7d0zfmKInj56up6i_vZohbWAvvWhkUvjuLGlvIWsuyGtdahTkFJG9iSL3I_-c3KEd-W5X7pRxCVbDZEKfDymOiD9Ca9Uc0saaTO4MRjF2hzLiFkdPxpZqNkPH_0E2g2W6bkvbjaO5uv24Vaeq1Z83Z6DHeGRjw_Gg1aZpdCL0YlPzfD2C_tg8q49-eF9O1GNOv2jk0Ui_uMHgRpvYL0cyL7Itn6_DcokfFqXeFvQ9stffNNVbQqmZ9NcnhCNta--R021kEttr10UP8V8VlGhrnqe6aF6jrBdAL2Kjzf7a8EA7qp64XujMf0gLw0JTqgTX-2KzD16-v0afVnc3H-9vPrxfHBiPs3WTILaDEDfadXSLsN_U_ZZmwHUKkjVZ_6OgqNYKpLIEyJopubYrRvY7QTdPytLBaa4hSctdPzo4D7BDvBi8NMIheDjNCc59IBCA79k7eCwW_wJ-GGECbQ4AAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\attachments\Recording-743773df74b831948a23a0c01d5ce5d2e6105e21.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\attachments\Replay-log-47cf5a6251745503427b8eea70c60c21c03ae4da.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-2252f-ce-Close-Vendor-Ledger-yml--chromium-retry1\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

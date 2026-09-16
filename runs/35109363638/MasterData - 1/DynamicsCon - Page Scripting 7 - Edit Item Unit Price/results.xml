@@ -1,0 +1,27 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="148.168454">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-16T14:50:53.601Z" hostname="chromium" tests="1" failures="0" skipped="0" time="145.958" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\MasterData - 1\DynamicsCon - Page Scripting 7 - Edit Item Unit Price.yml)" classname="dist\player.spec.js" time="145.958">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA71X2U7jMBR971dYPJNMnL1RQYIOoEozCLHMA6o0MolTrEntyHbo9O_nxumSbtAWNH1pY19fn3Pulmpa0DHVcjrIEkTwi5t6mW_RIA8t38GBFTsOtpzFBwcdpWmpkg5CFtLTkiaIkzc2IprCEkKayBHVifldm5RkBCaXlWKcKoV-Eg4LEt2LgqI-5ZrKhSlJNRM8QQNNx8qsZlSlkpXN8u3sGqQF6qXErJ4b2963-aM5VYjR_H4FcHSCXMcNLadr4fAR-0ngJdizY897nllllSTNHdjxwhazGrylXsWEG0slKpnSue-GWQ0A_WBKm9WxyEiRoJwUqpFDVlyzMa3FzQIHb7K6Ay876aAJUcjcb-_NLLBDbJjNSTD-Jv68F5xVCi3U9zRvwa4PSFpSCIFMUF9wLUWx3MoZLYDl9yU5s9Xc_miQXLMCzl5O-6Koxs12SSSB9KNSzVE9KXqRvRGe0qyxZ3yUIC0ruinewDhf84sEXwragnNElgR2FMebWdKNV-QtK_016qpU1B5zQ2dhvkPYNSEABOq9kaKi5ycmpx6aXT5C7knvW7MDYNvFs1scY56gs01XB2jXxe6mdm6A_f-bnO0MvMqY3pF3F8WETFVfjMdMtyt4W8JJMVnJsvl9R6RYbPvxtkbkR9ERjahPZLZPI3L3aUTG26eakevYjhs9H1otCxZbwu2uN5wnzjS6kyyl7cw9cWFYnXxQKLXNjtJYej08pjXr7pbUD4N25sO1LHt_an5aDGgn88vP2urUxDe1-TVD9L4KqLfwes5gVi2fZmC2iHuAclG0MrzSQihq1XJ8XqcVsv3asTn_btIfgDx28JZ2h531MjaUsj3r-IvKtrlz_7rFthMeGYePe_VecTjipa5GHXe39NLuRivdJwYLIl_wDne4_h72nzscZhRM_il8sxRmEwcWaxMZB7BWj7UGdKsBrEC8ZjxD9C9Qqg-t-WBw8hRVpSn-pYfTRY9C6SvhEPoGL4AvpYC3FMB2d3FzhR7694O7x8HtTWfGbRcvx7ODMKgj1IpOFMOfCmhNLKMCyCZDMvwNgMqhpkpbkqqq0GpolwWZTiQbvWoLnLMc_i0oCw-JG_qhT1_y6MX1vSiKu2Ea-36WZ37gRrlnT-jLuPMPyU2kveYMAAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-6898e---Edit-Item-Unit-Price-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-6898e---Edit-Item-Unit-Price-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-6898e---Edit-Item-Unit-Price-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-6898e---Edit-Item-Unit-Price-yml--chromium-retry1\attachments\Recording-6e1c9094acd10df04de4c9f4aef22bae05690c3a.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-6898e---Edit-Item-Unit-Price-yml--chromium-retry1\attachments\Replay-log-cda0d4d096d6be90a48adcbeb130cb62e827a0f6.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-6898e---Edit-Item-Unit-Price-yml--chromium-retry1\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-6898e---Edit-Item-Unit-Price-yml--chromium-retry1\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

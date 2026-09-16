@@ -1,0 +1,133 @@
+telemetryId: a1b2c3d4-e5f6-4020-8001-000000000020
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Vendors
+    description: Navigate to <caption>Vendors</caption>
+    log:
+      start: 2026-09-16T14:58:10.815Z
+      duration: 693
+  - type: page-shown
+    source:
+      page: Vendor List
+    modal: false
+    runtimeId: e001
+    description: Page <caption>Vendors</caption> was shown.
+    log:
+      start: 2026-09-16T14:58:11.814Z
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: e001
+      - repeater: Control1
+      - field: Name
+    invokeType: FilterByColumn
+    parameters:
+      UseAdvancedFiltering: true
+    description: Invoke FilterByColumn on <caption>Name</caption>
+    log:
+      start: 2026-09-16T14:58:11.887Z
+      duration: 49
+  - type: input
+    target:
+      - page: Vendor List
+        runtimeRef: e001
+      - scope: filter
+        field: Name
+    value: Page Scripting
+    description: Input <value>Page Scripting</value> into <caption>Name</caption>
+    log:
+      start: 2026-09-16T14:58:11.962Z
+      duration: 874
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: e001
+      - repeater: Control1
+    invokeType: Edit
+    parameters:
+      AlwaysCommit: false
+    description: Invoke row on <caption>Control1</caption>
+    log:
+      start: 2026-09-16T14:58:12.882Z
+      duration: 1283
+  - type: page-shown
+    source:
+      page: Vendor Card
+    modal: false
+    runtimeId: e002
+    description: Page <caption>Vendor Card</caption> was shown.
+    log:
+      start: 2026-09-16T14:58:14.237Z
+  - type: invoke
+    target:
+      - page: Vendor Card
+        runtimeRef: e002
+      - field: Balance (LCY)
+    invokeType: DrillDown
+    description: Invoke DrillDown on <caption>Balance ($)</caption>
+    log:
+      start: 2026-09-16T14:58:14.310Z
+      duration: 786
+  - type: page-shown
+    source:
+      page: Vendor Ledger Entries
+    modal: false
+    runtimeId: e003
+    description: Page <caption>Vendor Ledger Entries</caption> was shown.
+    log:
+      start: 2026-09-16T14:58:15.392Z
+  - type: close-page
+    target:
+      - page: Vendor Ledger Entries
+        runtimeRef: e003
+    description: Close page <caption>Vendor Ledger Entries</caption>
+    log:
+      start: 2026-09-16T14:58:15.480Z
+      duration: 274
+  - type: page-closed
+    source:
+      page: Vendor Ledger Entries
+    runtimeId: e003
+    description: Page <caption>Vendor Ledger Entries</caption> was closed.
+    log:
+      start: 2026-09-16T14:58:15.846Z
+  - type: close-page
+    target:
+      - page: Vendor Card
+        runtimeRef: e002
+    description: Close page <caption>Vendor Card</caption>
+    log:
+      start: 2026-09-16T14:58:15.872Z
+      duration: 254
+  - type: page-closed
+    source:
+      page: Vendor Card
+    runtimeId: e002
+    description: Page <caption>Vendor Card</caption> was closed.
+    log:
+      start: 2026-09-16T14:58:16.164Z
+  - type: close-page
+    target:
+      - page: Vendor List
+        runtimeRef: e001
+    description: Close page <caption>Vendors</caption>
+    log:
+      start: 2026-09-16T14:58:16.193Z
+      duration: 189
+  - type: page-closed
+    source:
+      page: Vendor List
+    runtimeId: e001
+    description: Page <caption>Vendors</caption> was closed.
+    log:
+      start: 2026-09-16T14:58:16.416Z
+name: DynamicsCon - Page Scripting 20 - Drill Vendor Balance to Ledger
+description: Open vendor card, drill Balance to Vendor Ledger Entries, validate, close
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-16T14:58:00.473Z
+  duration: 16002
+  video: D:\a\_temp\test-results\.playwright-artifacts-1\3fb4f4c9a83ad539dca2bd86e915c7e8.webm

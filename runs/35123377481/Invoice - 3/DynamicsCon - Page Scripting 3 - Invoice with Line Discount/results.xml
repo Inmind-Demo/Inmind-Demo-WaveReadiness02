@@ -1,0 +1,67 @@
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="254.304712">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-16T16:58:40.723Z" hostname="chromium" tests="1" failures="1" skipped="0" time="252.345" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Invoice - 3\DynamicsCon - Page Scripting 3 - Invoice with Line Discount.yml)" classname="dist\player.spec.js" time="252.345">
+<failure message="player.spec.js:64:21  (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Invoice - 3\DynamicsCon - Page Scripting 3 - Invoice with Line Discount.yml)" type="FAILURE">
+<![CDATA[  [chromium] › dist\player.spec.js:64:21 ›  (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Invoice - 3\DynamicsCon - Page Scripting 3 - Invoice with Line Discount.yml) 
+
+    Test timeout of 120000ms exceeded.
+
+    Error: frame.evaluate: Test timeout of 120000ms exceeded.
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:130:28
+        at withIgnoreDetachedFrame (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Utils.js:48:16)
+        at startPlay (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:128:12)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:87:18
+        at playRecording (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:69:26)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\player.spec.js:64:88
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\..\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: frame.evaluate: Test timeout of 120000ms exceeded.
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:130:28
+        at withIgnoreDetachedFrame (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Utils.js:48:16)
+        at startPlay (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:128:12)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:87:18
+        at playRecording (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:69:26)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\player.spec.js:64:88
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\..\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium-retry1\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium-retry1\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-a4628-ice-with-Line-Discount-yml--chromium-retry1\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

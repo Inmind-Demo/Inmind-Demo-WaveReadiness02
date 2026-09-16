@@ -1,0 +1,1 @@
+Step 22 "Page Choose was shown." failed: Unexpected page. Was expecting page with automation id

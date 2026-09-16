@@ -1,0 +1,146 @@
+name: DynamicsCon - Page Scripting 2 - Create Item
+description: Test recording
+telemetryId: 43ba2a34-2cd4-4d97-b788-d3e6efd4c118
+start:
+  profile: PAGE SCRIPTING
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Items
+    description: Navigate to <caption>Items</caption>
+  - type: page-shown
+    source:
+      page: Item List
+    modal: false
+    runtimeId: b2pf
+    description: Page <caption>Items</caption> was shown.
+  - type: invoke
+    target:
+      - page: Item List
+        runtimeRef: b2pf
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+  - type: page-shown
+    source:
+      page: Select Item Templ. List
+    modal: true
+    runtimeId: b346
+    description: Page <caption>Select a template for a new item</caption> was shown.
+  - type: input
+    target:
+      - page: Select Item Templ. List
+        runtimeRef: b346
+      - scope: filter
+        field: filter:system:search
+    value: "*ITEM"
+    isFilterAsYouType: true
+    description: Input <value>*ITEM</value> into <caption>Search</caption>
+  - type: invoke
+    target:
+      - page: Select Item Templ. List
+        runtimeRef: b346
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Select a template for a new item</caption>
+  - type: page-closed
+    source:
+      page: Select Item Templ. List
+    runtimeId: b346
+    description: Page <caption>Select a template for a new item</caption> was closed.
+  - type: page-shown
+    source:
+      page: Item Card
+    modal: false
+    runtimeId: b355
+    description: Page <caption>Item Card</caption> was shown.
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b355
+      - field: Description
+    value: Page Scripting
+    description: Input <value>Page Scripting</value> into <caption>Description</caption>
+  - type: focus
+    target:
+      - page: Item Card
+        runtimeRef: b355
+      - field: Tax Group Code
+    description: Focus <caption>Tax Group Code</caption>
+  - type: invoke
+    target:
+      - page: Item Card
+        runtimeRef: b355
+      - field: Tax Group Code
+    invokeType: Lookup
+    description: Invoke Lookup on <caption>Tax Group Code</caption>
+  - type: page-shown
+    source:
+      page: lookup:Tax Group Code
+    modal: false
+    runtimeId: b3de
+    description: Page <caption>Select</caption> was shown.
+  - type: invoke
+    target:
+      - page: lookup:Tax Group Code
+        runtimeRef: b3de
+      - action: system:fulllist
+    description: Invoke <caption>Select from full list</caption>
+  - type: page-closed
+    source:
+      page: lookup:Tax Group Code
+    runtimeId: b3de
+    description: Page <caption>Select</caption> was closed.
+  - type: page-shown
+    source:
+      page: Tax Groups
+    modal: false
+    runtimeId: b3dw
+    description: Page <caption>Select - Tax Groups</caption> was shown.
+  - type: input
+    target:
+      - page: Tax Groups
+        runtimeRef: b3dw
+      - scope: filter
+        field: filter:system:search
+    value: MATERIALS
+    isFilterAsYouType: true
+    description: Input <value>MATERIALS</value> into <caption>Search</caption>
+  - type: invoke
+    target:
+      - page: Tax Groups
+        runtimeRef: b3dw
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Select - Tax Groups</caption>
+  - type: page-closed
+    source:
+      page: Tax Groups
+    runtimeId: b3dw
+    description: Page <caption>Select - Tax Groups</caption> was closed.
+  - type: input
+    target:
+      - page: Item Card
+        runtimeRef: b355
+      - field: Unit Price
+    value: "1500"
+    description: Input <value>1500</value> into <caption>Unit Price</caption>
+  - type: close-page
+    target:
+      - page: Item Card
+        runtimeRef: b355
+    description: Close page <caption>Item Card</caption>
+  - type: page-closed
+    source:
+      page: Item Card
+    runtimeId: b355
+    description: Page <caption>Item Card</caption> was closed.
+  - type: close-page
+    target:
+      - page: Item List
+        runtimeRef: b2pf
+    description: Close page <caption>Items</caption>
+  - type: page-closed
+    source:
+      page: Item List
+    runtimeId: b2pf
+    description: Page <caption>Items</caption> was closed.

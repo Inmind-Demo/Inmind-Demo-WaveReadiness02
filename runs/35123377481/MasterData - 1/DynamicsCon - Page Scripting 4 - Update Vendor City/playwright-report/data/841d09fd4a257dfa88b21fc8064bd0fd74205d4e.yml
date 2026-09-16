@@ -1,0 +1,110 @@
+telemetryId: a1b2c3d4-e5f6-4011-8001-000000000011
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Vendors
+    description: Navigate to <caption>Vendors</caption>
+    log:
+      start: 2026-09-16T16:52:57.634Z
+      duration: 893
+  - type: page-shown
+    source:
+      page: Vendor List
+    modal: false
+    runtimeId: d101
+    description: Page <caption>Vendors</caption> was shown.
+    log:
+      start: 2026-09-16T16:52:58.822Z
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: d101
+      - repeater: Control1
+      - field: Name
+    invokeType: FilterByColumn
+    parameters:
+      UseAdvancedFiltering: true
+    description: Invoke FilterByColumn on <caption>Name</caption>
+    log:
+      start: 2026-09-16T16:52:58.949Z
+      duration: 207
+  - type: input
+    target:
+      - page: Vendor List
+        runtimeRef: d101
+      - scope: filter
+        field: Name
+    value: Page Scripting
+    description: Input <value>Page Scripting</value> into <caption>Name</caption>
+    log:
+      start: 2026-09-16T16:52:59.181Z
+      duration: 916
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: d101
+      - repeater: Control1
+    invokeType: Edit
+    parameters:
+      AlwaysCommit: false
+    description: Invoke row on <caption>Control1</caption>
+    log:
+      start: 2026-09-16T16:53:00.130Z
+      duration: 892
+  - type: page-shown
+    source:
+      page: Vendor Card
+    modal: false
+    runtimeId: d102
+    description: Page <caption>Vendor Card</caption> was shown.
+    log:
+      start: 2026-09-16T16:53:01.068Z
+  - type: input
+    target:
+      - page: Vendor Card
+        runtimeRef: d102
+      - field: City
+    value: Montreal
+    description: Input <value>Montreal</value> into <caption>City</caption>
+    log:
+      start: 2026-09-16T16:53:01.111Z
+      duration: 245
+  - type: close-page
+    target:
+      - page: Vendor Card
+        runtimeRef: d102
+    description: Close page <caption>Vendor Card</caption>
+    log:
+      start: 2026-09-16T16:53:01.381Z
+      duration: 1596
+  - type: page-closed
+    source:
+      page: Vendor Card
+    runtimeId: d102
+    description: Page <caption>Vendor Card</caption> was closed.
+    log:
+      start: 2026-09-16T16:53:03.019Z
+  - type: close-page
+    target:
+      - page: Vendor List
+        runtimeRef: d101
+    description: Close page <caption>Vendors</caption>
+    log:
+      start: 2026-09-16T16:53:03.045Z
+      duration: 227
+  - type: page-closed
+    source:
+      page: Vendor List
+    runtimeId: d101
+    description: Page <caption>Vendors</caption> was closed.
+    log:
+      start: 2026-09-16T16:53:03.303Z
+name: DynamicsCon - Page Scripting 11 - Update Vendor City
+description: Find existing Page Scripting vendor, update City, save
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-16T16:52:51.117Z
+  duration: 12215
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\e0f87d57766a6f1f15bfd06be64e5b0c.webm

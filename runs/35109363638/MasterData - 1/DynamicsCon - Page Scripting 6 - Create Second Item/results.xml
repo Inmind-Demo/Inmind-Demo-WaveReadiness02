@@ -1,0 +1,27 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="149.672881">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-16T14:48:20.059Z" hostname="chromium" tests="1" failures="0" skipped="0" time="147.62" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\MasterData - 1\DynamicsCon - Page Scripting 6 - Create Second Item.yml)" classname="dist\player.spec.js" time="147.62">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA7VYW2-jOBR-z6-w-jgSjLlfVI3UyXSrSG23arIPW0UaueCkqARH2LSbf7_GBgIEEkg6eWmxj4_Pd75zA4ZjvMEs3c1CHyDtVQ-M0FSwtbIVE2qm4kKoKbD6aeaEMryl_gQABbDdFvsgQR_RGjHMlwBgKF1j5ov_c5EtWnORnxmNEkwpeEAJX0jBM4kxmOKE4bQSRQGLSOKDGcMbKlZDTIM02srlx-IawAi4DpBY_SFkr7-Xj-JUTNbl_ZSbw3ygQ91WoKdo9kIzfQv6hqc6jvdSSIVZiuQdmguNGrLceIW-kc9ESFKSpQEudUtkuQHgPqJMrG5IiGIfrFBMpTvSLGHRBufODbk_D1E9cS29cMAnokDcrw5FZuqqrrsvNRBR8kHej5HThFCz-hmvambXKZqShKUk_v2IP8WevGMh7ivXGjBnQiDfAyTZ4-XP48njEA3bPSTPMZwabBqQrUQdkCSMhEhxpJPcNr0lwXOeIAGTTlrgzTZW675q8qt3AF-1KC70IcByZXk8r0jKHxPumoiv9bNfJZ7komR3m-2JaxJcJ_k4jE7a9YYa4U8e2lG8z1n5W0U4Dssdn-64nRufYpQGb5XcB4ozfvrq22xx-3BVLUf0L3Hqhv5LMhk-LM1wtd-KIQ4VXAtVP4Si6-_ygXuhXhTm4u5WYLWC62iAGaoO7Zea5D7IXPOAgCq9_iAD9QS7J-Q92_793uclkWmlUCPdhsfeGS4ztB6XaZ6tt5wmci-ICcVhdaSdfsMSsDsFD7xyUQ5KQ9XRPrFUwyt8MqSsGarmNCr30PYzRWk4pP0YQ9qP0HZZC7JU02u1oLJIHelAFYqORDCqA0Wx-bUHIbaK-iLgzOVOsgZd9bheRNriPfWkdtkZ3cpSLdvsGDU8b3STHuWiBfoP3KUk2_JuHeKDNi0LRG-nltuN6tFUeJYnXKh19G3dGRf0sbDN7wB4IgHMUwkgC8Nl0W-rlmWMGsD68XTwvO8_5TBWdNxVFsdxWRi7KG2Xv1VKNiA_BfJjZ_DJkXYN0bphtvmslfpxhH4Ff_XyPQyWp4-tw5XpdEgcWsNwcAP2ei8NSq8dlMdLcgtQRyBa1Ynu0fDUWFiU7Iebxe3z7OZ-LivUkYGwv45XOsYMhAPd1hXhtjMZkd5DXdk7442d77rDZjBoR4WOfgjasuHItG4B__IcGJvYjmo75p-dS_5JIgae0ijA9Ri_siC8OhHDXKQnevc6zyLTgbCj57pazQ_CkUqO-XJnNBBOc8Xi_NEhczAaV7Wgc4jGaKAZEppNMF80Jo-NR1f1jEY8Dufh9OeaQTycUx641V5HeTDg2PLQBPIFX8rG-t9TDZ37P0Ebbs2vHf8bBXTKC6rSfpHQTL42TXH-qjjH-QclYf2k6WS5jwCVEvmbJMiVhwfvJSD_HroG7A0DygWkaPkyOpEGc-u3KeHtM3-vubm7BfPp8-xpMXu8mxTg-oDprgpdMWjXhjJNd_Lx6SMKMeFo_SVa_s5vXDJMmZJimsWMLlVuwe4zjdZvTOHKoxUfMqmiLV0DejZyNf3VDWxTWzkmdLyA_2vzERCZSP3Er5vJ_wS-9FFNFgAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-85221-6---Create-Second-Item-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-85221-6---Create-Second-Item-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-85221-6---Create-Second-Item-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-85221-6---Create-Second-Item-yml--chromium-retry1\attachments\Recording-a6b51d6374e648ec7371926ba690e4aab845102f.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-85221-6---Create-Second-Item-yml--chromium-retry1\attachments\Replay-log-b9ed1227c38536651c87c73e617bdc9cf920a60c.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-85221-6---Create-Second-Item-yml--chromium-retry1\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-85221-6---Create-Second-Item-yml--chromium-retry1\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

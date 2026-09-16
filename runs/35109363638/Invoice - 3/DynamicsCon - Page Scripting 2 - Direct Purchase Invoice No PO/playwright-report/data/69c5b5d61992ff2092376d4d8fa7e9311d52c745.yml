@@ -1,0 +1,303 @@
+telemetryId: a1b2c3d4-e5f6-4808-8001-000000000008
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: <Page Purchase Invoices>
+    description: Navigate to <caption>Purchase Invoices</caption>
+    log:
+      start: 2026-09-16T15:02:24.190Z
+      duration: 735
+  - type: page-shown
+    source:
+      page: Purchase Invoices
+    modal: false
+    runtimeId: c801
+    description: Page <caption>Purchase Invoices</caption> was shown.
+    log:
+      start: 2026-09-16T15:02:25.299Z
+  - type: invoke
+    target:
+      - page: Purchase Invoices
+        runtimeRef: c801
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+    log:
+      start: 2026-09-16T15:02:25.483Z
+      duration: 1342
+  - type: page-shown
+    source:
+      page: Purchase Invoice
+    modal: false
+    runtimeId: c802
+    description: Page <caption>New - Purchase Invoice</caption> was shown.
+    log:
+      start: 2026-09-16T15:02:26.890Z
+  - type: focus
+    target:
+      - page: Purchase Invoice
+        runtimeRef: c802
+      - field: Buy-from Vendor Name
+    description: Focus <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-16T15:02:26.984Z
+      duration: 43
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: c802
+      - field: Buy-from Vendor Name
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-16T15:02:27.053Z
+      duration: 258
+  - type: page-shown
+    source:
+      page: lookup:Buy-from Vendor Name
+    modal: false
+    runtimeId: c803
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-16T15:02:27.337Z
+  - type: invoke
+    target:
+      - page: lookup:Buy-from Vendor Name
+        runtimeRef: c803
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+    log:
+      start: 2026-09-16T15:02:27.403Z
+      duration: 559
+  - type: page-closed
+    source:
+      page: lookup:Buy-from Vendor Name
+    runtimeId: c803
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-16T15:02:28.154Z
+  - type: copy-value
+    source:
+      - page: Purchase Invoice
+        runtimeRef: c802
+      - field: No.
+    name: Purchase Invoice - No.
+    valueType: string
+    description: Copy value from <caption>No.</caption>
+    log:
+      start: 2026-09-16T15:02:28.209Z
+      copiedValue: "107223"
+      duration: 24
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: c802
+      - field: Vendor Invoice No.
+    value: =Clipboard.'Purchase Invoice - No.'
+    description: Input <value>Clipboard.'Purchase Invoice - No.'</value> into
+      <caption>Vendor Invoice No.</caption>
+    log:
+      start: 2026-09-16T15:02:28.260Z
+      duration: 1503
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b2n3
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: No.
+    value: ""
+    isFilterAsYouType: true
+    description: Input <value></value> into <caption>No.</caption>
+    log:
+      start: 2026-09-16T15:02:29.796Z
+      duration: 338
+  - type: focus
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b2n3
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: No.
+    description: Focus <caption>No.</caption>
+    log:
+      start: 2026-09-16T15:02:30.177Z
+      duration: 48
+  - type: page-shown
+    source:
+      page: lookup:No.
+    modal: false
+    runtimeId: b36l
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-16T15:02:30.281Z
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b3eg
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: No.
+    value: Page Scripting
+    isFilterAsYouType: true
+    description: Input <value>Page Scripting</value> into <caption>No.</caption>
+    log:
+      start: 2026-09-16T15:02:30.307Z
+      duration: 95
+  - type: invoke
+    target:
+      - page: lookup:No.
+        runtimeRef: b3xy
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+    log:
+      start: 2026-09-16T15:02:30.428Z
+      duration: 422
+  - type: page-closed
+    source:
+      page: lookup:No.
+    runtimeId: b3xy
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-16T15:02:30.916Z
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b461
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: Quantity
+    value: "1"
+    description: Input <value>1</value> into <caption>Quantity</caption>
+    log:
+      start: 2026-09-16T15:02:30.965Z
+      duration: 291
+  - type: input
+    target:
+      - page: Purchase Invoice
+        runtimeRef: b461
+      - part: PurchLines
+      - page: Purch. Invoice Subform
+      - repeater: PurchDetailLine
+      - field: Line Amount
+    value: "1500"
+    description: Input <value>1500</value> into <caption>Line Amount Excl. Tax</caption>
+    log:
+      start: 2026-09-16T15:02:31.283Z
+      duration: 224
+  - type: focus
+    target:
+      - page: Purchase Invoice
+        runtimeRef: c802
+      - field: null
+        automationId: fb8cccf3-54ac-4d77-9ad8-136cec25583a
+        caption: null
+    description: Focus <caption>null</caption>
+    log:
+      start: 2026-09-16T15:02:31.533Z
+      duration: 61
+  - type: invoke
+    target:
+      - page: Purchase Invoice
+        runtimeRef: c802
+      - action: Post
+    description: Invoke <caption>Post</caption>
+    log:
+      start: 2026-09-16T15:02:31.621Z
+      duration: 138
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: c805
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-16T15:02:31.785Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: c805
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+    log:
+      start: 2026-09-16T15:02:31.812Z
+      duration: 2040
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: c805
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-16T15:02:33.891Z
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: c806
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-16T15:02:33.917Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: c806
+    invokeType: No
+    description: Invoke No on <caption>Confirm</caption>
+    log:
+      start: 2026-09-16T15:02:33.943Z
+      duration: 494
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: c806
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-16T15:02:34.467Z
+  - type: page-closed
+    source:
+      page: Purchase Invoice
+    runtimeId: c802
+    description: Page <caption>Purchase Invoice</caption> was closed.
+    log:
+      start: 2026-09-16T15:02:34.508Z
+  - type: close-page
+    target:
+      - page: Purchase Invoices
+        runtimeRef: b3z3
+    description: Close page <caption>Purchase Invoices</caption>
+    log:
+      start: 2026-09-16T15:02:34.534Z
+      duration: 200
+  - type: page-closed
+    source:
+      page: Purchase Invoices
+    runtimeId: b3z3
+    description: Page <caption>Purchase Invoices</caption> was closed.
+    log:
+      start: 2026-09-16T15:02:34.763Z
+name: DynamicsCon - Page Scripting 8 - Direct Purchase Invoice No PO
+description: Create purchase invoice directly without PO or receipt, post it
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-16T15:02:12.915Z
+  duration: 21907
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\9344e6baa7fd88e496920f88adcf0b38.webm

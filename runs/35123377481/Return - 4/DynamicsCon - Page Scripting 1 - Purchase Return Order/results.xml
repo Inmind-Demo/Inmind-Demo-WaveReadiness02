@@ -1,0 +1,91 @@
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="37.09233999999999">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-16T17:06:10.329Z" hostname="chromium" tests="1" failures="1" skipped="0" time="35.109" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Return - 4\DynamicsCon - Page Scripting 1 - Purchase Return Order.yml)" classname="dist\player.spec.js" time="35.109">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA91ZW2_bNhR-968g8pKXSSV1syRkBTK3HQK0aZdLhxUBClqiHCGyKJBUXO_Xj7paiqXIlp0Uax4cmz46POf7zs2kIBFZEsHWF74LMJprnu4bCjEDSzEc6Cg2hEiBmz9nwgVJuDsBQAFinRAXxPgxXGBB5BIAArMFEW7-PhNJ8EKK_JHyMCacg084lgsMXNGIgBmJBWG1KPZESGMXfEmZd485AVdEpCwGn5lPGM_FfMI9FiaF3GW5LxAUnHk4X33b_fDZm-r7XE1EF5WFXBosXKBBzVKku8i6QVMXWq4-VR3H-lZK-SnDxaa2aTRcz7xT-D1dxbkgp3J3UqkuXO80CHwMucjFltTHkQsCHPECQJbGIlySjI65x4Ntt79Itbv7C1aYg9xCdWfXHVVH8FvDzTB-pA_P8TvgZMOvKxK4wHMg2qJ9RmPBaPT9kqzy74pNb3IDqrUWEBe5QPYdoPEGEfl5BN3S5-l0m25kWcfge5BqiYg2RHXmqNKt_yC-DaRCGzX5DqiX8n3p7mNaqx8OQhL5WTFYKwGjS_CVxD5lMo-XZNv3D5kNG-cbsvuzKz1EU22b3anWCvIkFa_v9COOUlJSfV24Hy-KBOAfwkgWyHP-D02LPBAs7YDqIrMcnOWa3rYVnb0pVqV3zSp5KJraFG6jqVlov1SJKH1IE7cXmoGE0YcS5lr2Nk8cmhvWnrVwyKuOaNFrFYwkRLY05tbvJgVeTD4uP_Fqt_Nohdd8RpfLUPTHRV4gGW0XyErzKOYtA20zb9raU-a9iHLij6b-GEwXJuxOtabqRcevHPFoslby_Onw4zhl4ZIW9sXS8b42qtRSuS1FJeCCVXWihctM2lzIgRzYTfeg6gjCNdWw61SXeITE_1oUrBMEkXay3TBfr6SWMTNjKvhElrSNkgt-n0VhMqeY-erpM8CeDtTTHbW0Cm1p6dNy27R0FBcmsjtGFNNxXh7zJDcqf_hjNsrvNABep_OAsmVHdSuHPdSXDyWHJycHdMKe3jcOfENFhr4Nvq434_2F5qZXxv65MWwseKZmdEQutEYNDJWhA_OB8RrzgaFa5rQ9H_xC-fe6U-nY4LLsjtkeQThiaqv87-DC-L8MaYZqw44-odvmuCGtwuQY2bXvTGaqmg1_nfT6K8XSALFu9Th0MpA8qCdfKm0jYsRUdb0jRkxk_TJYvwuZjD9wG4dCypQnUSXmyIQQ3F6_GwK-FOvB_-kO4P0PL6rqxw3-MYoX2-76aa3rLz9mlLjFaRTVwjgVdJkbkaV9MLc9zwt0xTSwpxj-dKo42LcVpFse8TTTtHVcP1r63lD43GCRCY3Ay1I11HFK2zq0G3d6OYxXfV5dBVdXXd8c1EopVR3T4CxVhx0-GnseTDZ4bbNq-9hCJPCzY34te9EVaMKpAufQRwjpaIr8yRNOZ_eU8tYpTd3d2m3CHGoThabDhjCJ0LRGiDBGmVvTV-DDSEAYib3NEcyScJ7jchuTH4nMY-LnQKngb2lAsSRHlXwNrEJx30ANhH6tB4DTXQA8BXNZVxZUNBTGzSMhqaczDk8Bjv0BA7KLGeQEML-oyV6QAr3iHbR1a-5rvna6QaSVBM1EaKX-QYHSFy67tpZnitBeVnQFbCNIq6Q2nxbB84_u9c3Vp_eXt822AQf6BexpFBttrfTfuUD9FDSa9y-fH3oL3OeH1tz6NJ33HDlrT49RRTbD5j4m9HeDPe9rdrmp2TYxX1EyU47Ssea-1XGHOMs2KSrRrua-BIrdxv1cFPtvLefev4dAyY-L5cbO1o1xl4kjbowrRItz6Xdr-T_05C_ZOLuBbP2WB07fpeSkjRPL5nWQVJKskKSZ5G8gycbnconfh8mSxELWlWg9KZq-dCphNAijDI7zP9-D69nVxZebi8s_J-WA0HuzC1Vk58NB81YXObZceQx9QqV77h2--y7IMrkThAuFEZ5Ggt-pSYTXKxYu7oUilYeBnPi4gu4cAm3N0UyCLeL5pm7pphkQpEEdz4M5JuqKzJeT_wA_ENBjWiEAAA&amp;zip=1">
+</property>
+</properties>
+<failure message="player.spec.js:64:21  (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Return - 4\DynamicsCon - Page Scripting 1 - Purchase Return Order.yml)" type="FAILURE">
+<![CDATA[  [chromium] › dist\player.spec.js:64:21 ›  (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\Return - 4\DynamicsCon - Page Scripting 1 - Purchase Return Order.yml) 
+
+    Error: An error occurred during replaying the recording. See replay log for further info.
+
+    expect(received).toBeFalsy()
+
+    Received: "Unexpected page. Was expecting page with automation id '8da61efd-0002-0003-0507-0b0d1113171d' but got page with name 'Purchase Return Order' and with automation id '000019f0-0000-0001-0c00-0000836bd2d2'"
+        at playRecording (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:118:134)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\player.spec.js:64:88
+
+    attachment #1: Recording (text/plain) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\attachments\Recording-c103b9b3fef1be3f21f513896bb20ee49665c696.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: Replay log (text/plain) ─────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\attachments\Replay-log-da4c125ab7d365715497f81833bc04975bd961c9.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\error-context.md
+
+    Retry #1 ───────────────────────────────────────────────────────────────────────────────────────
+
+    Error: An error occurred during replaying the recording. See replay log for further info.
+
+    expect(received).toBeFalsy()
+
+    Received: "Unexpected page. Was expecting page with automation id '8da61efd-0002-0003-0507-0b0d1113171d' but got page with name 'Purchase Return Order' and with automation id '000019f0-0000-0001-0c00-0000836bd2d2'"
+        at playRecording (D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\Commands.js:118:134)
+        at D:\a\_temp\node_modules\@microsoft\bc-replay\player\dist\player.spec.js:64:88
+
+    attachment #1: Recording (text/plain) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\attachments\Recording-c103b9b3fef1be3f21f513896bb20ee49665c696.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: Replay log (text/plain) ─────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\attachments\Replay-log-08278b5a980fb247adc2f7be9ff1ab45a8464372.yml
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #4: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\..\..\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\attachments\Recording-c103b9b3fef1be3f21f513896bb20ee49665c696.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\attachments\Replay-log-da4c125ab7d365715497f81833bc04975bd961c9.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium\error-context.md]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\attachments\Recording-c103b9b3fef1be3f21f513896bb20ee49665c696.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\attachments\Replay-log-08278b5a980fb247adc2f7be9ff1ab45a8464372.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\test-failed-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\video.webm]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-bb8fc--Purchase-Return-Order-yml--chromium-retry1\error-context.md]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

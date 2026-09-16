@@ -1,0 +1,130 @@
+telemetryId: a1b2c3d4-e5f6-4028-8001-000000000028
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Vendors
+    description: Navigate to <caption>Vendors</caption>
+    log:
+      start: 2026-09-16T17:08:07.241Z
+      duration: 933
+  - type: page-shown
+    source:
+      page: Vendor List
+    modal: false
+    runtimeId: e801
+    description: Page <caption>Vendors</caption> was shown.
+    log:
+      start: 2026-09-16T17:08:08.467Z
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: e801
+      - repeater: Control1
+      - field: Name
+    invokeType: FilterByColumn
+    parameters:
+      UseAdvancedFiltering: true
+    description: Invoke FilterByColumn on <caption>Name</caption>
+    log:
+      start: 2026-09-16T17:08:08.537Z
+      duration: 89
+  - type: input
+    target:
+      - page: Vendor List
+        runtimeRef: e801
+      - scope: filter
+        field: Name
+    value: Page Scripting
+    description: Input <value>Page Scripting</value> into <caption>Name</caption>
+    log:
+      start: 2026-09-16T17:08:08.653Z
+      duration: 884
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: e801
+      - repeater: Control1
+    invokeType: Edit
+    parameters:
+      AlwaysCommit: false
+    description: Invoke row on <caption>Control1</caption>
+    log:
+      start: 2026-09-16T17:08:09.586Z
+      duration: 980
+  - type: page-shown
+    source:
+      page: Vendor Card
+    modal: false
+    runtimeId: e802
+    description: Page <caption>Vendor Card</caption> was shown.
+    log:
+      start: 2026-09-16T17:08:10.613Z
+  - type: validate
+    target:
+      - page: Vendor Card
+        runtimeRef: e802
+      - field: Balance (LCY)
+    operation: =
+    value: 0
+    description: Validate <caption>Balance ($)</caption> <operation>is</operation>
+      <value>0</value>
+    log:
+      start: 2026-09-16T17:08:10.657Z
+      error:
+        type: validation
+        message: Was expecting '0' but got '32538'.
+        operation: =
+        expected: 0
+        actual: 32538
+  - type: invoke
+    target:
+      - page: Vendor Card
+        runtimeRef: e802
+      - field: Balance (LCY)
+    invokeType: DrillDown
+    description: Invoke DrillDown on <caption>Balance ($)</caption>
+  - type: page-shown
+    source:
+      page: Vendor Ledger Entries
+    modal: false
+    runtimeId: e803
+    description: Page <caption>Vendor Ledger Entries</caption> was shown.
+  - type: close-page
+    target:
+      - page: Vendor Ledger Entries
+        runtimeRef: e803
+    description: Close page <caption>Vendor Ledger Entries</caption>
+  - type: page-closed
+    source:
+      page: Vendor Ledger Entries
+    runtimeId: e803
+    description: Page <caption>Vendor Ledger Entries</caption> was closed.
+  - type: close-page
+    target:
+      - page: Vendor Card
+        runtimeRef: e802
+    description: Close page <caption>Vendor Card</caption>
+  - type: page-closed
+    source:
+      page: Vendor Card
+    runtimeId: e802
+    description: Page <caption>Vendor Card</caption> was closed.
+  - type: close-page
+    target:
+      - page: Vendor List
+        runtimeRef: e801
+    description: Close page <caption>Vendors</caption>
+  - type: page-closed
+    source:
+      page: Vendor List
+    runtimeId: e801
+    description: Page <caption>Vendors</caption> was closed.
+name: DynamicsCon - Page Scripting 28 - Drill Balance Close Vendor Ledger
+description: Open vendor card, drill Balance to Vendor Ledger Entries, close without action
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-16T17:07:59.709Z
+  duration: 10953
+  video: D:\a\_temp\test-results\.playwright-artifacts-1\949f17b624f8820f4a352bd2df7edbb1.webm

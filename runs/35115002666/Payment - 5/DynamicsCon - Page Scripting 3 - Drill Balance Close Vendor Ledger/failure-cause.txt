@@ -1,0 +1,1 @@
+Step 7 "Validate Balance ($) is 0" failed: Was expecting '0' but got '32538'.

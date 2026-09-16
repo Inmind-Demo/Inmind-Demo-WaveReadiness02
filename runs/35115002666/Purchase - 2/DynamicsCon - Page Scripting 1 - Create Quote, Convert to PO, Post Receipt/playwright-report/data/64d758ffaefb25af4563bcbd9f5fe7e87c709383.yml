@@ -1,0 +1,365 @@
+telemetryId: 4dfeff42-7799-4e6f-812a-21651087abd4
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Purchase Quotes
+    description: Navigate to <caption>Purchase Quotes</caption>
+    log:
+      start: 2026-09-16T15:38:54.864Z
+      duration: 692
+  - type: page-shown
+    source:
+      page: Purchase Quotes
+    modal: false
+    runtimeId: b4xf
+    description: Page <caption>Purchase Quotes</caption> was shown.
+    log:
+      start: 2026-09-16T15:38:55.839Z
+  - type: invoke
+    target:
+      - page: Purchase Quotes
+        runtimeRef: b4xf
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+    log:
+      start: 2026-09-16T15:38:55.878Z
+      duration: 1655
+  - type: page-shown
+    source:
+      page: Purchase Quote
+    modal: false
+    runtimeId: b526
+    description: Page <caption>New - Purchase Quote</caption> was shown.
+    log:
+      start: 2026-09-16T15:38:57.576Z
+  - type: focus
+    target:
+      - page: Purchase Quote
+        runtimeRef: b526
+      - field: Buy-from Vendor Name
+    description: Focus <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-16T15:38:57.601Z
+      duration: 86
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: b526
+      - field: Buy-from Vendor Name
+    value: page scripting
+    description: Input <value>page scripting</value> into <caption>Vendor Name</caption>
+    log:
+      start: 2026-09-16T15:38:57.714Z
+      duration: 622
+  - type: page-closed
+    source:
+      page: lookup:Buy-from Vendor Name
+    runtimeId: b5er
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-16T15:38:58.488Z
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: b526
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: No.
+    value: ""
+    isFilterAsYouType: true
+    description: Input <value></value> into <caption>No.</caption>
+    log:
+      start: 2026-09-16T15:38:58.524Z
+      duration: 326
+  - type: focus
+    target:
+      - page: Purchase Quote
+        runtimeRef: b526
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: No.
+    description: Focus <caption>No.</caption>
+    log:
+      start: 2026-09-16T15:38:58.892Z
+      duration: 42
+  - type: page-shown
+    source:
+      page: lookup:No.
+    modal: false
+    runtimeId: b5gu
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-16T15:38:58.960Z
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: b526
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: No.
+    value: page scripting
+    isFilterAsYouType: true
+    description: Input <value>page scripting</value> into <caption>No.</caption>
+    log:
+      start: 2026-09-16T15:38:58.985Z
+      duration: 71
+  - type: invoke
+    target:
+      - page: lookup:No.
+        runtimeRef: b5gu
+      - repeater: repeater
+    parameters:
+      AlwaysCommit: true
+    description: Invoke row on <caption>repeater</caption>
+    log:
+      start: 2026-09-16T15:38:59.083Z
+      duration: 561
+  - type: page-closed
+    source:
+      page: lookup:No.
+    runtimeId: b5gu
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-16T15:38:59.708Z
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: b526
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: Quantity
+    value: "5"
+    description: Input <value>5</value> into <caption>Quantity</caption>
+    log:
+      start: 2026-09-16T15:38:59.734Z
+      duration: 273
+  - type: input
+    target:
+      - page: Purchase Quote
+        runtimeRef: b526
+      - part: PurchLines
+      - page: Purchase Quote Subform
+      - repeater: Control1
+      - field: Direct Unit Cost
+    value: "1500"
+    description: Input <value>1500</value> into <caption>Direct Unit Cost Excl.
+      Tax</caption>
+    log:
+      start: 2026-09-16T15:39:00.036Z
+      duration: 243
+  - type: focus
+    target:
+      - page: Purchase Quote
+        runtimeRef: b5mo
+      - field: null
+        automationId: fb8cccf3-54ac-4d77-9ad8-136cec25583a
+        caption: null
+    description: Focus <caption>null</caption>
+    log:
+      start: 2026-09-16T15:39:00.305Z
+      duration: 51
+  - type: invoke
+    target:
+      - page: Purchase Quote
+        runtimeRef: b5mo
+      - action: MakeOrder
+    description: Invoke <caption>Make Order</caption>
+    log:
+      start: 2026-09-16T15:39:00.382Z
+      duration: 120
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: b60p
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-16T15:39:00.528Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: b60p
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+    log:
+      start: 2026-09-16T15:39:00.554Z
+      duration: 735
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: b60p
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-16T15:39:01.322Z
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Confirm
+    modal: true
+    runtimeId: b60v
+    description: Page <caption>Confirm</caption> was shown.
+    log:
+      start: 2026-09-16T15:39:01.348Z
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Confirm
+        runtimeRef: b60v
+    invokeType: Yes
+    description: Invoke Yes on <caption>Confirm</caption>
+    log:
+      start: 2026-09-16T15:39:01.374Z
+      duration: 1828
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: b60v
+    description: Page <caption>Confirm</caption> was closed.
+    log:
+      start: 2026-09-16T15:39:03.273Z
+  - type: page-closed
+    source:
+      page: Purchase Quote
+    runtimeId: b5mo
+    description: Page <caption>Purchase Quote</caption> was closed.
+    log:
+      start: 2026-09-16T15:39:03.317Z
+  - type: page-shown
+    source:
+      page: Purchase Order
+    modal: false
+    runtimeId: b615
+    description: Page <caption>Purchase Order</caption> was shown.
+    log:
+      start: 2026-09-16T15:39:03.356Z
+  - type: copy-value
+    source:
+      - page: Purchase Order
+        runtimeRef: b615
+      - field: No.
+    name: Purchase Order - No.
+    valueType: string
+    description: Copy value from <caption>No.</caption>
+    log:
+      start: 2026-09-16T15:39:03.412Z
+      copiedValue: "106030"
+      duration: 1
+  - type: input
+    target:
+      - page: Purchase Order
+        runtimeRef: b615
+      - field: Vendor Invoice No.
+    value: =Clipboard.'Purchase Order - No.'
+    description: Input <value>Clipboard.'Purchase Order - No.'</value> into
+      <caption>Vendor Invoice No.</caption>
+    log:
+      start: 2026-09-16T15:39:03.442Z
+      duration: 1502
+  - type: focus
+    target:
+      - page: Purchase Order
+        runtimeRef: b615
+      - field: Vendor Invoice No.
+    description: Focus <caption>Vendor Invoice No.</caption>
+    log:
+      start: 2026-09-16T15:39:04.969Z
+      duration: 39
+  - type: invoke
+    target:
+      - page: Purchase Order
+        runtimeRef: b615
+      - action: Post
+    description: Invoke <caption>Post...</caption>
+    log:
+      start: 2026-09-16T15:39:05.036Z
+      duration: 187
+  - type: page-shown
+    source:
+      page: null
+      automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+      caption: Choose
+    modal: true
+    runtimeId: b6oc
+    description: Page <caption>Choose</caption> was shown.
+    log:
+      start: 2026-09-16T15:39:05.249Z
+  - type: input
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: b6oc
+      - field: AL:STRMENU
+    value: 0
+    description: Input <value>0</value> into <caption>AL:STRMENU</caption>
+    log:
+      start: 2026-09-16T15:39:05.275Z
+      duration: 36
+  - type: invoke
+    target:
+      - page: null
+        automationId: 8da61efd-0002-0003-0507-0b0d1113171d
+        caption: Choose
+        runtimeRef: b6oc
+    invokeType: Ok
+    description: Invoke Ok on <caption>Choose</caption>
+    log:
+      start: 2026-09-16T15:39:05.337Z
+      duration: 2286
+  - type: page-closed
+    source:
+      page: null
+    runtimeId: b6oc
+    description: Page <caption>Choose</caption> was closed.
+    log:
+      start: 2026-09-16T15:39:07.683Z
+  - type: close-page
+    target:
+      - page: Purchase Order
+        runtimeRef: b26s
+    description: Close page <caption>Purchase Order</caption>
+    log:
+      start: 2026-09-16T15:39:07.710Z
+      duration: 226
+  - type: page-closed
+    source:
+      page: Purchase Order
+    runtimeId: b26s
+    description: Page <caption>Purchase Order</caption> was closed.
+    log:
+      start: 2026-09-16T15:39:07.985Z
+  - type: close-page
+    target:
+      - page: Purchase Quotes
+        runtimeRef: b1nj
+    description: Close page <caption>Purchase Quotes</caption>
+    log:
+      start: 2026-09-16T15:39:08.014Z
+      duration: 167
+  - type: page-closed
+    source:
+      page: Purchase Quotes
+    runtimeId: b1nj
+    description: Page <caption>Purchase Quotes</caption> was closed.
+    log:
+      start: 2026-09-16T15:39:08.211Z
+name: DynamicsCon - Page Scripting 1 - Create Quote, Convert to PO, Post Receipt
+description: Test recording
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-16T15:38:42.631Z
+  duration: 25617
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\a65b18ce76a127420f208810c71eac84.webm

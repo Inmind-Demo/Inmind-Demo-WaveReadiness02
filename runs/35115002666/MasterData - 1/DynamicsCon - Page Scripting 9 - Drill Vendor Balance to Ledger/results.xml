@@ -1,0 +1,21 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="12.595615">
+<testsuite name="dist\player.spec.js" timestamp="2026-09-16T15:37:21.038Z" hostname="chromium" tests="1" failures="0" skipped="0" time="11.785" errors="0">
+<testcase name=" (D:\a\Inmind-Demo-WaveReadiness02\Inmind-Demo-WaveReadiness02\PageScriptLibrary\MasterData - 1\DynamicsCon - Page Scripting 9 - Drill Vendor Balance to Ledger.yml)" classname="dist\player.spec.js" time="11.785">
+<properties>
+<property name="log" value="https://businesscentral.dynamics.com/0350d3ea-e9b3-48b7-bd2c-ab9ed7f08d61/SANDBOX-Waves/do?profile=PAGE%20SCRIPTING#open-replaylog=H4sIAAAAAAAAA71XXY-bOhB9z6_ww324lRYKGBKCVpV2073VSv3Sdm-lVpEqByapdY2NbJMo_74GhxQS2hK6vXnZaDIenzNnxjOrgUEOWu7vswQRfxWkOAsdiNZTJ_QCz4k9z3e84yfwJkpDoZIJQg7S-wISxMmWbogGY0JIE7kBndTfK5eCbIzLbakoB6XQG8KNQaIHwQAtgGuQR1eSaip4gj4Cz4RUtT0DlUpa2B_eHi5CWqDrlNTWFwfv6-eNoT7HxKbBoAwknaDAC6aON3f86aMfJXiWBHPXx97ng1dWSmJviXDQIlfhd9RXseO1oxKlTKEJbclZBOg1Vbq25yIjLEFrwpTNiSy5pjlUGQaTznNi702cnzBCO6JQjcG9gNzcCz-3iFC-Ff_9TKNTGi3kD7BuQa-OSCjAKCETtBBcS8G-_7SmwLJKrNzeZi9-rEH8Q5k5dLtfCFbmNqMFkcbTWFUD6F8FN9mW8BQy60_5JkFalnCeufs6-ElcJPj3bFY4RhXHHM_Oi2MadlJalPqpMqpSUcVc10yO7qfJ3BJWwqFgPtg08E1fWgwydF17v-g6Xz-3VoO-3Ubj0oQ91wui8zTFePp_l167zO4yqn9QXDdsR_ZqIfKc6naP9lWVFLtOKTX3jcpTHPeU06xTT8PfmgWR2ZC3Jhj21tTxfuu9wb47tQQvFf1IpUf04PRRuSWsehfQ368Xn56dyf5SUsZeNunrU_To0dH1GPWvZyOk9d1ZNO8ZI_ORYwSyakDemVKjoIaIjAeK3I38e3IHbhgHbblTJhQ4FZMBfX5OsUf8HlqL6pI61mByFzCK_J5twI-iUxlrqtkIHf-AbBbLJbrNLMsxuv26VYeq1X1vLkGP43ONsB-P0-hI6MlezUv1wK4X-6P76JfzcqAeY_oFu77XM9H8cGy_NGSeZFu-XIcgNn3BzbZg5sje_KWp2RK4YdJdn8xZY6vnSIO8GR9mnbK9OunAfVcAR1vrmpqKuUJZfbp1rLfTr6plj2Zm1bmydCYWvaFSSGH2xGoPvHl1hz4sHu7fP96_fTU5MP3hUmtG1bTun5ZefhRWO8iWZiAM9WRJll805MVSg9KOBFUyrZZuwch-J-nmq3ZMcLo2_6wpx1uuVuBjCGAVA54DmH1mhvEUIPTiEOZk5e5glU--AUw9qDhlDgAA&amp;zip=1">
+</property>
+</properties>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-74cf1-ndor-Balance-to-Ledger-yml--chromium\attachments\Recording-0d59ea00144fb3fd7b2d9d4d59f440c394838655.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-74cf1-ndor-Balance-to-Ledger-yml--chromium\attachments\Replay-log-0710ddc8e2f3d5ac106e63bdebd30ab45a1bca32.yml]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-74cf1-ndor-Balance-to-Ledger-yml--chromium\test-finished-1.png]]
+
+[[ATTACHMENT|..\..\..\..\..\_temp\test-results\dist-player--D-a-Inmind-De-74cf1-ndor-Balance-to-Ledger-yml--chromium\video.webm]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

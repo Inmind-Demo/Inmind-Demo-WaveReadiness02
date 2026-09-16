@@ -1,0 +1,203 @@
+telemetryId: a1b2c3d4-e5f6-4012-8001-000000000012
+steps:
+  - type: navigate
+    target:
+      - page: Business Manager Role Center
+      - action: Vendors
+    description: Navigate to <caption>Vendors</caption>
+    log:
+      start: 2026-09-16T15:36:23.489Z
+      duration: 679
+  - type: page-shown
+    source:
+      page: Vendor List
+    modal: false
+    runtimeId: d201
+    description: Page <caption>Vendors</caption> was shown.
+    log:
+      start: 2026-09-16T15:36:24.425Z
+  - type: invoke
+    target:
+      - page: Vendor List
+        runtimeRef: d201
+      - action: Control_New
+    invokeType: New
+    description: Invoke New on <caption>New</caption>
+    log:
+      start: 2026-09-16T15:36:24.461Z
+      duration: 426
+  - type: scope
+    condition:
+      type: page-shown
+      source:
+        page: Select Vendor Templ. List
+      runtimeId: d202
+    description: If Page <caption>Select a template for a new vendor</caption> was shown.
+    steps:
+      - type: input
+        target:
+          - page: Select Vendor Templ. List
+            runtimeRef: d202
+          - scope: filter
+            field: filter:system:search
+        value: Vendor Person
+        isFilterAsYouType: true
+        description: Input <value>Vendor Person</value> into <caption>Search</caption>
+        log:
+          start: 2026-09-16T15:36:25.004Z
+          duration: 72
+      - type: invoke
+        target:
+          - page: Select Vendor Templ. List
+            runtimeRef: d202
+        invokeType: LookupOk
+        description: Invoke LookupOk on <caption>Select a template for a new
+          vendor</caption>
+        log:
+          start: 2026-09-16T15:36:25.103Z
+          duration: 846
+      - type: page-closed
+        source:
+          page: Select Vendor Templ. List
+        runtimeId: d202
+        description: Page <caption>Select a template for a new vendor</caption> was closed.
+        log:
+          start: 2026-09-16T15:36:25.975Z
+    log:
+      start: 2026-09-16T15:36:24.978Z
+  - type: page-shown
+    source:
+      page: Vendor Card
+    modal: false
+    runtimeId: d203
+    description: Page <caption>Vendor Card</caption> was shown.
+    log:
+      start: 2026-09-16T15:36:26.068Z
+  - type: input
+    target:
+      - page: Vendor Card
+        runtimeRef: d203
+      - field: Name
+    value: Page Scripting 2
+    description: Input <value>Page Scripting 2</value> into <caption>Name</caption>
+    log:
+      start: 2026-09-16T15:36:26.112Z
+      duration: 185
+  - type: input
+    target:
+      - page: Vendor Card
+        runtimeRef: d203
+      - field: Tax Liable
+    value: true
+    description: Input <value>true</value> into <caption>Tax Liable</caption>
+    log:
+      start: 2026-09-16T15:36:26.345Z
+      duration: 971
+  - type: invoke
+    target:
+      - page: Vendor Card
+        runtimeRef: d203
+      - field: Tax Area Code
+    invokeType: Lookup
+    description: Invoke Lookup on <caption>Tax Area Code</caption>
+    log:
+      start: 2026-09-16T15:36:27.341Z
+      duration: 128
+  - type: page-shown
+    source:
+      page: lookup:Tax Area Code
+    modal: false
+    runtimeId: d204
+    description: Page <caption>Select</caption> was shown.
+    log:
+      start: 2026-09-16T15:36:27.494Z
+  - type: invoke
+    target:
+      - page: lookup:Tax Area Code
+        runtimeRef: d204
+      - action: system:fulllist
+    description: Invoke <caption>Select from full list</caption>
+    log:
+      start: 2026-09-16T15:36:27.520Z
+      duration: 215
+  - type: page-closed
+    source:
+      page: lookup:Tax Area Code
+    runtimeId: d204
+    description: Page <caption>Select</caption> was closed.
+    log:
+      start: 2026-09-16T15:36:27.827Z
+  - type: page-shown
+    source:
+      page: Tax Area List
+    modal: false
+    runtimeId: d205
+    description: Page <caption>Select - Tax Areas</caption> was shown.
+    log:
+      start: 2026-09-16T15:36:27.853Z
+  - type: input
+    target:
+      - page: Tax Area List
+        runtimeRef: d205
+      - scope: filter
+        field: filter:system:search
+    value: MIAMI
+    isFilterAsYouType: true
+    description: Input <value>MIAMI</value> into <caption>Search</caption>
+    log:
+      start: 2026-09-16T15:36:27.879Z
+      duration: 64
+  - type: invoke
+    target:
+      - page: Tax Area List
+        runtimeRef: d205
+    invokeType: LookupOk
+    description: Invoke LookupOk on <caption>Select - Tax Areas</caption>
+    log:
+      start: 2026-09-16T15:36:27.969Z
+      duration: 474
+  - type: page-closed
+    source:
+      page: Tax Area List
+    runtimeId: d205
+    description: Page <caption>Select - Tax Areas</caption> was closed.
+    log:
+      start: 2026-09-16T15:36:28.469Z
+  - type: close-page
+    target:
+      - page: Vendor Card
+        runtimeRef: d203
+    description: Close page <caption>Vendor Card</caption>
+    log:
+      start: 2026-09-16T15:36:28.496Z
+      duration: 176
+  - type: page-closed
+    source:
+      page: Vendor Card
+    runtimeId: d203
+    description: Page <caption>Vendor Card</caption> was closed.
+    log:
+      start: 2026-09-16T15:36:28.703Z
+  - type: close-page
+    target:
+      - page: Vendor List
+        runtimeRef: d201
+    description: Close page <caption>Vendors</caption>
+    log:
+      start: 2026-09-16T15:36:28.766Z
+      duration: 150
+  - type: page-closed
+    source:
+      page: Vendor List
+    runtimeId: d201
+    description: Page <caption>Vendors</caption> was closed.
+    log:
+      start: 2026-09-16T15:36:28.946Z
+name: DynamicsCon - Page Scripting 12 - Create Second Vendor
+description: Create a second vendor named Page Scripting 2 using Vendor Person template
+start:
+  profile: PAGE SCRIPTING
+log:
+  start: 2026-09-16T15:36:16.474Z
+  duration: 12502
+  video: D:\a\_temp\test-results\.playwright-artifacts-0\286266582cf9ad0f025779cec01b340f.webm
